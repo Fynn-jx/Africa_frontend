@@ -57,7 +57,6 @@ build
 *.backup
 
 # Exclude unused data files
-public/data/african-countries-only.geojson
 news_media_data.json
 新闻媒体数据来源.xls
 
