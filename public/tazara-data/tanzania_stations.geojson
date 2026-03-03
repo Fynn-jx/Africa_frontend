@@ -1,0 +1,1093 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "0",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "440137926",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Dar es Salaam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2450325,
+          -6.8464084
+        ]
+      }
+    },
+    {
+      "id": "1",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "252940803",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kamata Kariakoo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2742656,
+          -6.8266688
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "258138384",
+        "code": 5602,
+        "fclass": "railway_halt",
+        "name": "Matambwe"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.7653909,
+          -7.532082
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "262107765",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Vwawa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.931378,
+          -9.0895438
+        ]
+      }
+    },
+    {
+      "id": "4",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "847699783",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Tunduma"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.7677559,
+          -9.3183324
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "918295516",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mwakanga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1173605,
+          -6.9151722
+        ]
+      }
+    },
+    {
+      "id": "6",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "918797136",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mahongole"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.9532333,
+          -8.8671683
+        ]
+      }
+    },
+    {
+      "id": "7",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "918799268",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Lumumwe"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.7138163,
+          -8.8432275
+        ]
+      }
+    },
+    {
+      "id": "8",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "1912629184",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mbalizi"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.350261,
+          -8.9419639
+        ]
+      }
+    },
+    {
+      "id": "9",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "1912650367",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Idiga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.2660445,
+          -8.9662786
+        ]
+      }
+    },
+    {
+      "id": "10",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2104442890",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Nakonde"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.7578947,
+          -9.3094307
+        ]
+      }
+    },
+    {
+      "id": "11",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2203442295",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Inyala"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.6043057,
+          -8.8775133
+        ]
+      }
+    },
+    {
+      "id": "12",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2225652210",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mlowo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.9903693,
+          -9.0148623
+        ]
+      }
+    },
+    {
+      "id": "13",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557733",
+        "code": 5602,
+        "fclass": "railway_halt",
+        "name": "Chikola"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.1532989,
+          -8.9361326
+        ]
+      }
+    },
+    {
+      "id": "14",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557740",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Gwata"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.5021541,
+          -7.1356473
+        ]
+      }
+    },
+    {
+      "id": "15",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557749",
+        "code": 5602,
+        "fclass": "railway_halt",
+        "name": "Ikule"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.0097374,
+          -8.4105125
+        ]
+      }
+    },
+    {
+      "id": "16",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557760",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kidunda"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.3227478,
+          -7.3063506
+        ]
+      }
+    },
+    {
+      "id": "17",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557769",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kinyanguru"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.0757091,
+          -7.439346
+        ]
+      }
+    },
+    {
+      "id": "18",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557781",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Lumba"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.6430757,
+          -8.8162411
+        ]
+      }
+    },
+    {
+      "id": "19",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557784",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Malamba"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.6147588,
+          -8.8037326
+        ]
+      }
+    },
+    {
+      "id": "20",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557795",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mbeya"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.4118653,
+          -8.9321091
+        ]
+      }
+    },
+    {
+      "id": "21",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557801",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mpemba"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          32.8556268,
+          -9.2623066
+        ]
+      }
+    },
+    {
+      "id": "22",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557808",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Uyole"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.5309882,
+          -8.890957
+        ]
+      }
+    },
+    {
+      "id": "23",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2229557811",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Yombo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2359904,
+          -6.8671032
+        ]
+      }
+    },
+    {
+      "id": "24",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "2579429951",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Uchindile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.4142019,
+          -8.7706359
+        ]
+      }
+    },
+    {
+      "id": "25",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4161051514",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kitete"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.5234625,
+          -8.7644578
+        ]
+      }
+    },
+    {
+      "id": "26",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384696",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kipunguni B"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1777475,
+          -6.8952085
+        ]
+      }
+    },
+    {
+      "id": "27",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384697",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kitunda"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1925267,
+          -6.8914343
+        ]
+      }
+    },
+    {
+      "id": "28",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384698",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kwa Limboa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2319386,
+          -6.8681906
+        ]
+      }
+    },
+    {
+      "id": "29",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384699",
+        "code": 5602,
+        "fclass": "railway_halt",
+        "name": "Magnus Secondary"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1355806,
+          -6.9126666
+        ]
+      }
+    },
+    {
+      "id": "30",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384700",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Majohe"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1408639,
+          -6.9032243
+        ]
+      }
+    },
+    {
+      "id": "31",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384701",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Moshi Bar"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1702285,
+          -6.896796
+        ]
+      }
+    },
+    {
+      "id": "32",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384702",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Lumo (Kigilagila)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2224989,
+          -6.8714132
+        ]
+      }
+    },
+    {
+      "id": "33",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384703",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Songosongo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1561043,
+          -6.8993674
+        ]
+      }
+    },
+    {
+      "id": "34",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4210384704",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Veta"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2118262,
+          -6.8824563
+        ]
+      }
+    },
+    {
+      "id": "35",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4558024093",
+        "code": 5622,
+        "fclass": "bus_station",
+        "name": "Majohe bus station"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1408311,
+          -6.9033363
+        ]
+      }
+    },
+    {
+      "id": "36",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4558024093",
+        "code": 5621,
+        "fclass": "bus_stop",
+        "name": "Majohe bus station"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.1408311,
+          -6.9033363
+        ]
+      }
+    },
+    {
+      "id": "37",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "4566534891",
+        "code": 5621,
+        "fclass": "bus_stop",
+        "name": "Kwa alimboa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2318147,
+          -6.8682744
+        ]
+      }
+    },
+    {
+      "id": "38",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "5787931053",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kitandalila"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.0414554,
+          -8.8300328
+        ]
+      }
+    },
+    {
+      "id": "39",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "6166468155",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mpanga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.6570322,
+          -8.7492163
+        ]
+      }
+    },
+    {
+      "id": "40",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "9125088483",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2828279,
+          -6.8245332
+        ]
+      }
+    },
+    {
+      "id": "41",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "9943742167",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kwa Fundi Umeme"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          39.2437257,
+          -6.8578735
+        ]
+      }
+    },
+    {
+      "id": "42",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482471036",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kisaki"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.6068598,
+          -7.4954623
+        ]
+      }
+    },
+    {
+      "id": "43",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482485234",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kifuru"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.9389574,
+          -6.9415707
+        ]
+      }
+    },
+    {
+      "id": "44",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482485235",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mzenga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          38.7136878,
+          -6.9409667
+        ]
+      }
+    },
+    {
+      "id": "45",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482846548",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Fuga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.8347088,
+          -7.5371737
+        ]
+      }
+    },
+    {
+      "id": "46",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482846556",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Msolwa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.040569,
+          -7.7990714
+        ]
+      }
+    },
+    {
+      "id": "47",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482849975",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mang’ula"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.8962369,
+          -7.857046
+        ]
+      }
+    },
+    {
+      "id": "48",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482850335",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Ruipa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.3960568,
+          -8.1517765
+        ]
+      }
+    },
+    {
+      "id": "49",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482850336",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mbingu"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.2433845,
+          -8.2125286
+        ]
+      }
+    },
+    {
+      "id": "50",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482864870",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kiberege"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.8566025,
+          -7.9538656
+        ]
+      }
+    },
+    {
+      "id": "51",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482864873",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Ifakara"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.6878934,
+          -8.0757873
+        ]
+      }
+    },
+    {
+      "id": "52",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482942177",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mngeta"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.1287857,
+          -8.3125219
+        ]
+      }
+    },
+    {
+      "id": "53",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482942178",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Chita"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.9422923,
+          -8.5224201
+        ]
+      }
+    },
+    {
+      "id": "54",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11482942179",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Mlimba"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.8021373,
+          -8.7827487
+        ]
+      }
+    },
+    {
+      "id": "55",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11483031500",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kiyowela"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          35.2025744,
+          -8.7642024
+        ]
+      }
+    },
+    {
+      "id": "56",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486617682",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Kangaga"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.5035423,
+          -8.7625487
+        ]
+      }
+    },
+    {
+      "id": "57",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486617684",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Rujewa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.3861775,
+          -8.7304088
+        ]
+      }
+    },
+    {
+      "id": "58",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486617687",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Msesule"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.2626649,
+          -8.7528428
+        ]
+      }
+    },
+    {
+      "id": "59",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486617927",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Makambako"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.8236609,
+          -8.8405983
+        ]
+      }
+    },
+    {
+      "id": "60",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486617928",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Wanging’mbe"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.6457337,
+          -8.827992
+        ]
+      }
+    },
+    {
+      "id": "61",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486656148",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Chimala"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          34.036527,
+          -8.8569143
+        ]
+      }
+    },
+    {
+      "id": "62",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486656153",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Igurusi"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.8613896,
+          -8.8263263
+        ]
+      }
+    },
+    {
+      "id": "63",
+      "type": "Feature",
+      "properties": {
+        "osm_id": "11486656161",
+        "code": 5601,
+        "fclass": "railway_station",
+        "name": "Ilongo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          33.7448194,
+          -8.7653278
+        ]
+      }
+    }
+  ]
+}

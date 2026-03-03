@@ -1,0 +1,70 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build output
+output
+build
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Vite
+.vite
+
+# Temp files
+*.tmp
+*.temp
+
+# Data files - only keep necessary geojson files
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.sbn
+*.sbx
+*.xml
+*.qmd
+*.qix
+*.shp.xml
+*.lock
+*.bak
+*.backup
+
+# Exclude unused data files
+public/data/african-countries-only.geojson
+public/data/news_media_classified.json
+public/data/traditional_sources.json
+news_media_data.json
+news_media_classified.json
+新闻媒体数据来源.xls
+
+# Exclude raw data directories (keep only processed geojson files)
+坦赞铁路数据/
+非洲矿产数据/
+image/
