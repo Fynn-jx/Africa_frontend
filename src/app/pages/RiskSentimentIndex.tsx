@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { TrendingUp, TrendingDown, Layers, MapPin, ChevronLeft, ChevronRight, Filter, Globe2, Gavel, Shield, Factory, Building2, Zap, AlertTriangle, Flame, CloudLightning, Activity, Diamond, Calendar } from "lucide-react";
+import { TrendingUp, TrendingDown, Layers, MapPin, ChevronLeft, ChevronRight, Globe2, Gavel, Shield, Factory, Building2, Zap, AlertTriangle, Flame, CloudLightning, Activity, Diamond, Calendar } from "lucide-react";
 import MapboxMap, { Marker, Popup } from "../components/MapboxMap";
 import HeatmapLayer from "../components/HeatmapLayer";
 import CountryDetailsSidebar from "../components/CountryDetailsSidebar";
@@ -214,21 +214,8 @@ export default function RiskSentimentIndex() {
   const [showEvents, setShowEvents] = useState(true);
   const [showRanking, setShowRanking] = useState(true);
 
-  // 事件图层状态
-  const [eventLayerFilterType, setEventLayerFilterType] = useState<string>("");
-  const [eventLayerFilterSeverity, setEventLayerFilterSeverity] = useState<string>("");
-
   // 适配后的事件数据
   const events = useMemo(() => adaptEventsForRiskIndex(allMockEvents), []);
-
-  // 筛选后的事件
-  const filteredEvents = useMemo(() => {
-    return events.filter(event => {
-      if (eventLayerFilterType && event.type !== eventLayerFilterType) return false;
-      if (eventLayerFilterSeverity && event.severity !== eventLayerFilterSeverity) return false;
-      return true;
-    });
-  }, [events, eventLayerFilterType, eventLayerFilterSeverity]);
 
   // 按分数从高到低排序的所有国家
   const sortedCountries = [...africanCountriesData]
@@ -291,100 +278,6 @@ export default function RiskSentimentIndex() {
         </div>
       </div>
 
-      {/* 事件类型筛选面板 */}
-      {showEvents && (
-        <div className="absolute top-24 right-8 z-10 bg-white/95 backdrop-blur-sm rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] p-4 w-64">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#005BBB]" />
-              <span className="text-sm font-semibold text-gray-900">事件筛选</span>
-            </div>
-          </div>
-
-          {/* 按类型筛选 */}
-          <div className="mb-3">
-            <div className="text-xs text-gray-500 mb-2">按类型</div>
-            <div className="grid grid-cols-3 gap-1">
-              <button
-                onClick={() => setEventLayerFilterType("")}
-                className={`px-2 py-1 rounded text-xs transition-all ${
-                  eventLayerFilterType === ""
-                    ? "bg-[#005BBB] text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                全部
-              </button>
-              {Object.entries(eventTypeConfig).map(([key, config]) => (
-                <button
-                  key={key}
-                  onClick={() => setEventLayerFilterType(key)}
-                  className={`px-2 py-1 rounded text-xs transition-all ${
-                    eventLayerFilterType === key
-                      ? "bg-[#005BBB] text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {config.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 按严重程度筛选 */}
-          <div>
-            <div className="text-xs text-gray-500 mb-2">按严重程度</div>
-            <div className="flex gap-1">
-              <button
-                onClick={() => setEventLayerFilterSeverity("")}
-                className={`flex-1 px-2 py-1 rounded text-xs transition-all ${
-                  eventLayerFilterSeverity === ""
-                    ? "bg-[#005BBB] text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                全部
-              </button>
-              <button
-                onClick={() => setEventLayerFilterSeverity("high")}
-                className={`flex-1 px-2 py-1 rounded text-xs transition-all ${
-                  eventLayerFilterSeverity === "high"
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                高
-              </button>
-              <button
-                onClick={() => setEventLayerFilterSeverity("medium")}
-                className={`flex-1 px-2 py-1 rounded text-xs transition-all ${
-                  eventLayerFilterSeverity === "medium"
-                    ? "bg-amber-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                中
-              </button>
-              <button
-                onClick={() => setEventLayerFilterSeverity("low")}
-                className={`flex-1 px-2 py-1 rounded text-xs transition-all ${
-                  eventLayerFilterSeverity === "low"
-                    ? "bg-green-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                低
-              </button>
-            </div>
-          </div>
-
-          {/* 统计信息 */}
-          <div className="mt-3 pt-3 border-t border-gray-200">
-            <div className="text-xs text-gray-500">显示 {filteredEvents.length} 个事件</div>
-          </div>
-        </div>
-      )}
-
       {/* 颜色图例 */}
       <div className="absolute bottom-8 left-8 z-10 bg-white/95 backdrop-blur-sm rounded-xl px-6 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
         <div className="text-xs text-gray-500 mb-3">风险等级（PORI指数）</div>
@@ -439,7 +332,7 @@ export default function RiskSentimentIndex() {
           />
 
           {/* 事件图层 - 使用和RegionalInsights相同的逻辑 */}
-          {showEvents && filteredEvents.map((event) => {
+          {showEvents && events.map((event) => {
             const icon = getEventIcon(event.type, event.severity);
             const popularityColor = getPopularityColor(event.popularity);
             return (
