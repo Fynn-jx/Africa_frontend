@@ -58,10 +58,7 @@ build
 
 # Exclude unused data files
 public/data/african-countries-only.geojson
-public/data/news_media_classified.json
-public/data/traditional_sources.json
 news_media_data.json
-news_media_classified.json
 新闻媒体数据来源.xls
 
 # Exclude raw data directories (keep only processed geojson files)

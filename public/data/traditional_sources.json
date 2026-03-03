@@ -1,0 +1,460 @@
+{
+  "government": [
+    {
+      "id": "gov-cn-mfa",
+      "url": "https://www.mfa.gov.cn",
+      "nameEn": "Ministry of Foreign Affairs of China",
+      "nameCn": "中国外交部",
+      "description": "中国外交部官方网站，提供中国对外政策、领事服务、双边关系等信息。",
+      "year": "1949",
+      "country": "中国",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-cn-commerce",
+      "url": "http://mofcom.gov.cn",
+      "nameEn": "Ministry of Commerce of China",
+      "nameCn": "中国商务部",
+      "description": "负责中国对外贸易、经济合作、外商投资等事务。",
+      "year": "1949",
+      "country": "中国",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-za-presidency",
+      "url": "https://www.thepresidency.gov.za",
+      "nameEn": "The Presidency of South Africa",
+      "nameCn": "南非总统府",
+      "description": "南非总统府官方网站，发布政府政策、总统声明等信息。",
+      "year": "1994",
+      "country": "南非",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-ke-foreign",
+      "url": "https://www.mfa.go.ke",
+      "nameEn": "Ministry of Foreign Affairs of Kenya",
+      "nameCn": "肯尼亚外交部",
+      "description": "肯尼亚外交部官方网站，提供外交政策、领事服务等信息。",
+      "year": "1963",
+      "country": "肯尼亚",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-ng-interior",
+      "url": "https://www.interior.gov.ng",
+      "nameEn": "Ministry of Interior of Nigeria",
+      "nameCn": "尼日利亚内政部",
+      "description": "尼日利亚内政部，负责国内安全、移民管理、公民登记等事务。",
+      "year": "1960",
+      "country": "尼日利亚",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-eg-mfa",
+      "url": "https://www.mfa.gov.eg",
+      "nameEn": "Ministry of Foreign Affairs of Egypt",
+      "nameCn": "埃及外交部",
+      "description": "埃及外交部官方网站，提供外交政策、领事服务、双边关系等信息。",
+      "year": "1922",
+      "country": "埃及",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-eth-mfa",
+      "url": "https://mfa.gov.et",
+      "nameEn": "Ministry of Foreign Affairs of Ethiopia",
+      "nameCn": "埃塞俄比亚外交部",
+      "description": "埃塞俄比亚外交部官方网站，负责外交事务和领事服务。",
+      "year": "1941",
+      "country": "埃塞俄比亚",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-ao-justice",
+      "url": "http://www.mjao.gv.ao",
+      "nameEn": "Ministry of Justice of Angola",
+      "nameCn": "安哥拉司法部",
+      "description": "安哥拉司法部，负责司法事务、法律制定和实施。",
+      "year": "1975",
+      "country": "安哥拉",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-tz-foreign",
+      "url": "https://www.mfa.go.tz",
+      "nameEn": "Ministry of Foreign Affairs of Tanzania",
+      "nameCn": "坦桑尼亚外交部",
+      "description": "坦桑尼亚外交部官方网站，提供外交政策、领事服务等信息。",
+      "year": "1961",
+      "country": "坦桑尼亚",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-ug-internal",
+      "url": "https://www.mia.gov.ug",
+      "nameEn": "Ministry of Internal Affairs of Uganda",
+      "nameCn": "乌干达内部事务部",
+      "description": "乌干达内部事务部，负责国内安全、移民、公民登记等事务。",
+      "year": "1962",
+      "country": "乌干达",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-gh-foreign",
+      "url": "https://mfa.gov.gh",
+      "nameEn": "Ministry of Foreign Affairs of Ghana",
+      "nameCn": "加纳外交部",
+      "description": "加纳外交部官方网站，负责外交政策、领事服务和国际合作。",
+      "year": "1957",
+      "country": "加纳",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-dz-foreign",
+      "url": "https://www.mfa.gov.dz",
+      "nameEn": "Ministry of Foreign Affairs of Algeria",
+      "nameCn": "阿尔及利亚外交部",
+      "description": "阿尔及利亚外交部官方网站，提供外交政策和领事服务。",
+      "year": "1962",
+      "country": "阿尔及利亚",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-mz-presidency",
+      "url": "https://www.presidencia.gov.mz",
+      "nameEn": "Presidency of Mozambique",
+      "nameCn": "莫桑比克总统府",
+      "description": "莫桑比克总统府官方网站，发布政府政策和总统声明。",
+      "year": "1975",
+      "country": "莫桑比克",
+      "marks": "官方"
+    },
+    {
+      "id": "gov-ci-foreign",
+      "url": "https://www.diplomatie.gouv.ci",
+      "nameEn": "Ministry of Foreign Affairs of Côte d'Ivoire",
+      "nameCn": "科特迪瓦外交部",
+      "description": "科特迪瓦外交部官方网站，负责外交事务和国际合作。",
+      "year": "1960",
+      "country": "科特迪瓦",
+      "marks": "官方"
+    }
+  ],
+  "ngo": [
+    {
+      "id": "ngo-cARE",
+      "url": "https://www.care.org",
+      "nameEn": "CARE International",
+      "nameCn": "国际凯尔组织",
+      "description": "全球性人道主义组织，专注于减贫、灾难应对和发展援助。",
+      "year": "1945",
+      "country": "美国",
+      "marks": "国际组织"
+    },
+    {
+      "id": "ngo-un",
+      "url": "https://www.un.org",
+      "nameEn": "United Nations",
+      "nameCn": "联合国",
+      "description": "全球最大的国际组织，致力于维护和平、促进人权和提供人道主义援助。",
+      "year": "1945",
+      "country": "美国",
+      "marks": "国际组织"
+    },
+    {
+      "id": "ngo-unocha",
+      "url": "https://www.unocha.org",
+      "nameEn": "UN Office for the Coordination of Humanitarian Affairs",
+      "nameCn": "联合国人道主义事务协调厅",
+      "description": "联合国负责协调全球人道主义援助事务的机构。",
+      "year": "1991",
+      "country": "瑞士",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-unhcr",
+      "url": "https://www.unhcr.org",
+      "nameEn": "UN High Commissioner for Refugees",
+      "nameCn": "联合国难民署",
+      "description": "联合国负责保护难民和解决难民问题的机构。",
+      "year": "1950",
+      "country": "瑞士",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-unicef",
+      "url": "https://www.unicef.org",
+      "nameEn": "UN Children's Fund",
+      "nameCn": "联合国儿童基金会",
+      "description": "联合国致力于保护儿童权利、提供儿童教育和医疗的基金。",
+      "year": "1946",
+      "country": "美国",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-who",
+      "url": "https://www.who.int",
+      "nameEn": "World Health Organization",
+      "nameCn": "世界卫生组织",
+      "description": "联合国专门机构，负责国际公共卫生事务。",
+      "year": "1948",
+      "country": "瑞士",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-imf",
+      "url": "https://www.imf.org",
+      "nameEn": "International Monetary Fund",
+      "nameCn": "国际货币基金组织",
+      "description": "全球国际金融组织，致力于促进全球货币合作和金融稳定。",
+      "year": "1945",
+      "country": "美国",
+      "marks": "国际金融机构"
+    },
+    {
+      "id": "ngo-worldbank",
+      "url": "https://www.worldbank.org",
+      "nameEn": "World Bank",
+      "nameCn": "世界银行",
+      "description": "联合国国际金融机构，为发展中国家提供贷款和技术援助。",
+      "year": "1944",
+      "country": "美国",
+      "marks": "国际金融机构"
+    },
+    {
+      "id": "ngo-wfp",
+      "url": "https://www.wfp.org",
+      "nameEn": "World Food Programme",
+      "nameCn": "世界粮食计划署",
+      "description": "联合国粮食援助机构，致力于消除饥饿和改善营养状况。",
+      "year": "1961",
+      "country": "意大利",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-undp",
+      "url": "https://www.undp.org",
+      "nameEn": "UN Development Programme",
+      "nameCn": "联合国开发计划署",
+      "description": "联合国全球发展网络，致力于可持续发展目标。",
+      "year": "1965",
+      "country": "美国",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-unesco",
+      "url": "https://www.unesco.org",
+      "nameEn": "UN Educational, Scientific and Cultural Organization",
+      "nameCn": "联合国教科文组织",
+      "description": "联合国教育、科学及文化组织，促进教育、科学和文化合作。",
+      "year": "1945",
+      "country": "法国",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-fao",
+      "url": "https://www.fao.org",
+      "nameEn": "Food and Agriculture Organization",
+      "nameCn": "联合国粮农组织",
+      "description": "联合国领导下的农业和粮食安全机构。",
+      "year": "1945",
+      "country": "意大利",
+      "marks": "联合国机构"
+    },
+    {
+      "id": "ngo-ilo",
+      "url": "https://www.ilo.org",
+      "nameEn": "International Labour Organization",
+      "nameCn": "国际劳工组织",
+      "description": "联合国专门机构，致力于劳工权利、就业和社会正义。",
+      "year": "1919",
+      "country": "瑞士",
+      "marks": "联合国机构"
+    }
+  ],
+  "research": [
+    {
+      "id": "research-cass",
+      "url": "https://www.cass.cn",
+      "nameEn": "Chinese Academy of Social Sciences",
+      "nameCn": "中国社会科学院",
+      "description": "中国哲学社会科学研究的最高学术机构和综合研究中心，下设非洲研究所等专门机构，发布非洲政治经济研究报告。",
+      "year": "1977",
+      "country": "中国",
+      "marks": "学术研究"
+    },
+    {
+      "id": "research-riia",
+      "url": "https://www.chathamhouse.org",
+      "nameEn": "Royal Institute of International Affairs",
+      "nameCn": "英国皇家国际事务研究所",
+      "description": "全球领先的国际政策智库，专注于非洲地缘政治、安全和发展研究，发布非洲风险分析报告。",
+      "year": "1920",
+      "country": "英国",
+      "marks": "智库"
+    },
+    {
+      "id": "research-csisafrica",
+      "url": "https://www.crisisgroup.org/africa",
+      "nameEn": "Crisis Group Africa",
+      "nameCn": "国际危机组织非洲项目",
+      "description": "专注于冲突分析和预防的独立非政府组织，发布非洲各国冲突风险报告和应对建议。",
+      "year": "1995",
+      "country": "比利时",
+      "marks": "冲突研究"
+    },
+    {
+      "id": "research-brookings",
+      "url": "https://www.brookings.edu",
+      "nameEn": "Brookings Institution Africa Growth Initiative",
+      "nameCn": "布鲁金斯学会非洲增长倡议",
+      "description": "美国知名智库，专注于非洲经济发展、治理和全球竞争力研究，提供政策建议和数据分析。",
+      "year": "1916",
+      "country": "美国",
+      "marks": "智库"
+    },
+    {
+      "id": "research-iucn",
+      "url": "https://www.iucn.org",
+      "nameEn": "International Union for Conservation of Nature",
+      "nameCn": "世界自然保护联盟",
+      "description": "专注于环境保护和可持续发展的国际组织，发布非洲环境风险和资源管理研究报告。",
+      "year": "1948",
+      "country": "瑞士",
+      "marks": "环境研究"
+    },
+    {
+      "id": "research-issafrica",
+      "url": "https://issafrica.org",
+      "nameEn": "Institute for Security Studies",
+      "nameCn": "非洲安全研究所",
+      "description": "非洲领先的公共政策研究机构，专注于人类安全、冲突预防和治理研究，总部位于南非。",
+      "year": "1991",
+      "country": "南非",
+      "marks": "安全研究"
+    },
+    {
+      "id": "research-acss",
+      "url": "https://africacss.org",
+      "nameEn": "African Center for Strategic Studies",
+      "nameCn": "非洲战略研究中心",
+      "description": "美国国防部的区域研究机构，专注于非洲安全政策、反恐和稳定研究，提供战略分析。",
+      "year": "1999",
+      "country": "美国",
+      "marks": "战略研究"
+    },
+    {
+      "id": "research-msharik",
+      "url": "https://www.msharik.ac.ma",
+      "nameEn": "Mohammed VI Polytechnic University",
+      "nameCn": "穆罕默德六世理工大学",
+      "description": "摩洛哥著名研究型大学，专注于非洲发展研究、社会创新和可持续发展，发布非洲社会经济报告。",
+      "year": "2013",
+      "country": "摩洛哥",
+      "marks": "学术研究"
+    },
+    {
+      "id": "research-afdb",
+      "url": "https://www.afdb.org",
+      "nameEn": "African Development Bank Group",
+      "nameCn": "非洲开发银行集团",
+      "description": "非洲地区最重要的多边开发金融机构，发布非洲各国经济展望、基础设施投资和发展报告。",
+      "year": "1964",
+      "country": "科特迪瓦",
+      "marks": "发展研究"
+    },
+    {
+      "id": "research-euromonitor",
+      "url": "https://www.euromonitor.com",
+      "nameEn": "Euromonitor International",
+      "nameCn": "欧睿信息咨询",
+      "description": "全球领先的市场研究公司，提供非洲消费者市场、行业趋势和宏观经济分析报告。",
+      "year": "1972",
+      "country": "英国",
+      "marks": "市场研究"
+    }
+  ],
+  "commercial": [
+    {
+      "id": "commercial-bloomberg",
+      "url": "https://www.bloomberg.com/africa",
+      "nameEn": "Bloomberg Africa",
+      "nameCn": "彭博非洲",
+      "description": "全球领先的金融数据提供商，提供非洲金融市场、经济数据和商业新闻。",
+      "year": "1981",
+      "country": "美国",
+      "marks": "金融数据"
+    },
+    {
+      "id": "commercial-reuters",
+      "url": "https://www.reuters.com/finance/africa",
+      "nameEn": "Reuters Africa",
+      "nameCn": "路透社非洲",
+      "description": "国际新闻通讯社，提供非洲市场新闻、大宗商品价格和商业情报。",
+      "year": "1851",
+      "country": "英国",
+      "marks": "新闻数据"
+    },
+    {
+      "id": "commercial-mckinsey",
+      "url": "https://www.mckinsey.com/africa",
+      "nameEn": "McKinsey & Company Africa",
+      "nameCn": "麦肯锡非洲",
+      "description": "全球管理咨询公司，发布非洲经济趋势、消费者洞察和行业发展报告。",
+      "year": "1926",
+      "country": "美国",
+      "marks": "咨询服务"
+    },
+    {
+      "id": "commercial-verisk",
+      "url": "https://www.veriskmaplecroft.com",
+      "nameEn": "Verisk Maplecroft",
+      "nameCn": "Verisk Maplecroft风险分析",
+      "description": "全球专业风险分析公司，提供非洲政治风险、供应链风险和人权评估数据。",
+      "year": "2001",
+      "country": "英国",
+      "marks": "风险评估"
+    },
+    {
+      "id": "commercial-spglobal",
+      "url": "https://www.spglobal.com/africa",
+      "nameEn": "S&P Global Africa",
+      "nameCn": "标普全球非洲",
+      "description": "国际评级机构，提供非洲国家主权评级、行业分析和商品市场数据。",
+      "year": "1860",
+      "country": "美国",
+      "marks": "信用评级"
+    },
+    {
+      "id": "commercial-controlrisks",
+      "url": "https://www.controlrisks.com",
+      "nameEn": "Control Risks",
+      "nameCn": "控制风险集团",
+      "description": "全球专业的风险咨询公司，提供非洲政治风险、安全威胁和运营风险分析服务。",
+      "year": "1975",
+      "country": "英国",
+      "marks": "风险咨询"
+    },
+    {
+      "id": "commercial-his-markets",
+      "url": "https://www.his.com/market",
+      "nameEn": "IHS Markit Africa",
+      "nameCn": "IHS Markit非洲",
+      "description": "全球信息提供商，提供非洲能源市场、商品贸易和宏观经济数据与分析。",
+      "year": "1959",
+      "country": "英国",
+      "marks": "市场情报"
+    },
+    {
+      "id": "commercial-eiu",
+      "url": "https://www.eiu.com",
+      "nameEn": "Economist Intelligence Unit",
+      "nameCn": "经济学人智库",
+      "description": "《经济学人》集团旗下研究机构，提供非洲国家风险分析、经济预测和商业环境评估。",
+      "year": "1946",
+      "country": "英国",
+      "marks": "经济分析"
+    }
+  ]
+}
