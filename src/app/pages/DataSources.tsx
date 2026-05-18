@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Database,
-  Globe,
   ExternalLink,
   Clock,
-  Filter,
   ChevronDown,
   ChevronRight,
   BookOpen,
@@ -14,9 +12,9 @@ import {
   Search,
   Globe2,
   Calendar,
-  AlertCircle,
 } from "lucide-react";
 import { mockEvents as generatedEvents, type EventItem } from "../../data/eventsData";
+import { DataSourceContent, DataSourceSidebar } from "../components/DataSourceCatalog";
 
 // 新闻媒体数据接口
 interface NewsMedia {
@@ -498,6 +496,7 @@ export default function DataSources() {
   const [activeTab, setActiveTab] = useState<"sources" | "tags" | "knowledge">("sources");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedDatasetId, setSelectedDatasetId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -612,6 +611,20 @@ export default function DataSources() {
     return filtered;
   };
 
+  const getSourceSearchText = (item: NewsMedia) => {
+    return [
+      item.nameEn,
+      item.nameCn,
+      item.description,
+      item.country,
+      item.url,
+      item.marks,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+  };
+
   const filteredEvents = getFilteredEvents();
   const paginatedEvents = filteredEvents.slice(
     (eventPage - 1) * eventItemsPerPage,
@@ -669,14 +682,8 @@ export default function DataSources() {
     }
 
     return dataList.filter((item) => {
-      const searchLower = searchQuery.toLowerCase();
-      return (
-        !searchQuery ||
-        item.nameEn.toLowerCase().includes(searchLower) ||
-        item.nameCn.toLowerCase().includes(searchLower) ||
-        item.description.toLowerCase().includes(searchLower) ||
-        item.country.toLowerCase().includes(searchLower)
-      );
+      const searchLower = searchQuery.trim().toLowerCase();
+      return !searchLower || getSourceSearchText(item).includes(searchLower);
     });
   };
 
@@ -689,6 +696,14 @@ export default function DataSources() {
   );
 
   const totalPages = Math.ceil(filteredCardData.length / itemsPerPage);
+  const sourceTypeCounts = {
+    "news-international": newsMediaData?.international.length ?? 0,
+    "news-african": newsMediaData?.african.length ?? 0,
+    government: traditionalData?.government.length ?? 0,
+    ngo: traditionalData?.ngo.length ?? 0,
+    research: traditionalData?.research.length ?? 0,
+    commercial: traditionalData?.commercial.length ?? 0,
+  };
 
   return (
     <div className="h-[calc(100vh-73px)] bg-[#FAFAFA] relative">
@@ -734,85 +749,19 @@ export default function DataSources() {
 
           {/* 数据来源面板内容 */}
           {activeTab === "sources" && (
-            <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">数据来源</h2>
-
-              {/* 加载状态 */}
-              {isLoading && (
-                <div className="flex items-center justify-center py-8">
-                  <div className="flex items-center gap-3 text-gray-500">
-                    <div className="w-5 h-5 border-2 border-[#005BBB] border-t-transparent rounded-full animate-spin"></div>
-                    <span className="text-sm">加载数据中...</span>
-                  </div>
-                </div>
-              )}
-
-              {/* 错误状态 */}
-              {loadError && !isLoading && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <div className="text-sm text-red-700">
-                      <strong className="font-semibold">加载失败</strong>
-                      <p className="mt-1">{loadError}</p>
-                      <p className="mt-1 text-xs">请刷新页面重试，或检查网络连接。</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* 搜索框 */}
-              <div className="mb-6">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="搜索数据源..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#005BBB]"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                  <Filter className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                </div>
-              </div>
-
-              {/* 数据类型筛选 */}
-              {!isLoading && !loadError && (
-              <div>
-                <h3 className="text-xs font-semibold text-gray-500 uppercase mb-3">数据类型</h3>
-                <div className="space-y-2">
-                  {Object.entries(typeConfig).map(([type, config]) => (
-                    <button
-                      key={type}
-                      onClick={() => {
-                        setSelectedType(selectedType === type ? null : type);
-                        setPage(1);
-                        setSearchQuery("");
-                      }}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                        selectedType === type
-                          ? "bg-blue-50 border border-blue-200"
-                          : "hover:bg-gray-50 border border-transparent"
-                      }`}
-                    >
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: config.color }}
-                      />
-                      <span className="text-sm text-gray-700">{config.label}</span>
-                      <span className="text-xs text-gray-500 ml-auto">
-                        {type === "government" && traditionalData && `(${traditionalData.government.length})`}
-                        {type === "ngo" && traditionalData && `(${traditionalData.ngo.length})`}
-                        {type === "research" && traditionalData && `(${traditionalData.research.length})`}
-                        {type === "commercial" && traditionalData && `(${traditionalData.commercial.length})`}
-                        {type === "news-international" && newsMediaData && `(${newsMediaData.international.length})`}
-                        {type === "news-african" && newsMediaData && `(${newsMediaData.african.length})`}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              )}
-            </div>
+            <DataSourceSidebar
+              isLoading={isLoading}
+              loadError={loadError}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedDatasetId={selectedDatasetId}
+              setSelectedDatasetId={setSelectedDatasetId}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              setPage={setPage}
+              newsMediaData={newsMediaData}
+              traditionalData={traditionalData}
+            />
           )}
 
           {/* 标签面板内容 */}
@@ -1010,7 +959,7 @@ export default function DataSources() {
             <div className="mb-8">
               <h1 className="text-2xl font-bold text-gray-900 mb-2">数据中心</h1>
               <p className="text-gray-600">
-                {activeTab === "sources" && "平台整合多个权威数据源，提供全面的非洲地缘政治情报。点击卡片查看详细信息。"}
+                {activeTab === "sources" && "在数据来源板块内按基础数据、平台衍生数据和来源库组织展示，支持数据库式浏览与来源反查。"}
                 {activeTab === "tags" && "标签体系帮助您快速定位和筛选相关信息，支持多维度分类检索。"}
                 {activeTab === "knowledge" && "知识库按应用场景分类，提供风险事件标注、影响路径分析和政策建议支持。在左侧选择分类查看详情。"}
               </p>
@@ -1018,184 +967,20 @@ export default function DataSources() {
 
             {/* 数据源和新闻媒体列表 */}
             {activeTab === "sources" && (
-              <div className="space-y-6">
-                {/* 横条卡片数据 */}
-                {selectedType && filteredCardData.length > 0 && (
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      {selectedType === "news-international" && "国际新闻媒体"}
-                      {selectedType === "news-african" && "非洲本地媒体"}
-                      {selectedType === "government" && "政府机构"}
-                      {selectedType === "ngo" && "非政府组织"}
-                      {selectedType === "research" && "研究机构"}
-                      {selectedType === "commercial" && "商业数据"}
-                    </h2>
-
-                    {/* 搜索框 */}
-                    <div className="mb-4">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="搜索..."
-                          className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#005BBB]"
-                          value={searchQuery}
-                          onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                            setPage(1);
-                          }}
-                        />
-                        <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                      </div>
-                    </div>
-
-                    {/* 统计信息 */}
-                    <div className="mb-4 text-sm text-gray-600">
-                      共 {filteredCardData.length} 条数据
-                      {searchQuery && ` · 搜索结果`}
-                    </div>
-
-                    {/* 列表 - 横条卡片 */}
-                    <div className="space-y-3">
-                      {paginatedCardData.map((item, index) => (
-                        <motion.div
-                          key={item.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.02 }}
-                          className="bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200 p-5"
-                        >
-                          <div className="flex items-start gap-4">
-                            {/* 左侧：基本信息 */}
-                            <div className="flex-1 min-w-0">
-                              {/* 名称和URL */}
-                              <div className="flex items-center gap-3 mb-2">
-                                <h3 className="text-base font-semibold text-gray-900 truncate">
-                                  {item.nameCn || item.nameEn}
-                                </h3>
-                                {item.nameCn && item.nameEn && item.nameCn !== item.nameEn && (
-                                  <span className="text-sm text-gray-500">| {item.nameEn}</span>
-                                )}
-                              </div>
-
-                              {/* URL */}
-                              <div className="flex items-center gap-2 mb-3">
-                                <a
-                                  href={`https://${item.url.replace(/^https?:\/\//, '')}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-sm text-[#005BBB] hover:underline truncate flex items-center gap-1"
-                                >
-                                  <Globe2 className="w-3 h-3" />
-                                  {item.url}
-                                  <ExternalLink className="w-3 h-3" />
-                                </a>
-                              </div>
-
-                              {/* 简介 */}
-                              <p className="text-sm text-gray-600 line-clamp-2 mb-3">{item.description}</p>
-
-                              {/* 标签 - 只显示前5个 */}
-                              {item.marks && (
-                                <div className="flex flex-wrap gap-2">
-                                  {item.marks.split(',').slice(0, 5).map((tag, idx) => (
-                                    <span
-                                      key={idx}
-                                      className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-md"
-                                    >
-                                      {tag.trim()}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-
-                            {/* 右侧：元信息 */}
-                            <div className="flex-shrink-0 text-right">
-                              {/* 所在地 */}
-                              <div className="flex items-center gap-2 mb-2 justify-end">
-                                <MapPin className="w-4 h-4 text-gray-400" />
-                                <span className="text-sm text-gray-700">{item.country}</span>
-                              </div>
-
-                              {/* 成立年份 */}
-                              {item.year && (
-                                <div className="text-xs text-gray-500">
-                                  {selectedType === "government" || selectedType === "ngo" || selectedType === "research" ? "成立于" : "创立于"} {item.year}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* 分页控制 */}
-                    {totalPages > 1 && (
-                      <div className="flex items-center justify-center gap-2 mt-6">
-                        <button
-                          onClick={() => setPage(p => Math.max(1, p - 1))}
-                          disabled={page === 1}
-                          className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          上一页
-                        </button>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                            let pageNum;
-                            if (totalPages <= 5) {
-                              pageNum = i + 1;
-                            } else if (page <= 3) {
-                              pageNum = i + 1;
-                            } else if (page >= totalPages - 2) {
-                              pageNum = totalPages - 4 + i;
-                            } else {
-                              pageNum = page - 2 + i;
-                            }
-
-                            return (
-                              <button
-                                key={pageNum}
-                                onClick={() => setPage(pageNum)}
-                                className={`px-3 py-1 rounded-lg text-sm ${
-                                  page === pageNum
-                                    ? "bg-[#005BBB] text-white"
-                                    : "border border-gray-200 text-gray-700 hover:bg-gray-50"
-                                }`}
-                              >
-                                {pageNum}
-                              </button>
-                            );
-                          })}
-                        </div>
-                        <button
-                          onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                          disabled={page === totalPages}
-                          className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          下一页
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* 无数据提示 */}
-                {!selectedType && (
-                  <div className="text-center py-16">
-                    <Database className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">请选择数据来源</h3>
-                    <p className="text-gray-500">在左侧选择一个数据来源，查看详细数据源</p>
-                  </div>
-                )}
-
-                {selectedType && filteredCardData.length === 0 && (
-                  <div className="text-center py-16">
-                    <Database className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">暂无数据</h3>
-                    <p className="text-gray-500">请尝试选择其他数据类型或调整搜索关键词</p>
-                  </div>
-                )}
-              </div>
+              <DataSourceContent
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedDatasetId={selectedDatasetId}
+                setSelectedDatasetId={setSelectedDatasetId}
+                selectedType={selectedType}
+                setSelectedType={setSelectedType}
+                page={page}
+                setPage={setPage}
+                filteredCardData={filteredCardData}
+                paginatedCardData={paginatedCardData}
+                totalPages={totalPages}
+                sourceTypeCounts={sourceTypeCounts}
+              />
             )}
 
             {/* 标签视图 - 事件中心 */}

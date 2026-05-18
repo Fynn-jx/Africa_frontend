@@ -7,6 +7,7 @@ import ConflictEarlyWarning from "./pages/ConflictEarlyWarning";
 import ImpactSimulator from "./pages/ImpactSimulator";
 import RegionalInsights from "./pages/RegionalInsights";
 import DataSources from "./pages/DataSources";
+import AIConversation from "./pages/AIConversation";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <DataSources />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "ai-conversation",
+        element: (
+          <ProtectedRoute>
+            <AIConversation />
           </ProtectedRoute>
         ),
       },

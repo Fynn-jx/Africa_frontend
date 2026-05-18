@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { TrendingUp, TrendingDown, Layers, MapPin, ChevronLeft, ChevronRight, Globe2, Gavel, Shield, Factory, Building2, Zap, AlertTriangle, Flame, CloudLightning, Activity, Diamond, Calendar } from "lucide-react";
-import MapboxMap, { Marker, Popup } from "../components/MapboxMap";
+import LeafletMap, { Marker, Popup } from "../components/map";
 import HeatmapLayer from "../components/HeatmapLayer";
 import CountryDetailsSidebar from "../components/CountryDetailsSidebar";
 import { africanCountriesData } from "../../data/africanCountriesData";
@@ -320,7 +320,7 @@ export default function RiskSentimentIndex() {
 
       {/* 地图容器 */}
       <div className="absolute inset-0">
-        <MapboxMap center={[20, 0]} zoom={4}>
+        <LeafletMap center={[20, 0]} zoom={4}>
           {/* 热力图层 */}
           <HeatmapLayer
             countries={africanCountriesData}
@@ -371,7 +371,7 @@ export default function RiskSentimentIndex() {
               </Marker>
             );
           })}
-        </MapboxMap>
+        </LeafletMap>
       </div>
 
       {/* 指数排行榜 */}

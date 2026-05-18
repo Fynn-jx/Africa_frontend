@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GeoJSON, Popup, CircleMarker } from '../components/MapboxMap';
+import { GeoJSON, Popup, CircleMarker } from './map';
 import { FeatureCollection, Feature } from 'geojson';
 import L from 'leaflet';
 

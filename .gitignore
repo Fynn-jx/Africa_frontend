@@ -39,6 +39,9 @@ build
 # Temp files
 *.tmp
 *.temp
+tmp/
+src/assets/logos/*-checker.png
+src/assets/logos/*-dark-preview.png
 
 # Data files - only keep necessary geojson files
 *.shp
@@ -58,9 +61,13 @@ build
 
 # Exclude unused data files
 news_media_data.json
+news_media_classified.json
+AFR_Mineral_Deposits.xls
+数据库设计.pdf
 新闻媒体数据来源.xls
 
 # Exclude raw data directories (keep only processed geojson files)
 坦赞铁路数据/
 非洲矿产数据/
 image/
+public/data/boundaries/

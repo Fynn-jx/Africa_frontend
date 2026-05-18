@@ -53,34 +53,34 @@ const importantEvents = [
 
 // 15维度雷达图数据
 const radarData = [
-  { dimension: "政治稳定性", value: 65, fullMark: 100, category: "political" },
-  { dimension: "法律法规", value: 58, fullMark: 100, category: "political" },
-  { dimension: "双边关系", value: 72, fullMark: 100, category: "political" },
-  { dimension: "地缘政治", value: 68, fullMark: 100, category: "political" },
-  { dimension: "经济韧性", value: 55, fullMark: 100, category: "social" },
-  { dimension: "社会治安", value: 62, fullMark: 100, category: "social" },
-  { dimension: "自然灾害", value: 48, fullMark: 100, category: "social" },
-  { dimension: "医疗卫生", value: 70, fullMark: 100, category: "social" },
-  { dimension: "文化宗教", value: 52, fullMark: 100, category: "social" },
-  { dimension: "出行安全", value: 58, fullMark: 100, category: "social" },
-  { dimension: "应急资源", value: 45, fullMark: 100, category: "social" },
-  { dimension: "恐怖主义", value: 38, fullMark: 100, category: "security" },
-  { dimension: "网络安全", value: 42, fullMark: 100, category: "security" },
-  { dimension: "供应链安全", value: 55, fullMark: 100, category: "security" },
-  { dimension: "领事保护", value: 60, fullMark: 100, category: "security" },
+  { dimension: "政权政策", fullName: "政权更迭与政策连续性风险", value: 65, fullMark: 100, category: "core" },
+  { dimension: "军事冲突", fullName: "地缘军事冲突与战争风险", value: 72, fullMark: 100, category: "core" },
+  { dimension: "恐怖极端", fullName: "恐怖主义与极端主义风险", value: 78, fullMark: 100, category: "core" },
+  { dimension: "制裁孤立", fullName: "国际制裁与外交孤立风险", value: 58, fullMark: 100, category: "core" },
+  { dimension: "意识形态脱钩", fullName: "意识形态与民族主义脱钩风险", value: 62, fullMark: 100, category: "core" },
+  { dimension: "供应链矿产", fullName: "供应链与关键矿产卡脖子风险", value: 69, fullMark: 100, category: "geoEconomic" },
+  { dimension: "能源价格", fullName: "能源安全与价格剧烈波动风险", value: 61, fullMark: 100, category: "geoEconomic" },
+  { dimension: "金融管制", fullName: "跨境金融与资本管制风险", value: 54, fullMark: 100, category: "geoEconomic" },
+  { dimension: "贸易保护", fullName: "关税壁垒与贸易保护主义风险", value: 57, fullMark: 100, category: "geoEconomic" },
+  { dimension: "技术壁垒", fullName: "技术冷战与知识产权壁垒风险", value: 64, fullMark: 100, category: "geoEconomic" },
+  { dimension: "国有化征收", fullName: "国有化与资产征收风险", value: 52, fullMark: 100, category: "governance" },
+  { dimension: "长臂管辖", fullName: "监管法律“武器化”与长臂管辖风险", value: 56, fullMark: 100, category: "governance" },
+  { dimension: "数字对抗", fullName: "网络主权与数字化对抗风险", value: 48, fullMark: 100, category: "governance" },
+  { dimension: "绿色壁垒", fullName: "气候政策与绿色壁垒风险", value: 45, fullMark: 100, category: "governance" },
+  { dimension: "社会ESG舆情", fullName: "社会动荡与ESG负面舆情风险", value: 67, fullMark: 100, category: "governance" },
 ];
 
 // 子类别雷达图数据
-const politicalRadarData = radarData.filter(d => d.category === "political");
-const socialRadarData = radarData.filter(d => d.category === "social");
-const securityRadarData = radarData.filter(d => d.category === "security");
+const coreRadarData = radarData.filter(d => d.category === "core");
+const geoEconomicRadarData = radarData.filter(d => d.category === "geoEconomic");
+const governanceRadarData = radarData.filter(d => d.category === "governance");
 
 // 风险类别配置
 const riskCategories = [
   { id: "all", name: "综合评估", color: "#005BBB" },
-  { id: "political", name: "政治-制度", color: "#DC2626" },
-  { id: "social", name: "社会-环境", color: "#F59E0B" },
-  { id: "security", name: "安全-技术", color: "#7C3AED" },
+  { id: "core", name: "核心政治", color: "#DC2626" },
+  { id: "geoEconomic", name: "经贸资源", color: "#F59E0B" },
+  { id: "governance", name: "治理合规", color: "#7C3AED" },
 ];
 
 export default function CountryDetailsSidebar({ country, onClose }: CountryDetailsSidebarProps) {
@@ -90,12 +90,12 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
   // 根据选中的类别获取对应的雷达图数据
   const getCurrentRadarData = () => {
     switch (selectedCategory) {
-      case "political":
-        return politicalRadarData;
-      case "social":
-        return socialRadarData;
-      case "security":
-        return securityRadarData;
+      case "core":
+        return coreRadarData;
+      case "geoEconomic":
+        return geoEconomicRadarData;
+      case "governance":
+        return governanceRadarData;
       default:
         return radarData;
     }
@@ -108,6 +108,19 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
 
   const currentRadarData = getCurrentRadarData();
   const currentColor = getCurrentColor();
+  const renderRadarTick = ({ payload, x, y, textAnchor }: any) => {
+    const lines = String(payload.value).split("\n");
+
+    return (
+      <text x={x} y={y} textAnchor={textAnchor} fill="#6B7280" fontSize={currentRadarData.length > 5 ? 8 : 9}>
+        {lines.map((line, index) => (
+          <tspan key={`${line}-${index}`} x={x} dy={index === 0 ? 0 : 11}>
+            {line}
+          </tspan>
+        ))}
+      </text>
+    );
+  };
 
   return (
     <motion.div
@@ -265,13 +278,13 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
           <h3 className="text-sm text-gray-500 mb-4">15维度风险评估</h3>
 
           {/* 类别选择按钮 */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="grid grid-cols-2 gap-2 mb-4">
             {riskCategories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`
-                  flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200
+                  px-3 py-2 min-h-[44px] rounded-lg text-xs font-medium leading-tight transition-all duration-200
                   ${
                     selectedCategory === category.id
                       ? "text-white shadow-md"
@@ -294,12 +307,16 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
                 <PolarGrid stroke="#E5E7EB" />
                 <PolarAngleAxis
                   dataKey="dimension"
-                  tick={{ fill: '#6B7280', fontSize: currentRadarData.length > 5 ? 9 : 10 }}
+                  tick={renderRadarTick}
                 />
                 <PolarRadiusAxis
                   angle={90}
                   domain={[0, 100]}
                   tick={{ fill: '#9CA3AF', fontSize: 9 }}
+                />
+                <Tooltip
+                  formatter={(value) => [`${value}/100`, "风险值"]}
+                  labelFormatter={(_, payload) => payload?.[0]?.payload?.fullName ?? ""}
                 />
                 <Radar
                   name="风险值"
@@ -321,10 +338,10 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
                 {riskCategories.find(c => c.id === selectedCategory)?.name}
               </span>
               <span className="ml-2">
-                {selectedCategory === "all" && "包含所有15个维度的综合评估"}
-                {selectedCategory === "political" && "政治与制度层面的4项核心指标"}
-                {selectedCategory === "social" && "社会与环境韧性的7项关键指标"}
-                {selectedCategory === "security" && "安全与技术威胁的4项风险指标"}
+                {selectedCategory === "all" && "包含三大维度下所有15项风险指标的综合评估"}
+                {selectedCategory === "core" && "评估国家内部政局稳定性，以及传统政治、军事和意识形态对抗强度"}
+                {selectedCategory === "geoEconomic" && "聚焦经济、金融、技术和资源被地缘政治工具化带来的风险"}
+                {selectedCategory === "governance" && "关注法律监管、社会治理和虚拟空间压力对经济主体的影响"}
               </span>
             </div>
           </div>

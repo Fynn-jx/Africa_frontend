@@ -55,6 +55,22 @@ input:focus-visible {
   outline-offset: 2px;
 }
 
+.case-point-marker {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.case-point-marker-dot {
+  background: #dc2626;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(127, 29, 29, 0.32);
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+
 /* 动画性能优化 */
 @media (prefers-reduced-motion: reduce) {
   *,

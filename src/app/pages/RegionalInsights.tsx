@@ -536,6 +536,7 @@ export default function RegionalInsights() {
           zoom={3}
           className="w-full h-full z-0"
           zoomControl={false}
+          attributionControl={false}
           minZoom={3}
           maxZoom={10}
           maxBounds={AFRICA_BOUNDS}

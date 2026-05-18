@@ -1467,6 +1467,7 @@ export default function ImpactSimulator() {
                 zoom={4}
                 className="w-full h-full z-0"
                 zoomControl={false}
+                attributionControl={false}
                 minZoom={3}
                 maxZoom={10}
                 maxBounds={AFRICA_BOUNDS}
@@ -1875,6 +1876,7 @@ export default function ImpactSimulator() {
               zoom={8}
               className="w-full h-full z-0"
               zoomControl={false}
+              attributionControl={false}
               minZoom={3}
               maxZoom={12}
               maxBounds={AFRICA_BOUNDS}

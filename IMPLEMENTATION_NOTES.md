@@ -10,7 +10,7 @@
 - ✅ 统一的圆角和间距系统
 
 ### 2. 风险情绪指数模块（RiskSentimentIndex）
-- ✅ 接入 Mapbox GL 真实地图
+- ✅ 接入 Leaflet 真实地图
 - ✅ 在真实地图上显示国家标记点
 - ✅ 根据风险等级（低/中/高）显示不同颜色
 - ✅ 高风险国家添加脉冲动画
@@ -20,7 +20,7 @@
 - ✅ 改进图表交互，显示风险等级
 
 ### 3. 影响模拟器（ImpactSimulator）
-- ✅ 使用 Mapbox GL 真实地图
+- ✅ 使用 Leaflet 真实地图
 - ✅ 在地图上绘制同心圆影响范围
 - ✅ 显示中资资产标记点
 - ✅ 动态计算资产位置
@@ -52,28 +52,13 @@
 - ✅ 优化焦点状态
 - ✅ 支持减少动画偏好设置
 
-## Mapbox 配置
+## Leaflet 地图配置
 
-### 获取 Mapbox Access Token
+当前地图实现基于 `Leaflet` 与 `react-leaflet`，底图使用 CARTO Light 瓦片服务，无需配置 Access Token。统一地图封装位于 `/src/app/components/map/LeafletMap.tsx`。
 
-1. 访问 [Mapbox](https://www.mapbox.com/)
-2. 注册账号（免费账号包含每月50,000次地图加载）
-3. 前往 [Access Tokens](https://account.mapbox.com/access-tokens/)
-4. 创建新的 token 或使用默认 token
-5. 复制 token
+### 坐标约定
 
-### 配置步骤
-
-在 `/src/app/components/MapboxMap.tsx` 文件中，将占位符替换为你的真实 token：
-
-```typescript
-// 第 6 行
-const MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN_HERE';
-```
-
-### 备用方案
-
-如果 Mapbox 无法加载（无效 token 或网络问题），组件会自动降级到简化地图模式，使用 SVG 网格背景。
+业务数据统一使用 `[lng, lat]`，Leaflet 渲染层在封装组件内部转换为 `[lat, lng]`。页面无需重复处理坐标顺序。
 
 ## 技术栈
 
@@ -81,8 +66,8 @@ const MAPBOX_TOKEN = 'YOUR_MAPBOX_TOKEN_HERE';
 - **React Router 7** - 路由管理
 - **Tailwind CSS 4** - 样式系统
 - **Motion (Framer Motion)** - 动画库
-- **Mapbox GL JS** - 地图引擎
-- **react-map-gl** - React Mapbox 封装
+- **Leaflet** - 地图引擎
+- **React Leaflet** - React 地图组件封装
 - **Recharts** - 图表库
 - **Lucide React** - 图标库
 

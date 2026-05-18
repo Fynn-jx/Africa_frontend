@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Globe, AlertTriangle, Target, Layers, Database, LogOut } from "lucide-react";
+import { Globe, FileSearch, Target, Layers, Database, LogOut, MessageSquare } from "lucide-react";
 
 const navItems = [
   {
@@ -9,8 +9,8 @@ const navItems = [
   },
   {
     path: "/conflict-warning",
-    label: "冲突预警",
-    icon: AlertTriangle,
+    label: "案例分析",
+    icon: FileSearch,
   },
   {
     path: "/impact-simulator",
@@ -26,6 +26,11 @@ const navItems = [
     path: "/data-sources",
     label: "数据中心",
     icon: Database,
+  },
+  {
+    path: "/ai-conversation",
+    label: "AI对话",
+    icon: MessageSquare,
   },
 ];
 
