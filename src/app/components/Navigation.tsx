@@ -8,11 +8,6 @@ const navItems = [
     icon: Globe,
   },
   {
-    path: "/conflict-warning",
-    label: "案例分析",
-    icon: FileSearch,
-  },
-  {
     path: "/impact-simulator",
     label: "影响模拟器",
     icon: Target,
@@ -21,6 +16,11 @@ const navItems = [
     path: "/regional-insights",
     label: "重点项目",
     icon: Layers,
+  },
+  {
+    path: "/conflict-warning",
+    label: "案例分析",
+    icon: FileSearch,
   },
   {
     path: "/data-sources",

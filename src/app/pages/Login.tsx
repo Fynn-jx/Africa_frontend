@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
-import { AlertTriangle, ArrowRight, Database, Eye, EyeOff, Globe2 } from "lucide-react";
+import { AlertTriangle, ArrowRight, Building2, Database, Eye, EyeOff, Globe2, Landmark } from "lucide-react";
 import hnuAfricaLogo from "../../assets/logos/logo-hnu-africa-institute-transparent.png";
-import caetLogo from "../../assets/logos/logo-caet-research-transparent.png";
 import ciweiLogo from "../../assets/logos/logo-ciwei-security-transparent.png";
+import smartLabLogo from "../../assets/logos/logo-smart-lab-transparent.png";
+import shujizheLogo from "../../assets/logos/logo-shujizhe-transparent.png";
+import titanSharkLogo from "../../assets/logos/logo-titanshark-transparent.png";
 import africaMapOutline from "../../assets/africa-countries-outline.svg";
 
 const partnerLogos = [
   { name: "湖南大学非洲研究院", src: hnuAfricaLogo, className: "h-12 w-auto max-w-[300px]" },
-  { name: "中非经贸合作研究院", src: caetLogo, className: "h-12 w-auto max-w-[310px]" },
+  { name: "中非经贸合作智能实验室", src: smartLabLogo, className: "h-16 w-auto max-w-[390px]" },
   { name: "刺猬安全", src: ciweiLogo, className: "h-10 w-auto max-w-[170px]" },
+  { name: "数迹者", src: shujizheLogo, className: "h-10 w-auto max-w-[230px]" },
+  { name: "钛鲨科技", src: titanSharkLogo, className: "h-10 w-auto max-w-[260px]" },
 ];
 
 export default function Login() {
@@ -20,6 +24,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedRole, setSelectedRole] = useState<"enterprise" | "government">("enterprise");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,6 +112,26 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">选择访问端</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <RoleCard
+                    icon={Building2}
+                    title="企业端"
+                    description="出海安全决策"
+                    active={selectedRole === "enterprise"}
+                    onClick={() => setSelectedRole("enterprise")}
+                  />
+                  <RoleCard
+                    icon={Landmark}
+                    title="政府端"
+                    description="区域态势监管"
+                    active={selectedRole === "government"}
+                    onClick={() => setSelectedRole("government")}
+                  />
+                </div>
+              </div>
+
+              <div>
                 <label className="mb-2 block text-sm font-medium text-gray-700">账号</label>
                 <input
                   type="text"
@@ -172,6 +197,47 @@ export default function Login() {
         </section>
       </div>
     </div>
+  );
+}
+
+function RoleCard({
+  icon: Icon,
+  title,
+  description,
+  active = false,
+  onClick,
+}: {
+  icon: typeof Globe2;
+  title: string;
+  description: string;
+  active?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`relative rounded-xl border px-3 py-3 text-left transition ${
+        active
+          ? "border-[#005BBB] bg-blue-50 text-[#005BBB] shadow-sm"
+          : "border-gray-200 bg-white text-gray-500"
+      } hover:border-blue-200 hover:bg-blue-50/50`}
+    >
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <div
+          className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+            active ? "bg-[#005BBB] text-white" : "bg-gray-100 text-gray-400"
+          }`}
+        >
+          <Icon className="h-4 w-4" />
+        </div>
+        {active && (
+          <span className="h-2 w-2 rounded-full bg-[#005BBB]" />
+        )}
+      </div>
+      <div className="text-sm font-semibold text-gray-900">{title}</div>
+      <div className="mt-1 text-xs text-gray-500">{description}</div>
+    </button>
   );
 }
 

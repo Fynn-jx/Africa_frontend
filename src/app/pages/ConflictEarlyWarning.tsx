@@ -277,6 +277,450 @@ const caseItems: CaseItem[] = [
   },
 ];
 
+const demoCaseItems: CaseItem[] = [
+  {
+    id: "mali-gold-mine-kidnap-2025",
+    title: "马里南部金矿营地遭武装绑架",
+    country: "马里",
+    province: "锡卡索大区",
+    locationName: "布谷尼金矿带",
+    coordinates: [-7.48, 11.42],
+    date: "2025-07-23",
+    category: "社会治安",
+    level: "高",
+    score: 88,
+    coordinateAccuracy: "矿区级估算坐标",
+    impact: "极端组织袭击矿区营地，影响中资小型矿山人员安全和运营连续性。",
+    summary: "该案例围绕马里南部金矿营地绑架事件展开，反映极端组织对偏远矿区人员、设备和赎金链条的持续威胁。",
+    evidenceTags: ["前方线索", "社区数据"],
+    drivers: ["极端组织活动", "矿区安保薄弱"],
+    chain: ["武装渗透", "营地袭击", "人员绑架"],
+    recommendations: ["提高矿区安保等级"],
+    stakeholders: ["矿企", "当地社区"],
+    financials: { revenueH1UsdBn: 0.18, profitH1UsdBn: 0.03, claimTrustUsdBn: 0.2, emergencyFundMinUsdMn: 5, emergencyFundMaxUsdMn: 20 },
+  },
+  {
+    id: "nigeria-edo-convoy-ambush-2025",
+    title: "尼日利亚埃多州中企车队遭伏击",
+    country: "尼日利亚",
+    province: "埃多州",
+    locationName: "Edelstine矿区通勤道路",
+    coordinates: [5.91, 6.32],
+    date: "2025-09-05",
+    category: "社会治安",
+    level: "高",
+    score: 86,
+    coordinateAccuracy: "道路节点估算坐标",
+    impact: "车队遭伏击并造成安保人员伤亡，暴露矿区通勤路线和护卫协同风险。",
+    summary: "该案例围绕矿区员工通勤车队遭伏击展开，适用于评估道路安保、护送频率和路线暴露度。",
+    evidenceTags: ["开源媒体", "前方线索"],
+    drivers: ["道路伏击", "护卫路线固定"],
+    chain: ["车队出行", "路段伏击", "人员绑架"],
+    recommendations: ["调整通勤路线和出行窗口"],
+    stakeholders: ["中资项目", "安保单位"],
+    financials: { revenueH1UsdBn: 0.22, profitH1UsdBn: 0.04, claimTrustUsdBn: 0.12, emergencyFundMinUsdMn: 3, emergencyFundMaxUsdMn: 15 },
+  },
+  {
+    id: "cameroon-mines-community-arson-2025",
+    title: "喀麦隆金矿遭社区纵火抗议",
+    country: "喀麦隆",
+    province: "阿达马瓦区",
+    locationName: "Tignere金矿区",
+    coordinates: [12.65, 7.37],
+    date: "2025-11-04",
+    category: "环境事故",
+    level: "高",
+    score: 82,
+    coordinateAccuracy: "社区级估算坐标",
+    impact: "当地居民纵火焚毁矿区设施，资源收益分配和社区关系成为主要矛盾。",
+    summary: "该案例围绕矿区社区抗议与纵火事件展开，用于展示本地化ESG和社区沟通缺口风险。",
+    evidenceTags: ["开源媒体", "社区舆情"],
+    drivers: ["资源分配不满", "社区关系紧张"],
+    chain: ["不满聚集", "抗议升级", "设施损毁"],
+    recommendations: ["建立社区收益沟通机制"],
+    stakeholders: ["矿企", "社区代表"],
+    financials: { revenueH1UsdBn: 0.12, profitH1UsdBn: 0.02, claimTrustUsdBn: 0.08, emergencyFundMinUsdMn: 2, emergencyFundMaxUsdMn: 12 },
+  },
+  {
+    id: "guinea-doko-gold-robbery-2025",
+    title: "几内亚多科金矿遭武装抢劫",
+    country: "几内亚",
+    province: "康康大区",
+    locationName: "Doko金矿区",
+    coordinates: [-9.38, 11.67],
+    date: "2025-04-03",
+    category: "社会治安",
+    level: "高",
+    score: 79,
+    coordinateAccuracy: "矿区级估算坐标",
+    impact: "武装人员进入金矿抢夺黄金并造成外籍员工受伤，现场内线风险上升。",
+    summary: "该案例用于展示黄金矿区盗抢、内外勾连和夜间安防薄弱带来的直接安全威胁。",
+    evidenceTags: ["开源媒体"],
+    drivers: ["武装抢劫", "内线引导"],
+    chain: ["内线泄露", "夜间突袭", "黄金被盗"],
+    recommendations: ["强化矿区出入和夜间巡检"],
+    stakeholders: ["矿企", "安保团队"],
+    financials: { revenueH1UsdBn: 0.1, profitH1UsdBn: 0.02, claimTrustUsdBn: 0.06, emergencyFundMinUsdMn: 2, emergencyFundMaxUsdMn: 8 },
+  },
+  {
+    id: "egypt-suez-route-delay-2026",
+    title: "苏伊士航线政治管控导致货期延误",
+    country: "埃及",
+    province: "苏伊士运河",
+    locationName: "苏伊士运河通道",
+    coordinates: [32.55, 29.97],
+    date: "2026-03-18",
+    category: "交通运输",
+    level: "中",
+    score: 71,
+    coordinateAccuracy: "通道级估算坐标",
+    impact: "航线通行窗口收紧，企业出口计划面临排队、绕航和仓储成本上升。",
+    summary: "该案例展示关键海运咽喉节点政策管控对交付周期和替代航线成本的影响。",
+    evidenceTags: ["航运数据", "通道监测"],
+    drivers: ["通行管控", "航线拥堵"],
+    chain: ["政策收紧", "排队增加", "货期延误"],
+    recommendations: ["预留绕航和仓储弹性"],
+    stakeholders: ["货代", "出口企业"],
+    financials: { revenueH1UsdBn: 0.3, profitH1UsdBn: 0.06, claimTrustUsdBn: 0.04, emergencyFundMinUsdMn: 4, emergencyFundMaxUsdMn: 18 },
+  },
+  {
+    id: "kenya-mombasa-port-strike-2026",
+    title: "肯尼亚蒙巴萨港罢工扰动东非物流",
+    country: "肯尼亚",
+    province: "蒙巴萨",
+    locationName: "蒙巴萨港",
+    coordinates: [39.67, -4.04],
+    date: "2026-01-14",
+    category: "交通运输",
+    level: "高",
+    score: 80,
+    coordinateAccuracy: "港口级估算坐标",
+    impact: "港口装卸效率下降，东非内陆项目物资交付周期延长。",
+    summary: "该案例展示劳资罢工和港口效率波动对工程项目设备进口的连锁影响。",
+    evidenceTags: ["港口通告", "物流反馈"],
+    drivers: ["劳资冲突", "港口拥堵"],
+    chain: ["罢工动员", "作业下降", "货物滞留"],
+    recommendations: ["提前锁定替代堆场"],
+    stakeholders: ["港务局", "承包商"],
+    financials: { revenueH1UsdBn: 0.4, profitH1UsdBn: 0.08, claimTrustUsdBn: 0.05, emergencyFundMinUsdMn: 6, emergencyFundMaxUsdMn: 20 },
+  },
+  {
+    id: "south-africa-power-shortage-2026",
+    title: "南非限电冲击工业园连续生产",
+    country: "南非",
+    province: "豪登省",
+    locationName: "约翰内斯堡工业带",
+    coordinates: [28.04, -26.2],
+    date: "2026-02-09",
+    category: "经营管理",
+    level: "中",
+    score: 68,
+    coordinateAccuracy: "城市级估算坐标",
+    impact: "持续限电压缩工厂产能，备用电力成本和交付违约风险同步上升。",
+    summary: "该案例用于展示本地生产要素波动对海外园区经营管理的影响。",
+    evidenceTags: ["电力公告", "企业反馈"],
+    drivers: ["电力短缺", "能源成本上升"],
+    chain: ["限电", "产能下降", "交付推迟"],
+    recommendations: ["配置备用能源和排产策略"],
+    stakeholders: ["园区企业", "电力公司"],
+    financials: { revenueH1UsdBn: 0.8, profitH1UsdBn: 0.12, claimTrustUsdBn: 0.03, emergencyFundMinUsdMn: 8, emergencyFundMaxUsdMn: 30 },
+  },
+  {
+    id: "mozambique-cabo-delgado-insurgency-2026",
+    title: "莫桑比克北部武装活动威胁能源项目",
+    country: "莫桑比克",
+    province: "德尔加杜角省",
+    locationName: "帕尔马能源项目区",
+    coordinates: [40.48, -10.77],
+    date: "2026-04-02",
+    category: "社会治安",
+    level: "高",
+    score: 84,
+    coordinateAccuracy: "项目区估算坐标",
+    impact: "武装活动靠近能源项目区，外派人员撤离和承包商复工面临不确定性。",
+    summary: "该案例展示恐怖主义和地方武装活动对大型能源项目的持续扰动。",
+    evidenceTags: ["安全通报", "开源事件"],
+    drivers: ["武装活动", "人员撤离"],
+    chain: ["袭扰升级", "项目停工", "复工延期"],
+    recommendations: ["动态调整安保等级"],
+    stakeholders: ["能源企业", "承包商"],
+    financials: { revenueH1UsdBn: 1.1, profitH1UsdBn: 0.18, claimTrustUsdBn: 0.09, emergencyFundMinUsdMn: 12, emergencyFundMaxUsdMn: 60 },
+  },
+  {
+    id: "ghana-cocoa-export-tax-2026",
+    title: "加纳出口税调整影响原料采购成本",
+    country: "加纳",
+    province: "阿散蒂大区",
+    locationName: "库马西贸易节点",
+    coordinates: [-1.62, 6.69],
+    date: "2026-03-05",
+    category: "政策合规",
+    level: "中",
+    score: 66,
+    coordinateAccuracy: "城市级估算坐标",
+    impact: "出口税率调整推高原料采购成本，合同价格重谈压力上升。",
+    summary: "该案例用于展示财政压力下的贸易政策调整对企业采购和合同履约的影响。",
+    evidenceTags: ["政策公告", "贸易数据"],
+    drivers: ["税率调整", "财政压力"],
+    chain: ["税负上升", "成本传导", "合同重谈"],
+    recommendations: ["加入税费浮动条款"],
+    stakeholders: ["采购企业", "供应商"],
+    financials: { revenueH1UsdBn: 0.25, profitH1UsdBn: 0.05, claimTrustUsdBn: 0.02, emergencyFundMinUsdMn: 3, emergencyFundMaxUsdMn: 10 },
+  },
+  {
+    id: "ethiopia-industrial-park-unrest-2026",
+    title: "埃塞工业园劳资纠纷引发停工",
+    country: "埃塞俄比亚",
+    province: "奥罗米亚州",
+    locationName: "工业园区",
+    coordinates: [38.76, 8.98],
+    date: "2026-01-27",
+    category: "经营管理",
+    level: "中",
+    score: 70,
+    coordinateAccuracy: "园区级估算坐标",
+    impact: "劳资纠纷导致短期停工，订单交付和本地雇佣关系承压。",
+    summary: "该案例展示海外园区人力资源管理、工会沟通和薪酬预期差带来的运营风险。",
+    evidenceTags: ["园区反馈", "社交媒体"],
+    drivers: ["劳资纠纷", "工资预期"],
+    chain: ["不满积累", "停工抗议", "交付延误"],
+    recommendations: ["建立工会沟通窗口"],
+    stakeholders: ["园区企业", "员工组织"],
+    financials: { revenueH1UsdBn: 0.32, profitH1UsdBn: 0.04, claimTrustUsdBn: 0.03, emergencyFundMinUsdMn: 4, emergencyFundMaxUsdMn: 12 },
+  },
+  {
+    id: "uganda-border-clearance-delay-2026",
+    title: "乌干达边境清关延误影响工程设备入场",
+    country: "乌干达",
+    province: "东部边境",
+    locationName: "马拉巴口岸",
+    coordinates: [34.28, 0.64],
+    date: "2026-02-21",
+    category: "交通运输",
+    level: "中",
+    score: 64,
+    coordinateAccuracy: "口岸级估算坐标",
+    impact: "清关政策临时收紧，工程设备在边境滞留并产生仓储费用。",
+    summary: "该案例展示跨境口岸政策调整和通关效率变化对项目进度的影响。",
+    evidenceTags: ["清关通告", "物流反馈"],
+    drivers: ["口岸政策", "单证审查"],
+    chain: ["审查加强", "边境滞留", "工期顺延"],
+    recommendations: ["提前校核单证和备用口岸"],
+    stakeholders: ["工程承包商", "货代"],
+    financials: { revenueH1UsdBn: 0.2, profitH1UsdBn: 0.03, claimTrustUsdBn: 0.02, emergencyFundMinUsdMn: 2, emergencyFundMaxUsdMn: 9 },
+  },
+  {
+    id: "angola-forex-control-2026",
+    title: "安哥拉外汇管制影响利润汇回",
+    country: "安哥拉",
+    province: "罗安达",
+    locationName: "罗安达金融节点",
+    coordinates: [13.23, -8.83],
+    date: "2026-04-11",
+    category: "政策合规",
+    level: "中",
+    score: 69,
+    coordinateAccuracy: "城市级估算坐标",
+    impact: "外汇审批和资本汇出窗口收紧，企业现金流计划受到影响。",
+    summary: "该案例用于展示跨境金融和资本管制对海外经营回款的影响。",
+    evidenceTags: ["央行政策", "企业反馈"],
+    drivers: ["外汇短缺", "审批收紧"],
+    chain: ["管制升级", "汇出延后", "现金流承压"],
+    recommendations: ["建立本地资金池和汇率对冲"],
+    stakeholders: ["财务部门", "银行"],
+    financials: { revenueH1UsdBn: 0.55, profitH1UsdBn: 0.1, claimTrustUsdBn: 0.04, emergencyFundMinUsdMn: 5, emergencyFundMaxUsdMn: 20 },
+  },
+  {
+    id: "senegal-election-protest-2026",
+    title: "塞内加尔选举抗议波及中资商圈",
+    country: "塞内加尔",
+    province: "达喀尔",
+    locationName: "达喀尔商贸区",
+    coordinates: [-17.45, 14.69],
+    date: "2026-03-22",
+    category: "社会治安",
+    level: "中",
+    score: 72,
+    coordinateAccuracy: "城区级估算坐标",
+    impact: "选举抗议造成商圈临时停业，仓储和门店安保压力上升。",
+    summary: "该案例展示政治周期事件向商业街区和侨商资产扩散的风险路径。",
+    evidenceTags: ["社交媒体", "当地新闻"],
+    drivers: ["选举争议", "街头抗议"],
+    chain: ["集会动员", "道路封锁", "商圈停业"],
+    recommendations: ["制定门店闭店和人员撤离预案"],
+    stakeholders: ["商户", "安保人员"],
+    financials: { revenueH1UsdBn: 0.18, profitH1UsdBn: 0.03, claimTrustUsdBn: 0.01, emergencyFundMinUsdMn: 2, emergencyFundMaxUsdMn: 8 },
+  },
+  {
+    id: "algeria-import-license-review-2026",
+    title: "阿尔及利亚进口许可证审查趋严",
+    country: "阿尔及利亚",
+    province: "阿尔及尔",
+    locationName: "进口许可证审批节点",
+    coordinates: [3.06, 36.75],
+    date: "2026-02-03",
+    category: "政策合规",
+    level: "中",
+    score: 63,
+    coordinateAccuracy: "国家政策节点估算坐标",
+    impact: "进口许可审查延长，设备入境和经销商库存补充受到影响。",
+    summary: "该案例展示准入许可和行政审批变动对企业市场进入的影响。",
+    evidenceTags: ["政策公告", "企业反馈"],
+    drivers: ["准入审查", "行政审批"],
+    chain: ["审查趋严", "许可延迟", "库存不足"],
+    recommendations: ["提前准备许可证材料"],
+    stakeholders: ["经销商", "法务合规"],
+    financials: { revenueH1UsdBn: 0.35, profitH1UsdBn: 0.07, claimTrustUsdBn: 0.02, emergencyFundMinUsdMn: 3, emergencyFundMaxUsdMn: 11 },
+  },
+  {
+    id: "morocco-phosphate-logistics-2026",
+    title: "摩洛哥磷矿外运铁路节点拥堵",
+    country: "摩洛哥",
+    province: "卡萨布兰卡-塞塔特",
+    locationName: "磷矿铁路外运节点",
+    coordinates: [-7.62, 33.59],
+    date: "2026-05-06",
+    category: "交通运输",
+    level: "中",
+    score: 61,
+    coordinateAccuracy: "铁路节点估算坐标",
+    impact: "铁路调度拥堵导致磷矿外运时效下降，港口装船计划延后。",
+    summary: "该案例展示矿产铁路和港口协同效率对大宗资源出口的影响。",
+    evidenceTags: ["铁路调度", "港口反馈"],
+    drivers: ["铁路拥堵", "港口排期"],
+    chain: ["调度延迟", "港口积压", "船期后移"],
+    recommendations: ["优化铁路-港口装卸窗口"],
+    stakeholders: ["矿企", "物流公司"],
+    financials: { revenueH1UsdBn: 0.5, profitH1UsdBn: 0.09, claimTrustUsdBn: 0.02, emergencyFundMinUsdMn: 4, emergencyFundMaxUsdMn: 14 },
+  },
+  {
+    id: "libya-oil-terminal-security-2026",
+    title: "利比亚油港安全局势影响装船",
+    country: "利比亚",
+    province: "锡尔特湾",
+    locationName: "油品出口终端",
+    coordinates: [19.58, 30.49],
+    date: "2026-01-31",
+    category: "供应链",
+    level: "高",
+    score: 81,
+    coordinateAccuracy: "港区级估算坐标",
+    impact: "油港周边安全事件导致装船窗口不稳定，能源贸易履约风险上升。",
+    summary: "该案例展示能源出口终端安全局势对供应链连续性的影响。",
+    evidenceTags: ["安全事件", "航运反馈"],
+    drivers: ["地方武装", "港区管控"],
+    chain: ["冲突靠近", "装船暂停", "贸易延期"],
+    recommendations: ["设置能源装船风险阈值"],
+    stakeholders: ["能源企业", "贸易商"],
+    financials: { revenueH1UsdBn: 1.2, profitH1UsdBn: 0.2, claimTrustUsdBn: 0.08, emergencyFundMinUsdMn: 10, emergencyFundMaxUsdMn: 45 },
+  },
+  {
+    id: "namibia-uranium-water-risk-2026",
+    title: "纳米比亚铀矿水资源约束引发运营风险",
+    country: "纳米比亚",
+    province: "埃龙戈区",
+    locationName: "斯瓦科普蒙德矿业带",
+    coordinates: [14.52, -22.68],
+    date: "2026-04-24",
+    category: "环境事故",
+    level: "中",
+    score: 65,
+    coordinateAccuracy: "矿业带估算坐标",
+    impact: "水资源约束和环保审批趋严，矿山扩产和社区关系面临压力。",
+    summary: "该案例展示矿业项目在干旱地区面临的水资源、环保审批和社区沟通风险。",
+    evidenceTags: ["环境审批", "社区反馈"],
+    drivers: ["水资源紧张", "环保审批"],
+    chain: ["取水受限", "扩产放缓", "社区质疑"],
+    recommendations: ["建设水资源压力监测模型"],
+    stakeholders: ["矿企", "监管机构"],
+    financials: { revenueH1UsdBn: 0.42, profitH1UsdBn: 0.08, claimTrustUsdBn: 0.03, emergencyFundMinUsdMn: 4, emergencyFundMaxUsdMn: 16 },
+  },
+  {
+    id: "botswana-diamond-export-review-2026",
+    title: "博茨瓦纳钻石出口审查影响结算周期",
+    country: "博茨瓦纳",
+    province: "哈博罗内",
+    locationName: "钻石贸易监管节点",
+    coordinates: [25.91, -24.65],
+    date: "2026-02-17",
+    category: "政策合规",
+    level: "中",
+    score: 60,
+    coordinateAccuracy: "城市级估算坐标",
+    impact: "钻石出口审查和来源证明要求提高，贸易结算周期延长。",
+    summary: "该案例用于展示资源出口合规审查对贸易单证、结算和客户交付的影响。",
+    evidenceTags: ["监管公告", "贸易单据"],
+    drivers: ["来源审查", "合规单证"],
+    chain: ["审查加强", "结算延后", "客户交付延迟"],
+    recommendations: ["提前完善来源证明链"],
+    stakeholders: ["贸易商", "合规部门"],
+    financials: { revenueH1UsdBn: 0.28, profitH1UsdBn: 0.06, claimTrustUsdBn: 0.02, emergencyFundMinUsdMn: 3, emergencyFundMaxUsdMn: 9 },
+  },
+  {
+    id: "rwanda-data-localization-2026",
+    title: "卢旺达数据本地化要求影响云服务部署",
+    country: "卢旺达",
+    province: "基加利",
+    locationName: "基加利数字监管节点",
+    coordinates: [30.06, -1.95],
+    date: "2026-03-13",
+    category: "政策合规",
+    level: "中",
+    score: 62,
+    coordinateAccuracy: "城市级估算坐标",
+    impact: "数据本地化要求提高，跨境云服务和客户数据处理需重新设计架构。",
+    summary: "该案例展示数字主权和跨境数据合规对平台型企业部署模式的影响。",
+    evidenceTags: ["数据政策", "合规审查"],
+    drivers: ["数据本地化", "监管审查"],
+    chain: ["政策发布", "架构调整", "合规成本上升"],
+    recommendations: ["建设本地化数据分区方案"],
+    stakeholders: ["云服务商", "合规团队"],
+    financials: { revenueH1UsdBn: 0.16, profitH1UsdBn: 0.04, claimTrustUsdBn: 0.01, emergencyFundMinUsdMn: 2, emergencyFundMaxUsdMn: 7 },
+  },
+  {
+    id: "cote-divoire-port-congestion-2026",
+    title: "科特迪瓦阿比让港拥堵影响设备进口",
+    country: "科特迪瓦",
+    province: "阿比让",
+    locationName: "阿比让港",
+    coordinates: [-4.03, 5.32],
+    date: "2026-04-08",
+    category: "交通运输",
+    level: "中",
+    score: 67,
+    coordinateAccuracy: "港口级估算坐标",
+    impact: "港口排队和清关拥堵导致工程设备入场延后，项目施工计划被迫调整。",
+    summary: "该案例展示西非港口拥堵对中资工程项目设备交付的影响。",
+    evidenceTags: ["港口数据", "清关反馈"],
+    drivers: ["港口拥堵", "清关延迟"],
+    chain: ["船舶排队", "设备滞留", "工期延误"],
+    recommendations: ["提前锁定堆场和备用船期"],
+    stakeholders: ["工程企业", "货代"],
+    financials: { revenueH1UsdBn: 0.31, profitH1UsdBn: 0.05, claimTrustUsdBn: 0.02, emergencyFundMinUsdMn: 3, emergencyFundMaxUsdMn: 12 },
+  },
+  {
+    id: "sudan-border-conflict-supply-risk-2026",
+    title: "苏丹边境冲突扰动人道物资通道",
+    country: "苏丹",
+    province: "喀土穆周边",
+    locationName: "人道物资通道",
+    coordinates: [32.56, 15.5],
+    date: "2026-01-19",
+    category: "公共卫生",
+    level: "高",
+    score: 83,
+    coordinateAccuracy: "区域级估算坐标",
+    impact: "边境冲突导致人道物资通道不稳定，医疗和生活物资配送受阻。",
+    summary: "该案例展示武装冲突对公共卫生、物资保障和企业人员撤离通道的影响。",
+    evidenceTags: ["冲突事件", "人道通报"],
+    drivers: ["边境冲突", "道路封锁"],
+    chain: ["冲突升级", "通道受阻", "物资短缺"],
+    recommendations: ["建立撤离和物资替代通道"],
+    stakeholders: ["NGO", "外派人员"],
+    financials: { revenueH1UsdBn: 0.08, profitH1UsdBn: 0.01, claimTrustUsdBn: 0.02, emergencyFundMinUsdMn: 4, emergencyFundMaxUsdMn: 18 },
+  },
+];
+
 const waterQualityTimeline = [
   { label: "事故发生", date: "2月18日", ph: "异常", metal: "超标", tone: "critical" },
   { label: "应急处置", date: "3月", ph: "波动", metal: "高位", tone: "warning" },
@@ -368,6 +812,20 @@ const ownershipNodes = [
 
 const toLeafletPoint = ([lng, lat]: LngLat): [number, number] => [lat, lng];
 
+const detailCaseIds = new Set(caseItems.map((item) => item.id));
+
+const caseTypeStyles: Record<CaseCategory, { marker: string; bg: string; text: string; border: string }> = {
+  环境事故: { marker: "#16A34A", bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200" },
+  社会治安: { marker: "#DC2626", bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
+  政策合规: { marker: "#7C3AED", bg: "bg-violet-50", text: "text-violet-700", border: "border-violet-200" },
+  供应链: { marker: "#F59E0B", bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
+  公共卫生: { marker: "#0891B2", bg: "bg-cyan-50", text: "text-cyan-700", border: "border-cyan-200" },
+  交通运输: { marker: "#005BBB", bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
+  经营管理: { marker: "#475569", bg: "bg-slate-50", text: "text-slate-700", border: "border-slate-200" },
+};
+
+const caseCategoryOrder: CaseCategory[] = ["社会治安", "交通运输", "政策合规", "供应链", "经营管理", "环境事故", "公共卫生"];
+
 function CaseMapLayerSwitch({
   layers,
   activeLayerId,
@@ -400,12 +858,14 @@ export default function ConflictEarlyWarning() {
   const [pageLevel, setPageLevel] = useState<PageLevel>("overview");
   const [isCaseLibraryOpen, setIsCaseLibraryOpen] = useState(true);
 
-  const sortedCases = useMemo(() => [...caseItems].sort((a, b) => b.score - a.score), []);
-  const highRiskCount = useMemo(() => caseItems.filter((item) => item.level === "极高" || item.level === "高").length, []);
+  const overviewCases = useMemo(() => [...caseItems, ...demoCaseItems.sort((a, b) => b.score - a.score)], []);
+  const highRiskCount = useMemo(() => overviewCases.filter((item) => item.level === "极高" || item.level === "高").length, [overviewCases]);
 
   const handleSelectCase = (item: CaseItem) => {
     setSelectedCase(item);
-    setPageLevel("detail");
+    if (detailCaseIds.has(item.id)) {
+      setPageLevel("detail");
+    }
   };
 
   if (pageLevel === "detail") {
@@ -450,13 +910,13 @@ export default function ConflictEarlyWarning() {
 
             {isCaseLibraryOpen ? (
               <div className="grid grid-cols-3 gap-2">
-                <OverviewMetric label="案例" value={caseItems.length.toString()} />
+                <OverviewMetric label="案例" value={overviewCases.length.toString()} />
                 <OverviewMetric label="在线底图" value="Esri" />
                 <OverviewMetric label="高风险" value={highRiskCount.toString()} />
               </div>
             ) : (
               <div className="text-center">
-                <div className="text-lg font-semibold text-[#005BBB]">{caseItems.length}</div>
+                <div className="text-lg font-semibold text-[#005BBB]">{overviewCases.length}</div>
                 <div className="text-[11px] text-gray-500">案例</div>
               </div>
             )}
@@ -464,7 +924,7 @@ export default function ConflictEarlyWarning() {
 
           {isCaseLibraryOpen ? (
             <div className="flex-1 overflow-y-auto p-3">
-              {sortedCases.map((item, index) => (
+              {overviewCases.map((item, index) => (
                 <motion.button
                   key={item.id}
                   type="button"
@@ -475,7 +935,7 @@ export default function ConflictEarlyWarning() {
                   }`}
                 >
                   <div className="mb-3 flex items-start gap-3">
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gray-900 text-xs font-semibold text-white">
+                    <div className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-xs font-semibold ${caseTypeStyles[item.category].bg} ${caseTypeStyles[item.category].text} ${caseTypeStyles[item.category].border} border`}>
                       {index + 1}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -498,14 +958,14 @@ export default function ConflictEarlyWarning() {
                 className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-900 text-sm font-semibold text-white"
                 aria-label="展开案例列表"
               >
-                {caseItems.length}
+                {overviewCases.length}
               </button>
             </div>
           )}
         </aside>
 
         <main className="relative flex-1">
-          <CaseOverviewMap cases={sortedCases} selectedCase={selectedCase} onSelectCase={handleSelectCase} />
+          <CaseOverviewMap cases={overviewCases} selectedCase={selectedCase} onSelectCase={handleSelectCase} />
         </main>
       </div>
     </div>
@@ -517,6 +977,28 @@ function OverviewMetric({ label, value }: { label: string; value: string }) {
     <div className="rounded-lg bg-gray-50 px-3 py-2 text-center">
       <div className="text-base font-semibold text-gray-900">{value}</div>
       <div className="text-[11px] text-gray-500">{label}</div>
+    </div>
+  );
+}
+
+function CaseTypeLegend() {
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white/95 px-4 py-3 shadow-lg backdrop-blur-sm">
+      <div className="mb-2 text-xs font-semibold text-gray-600">颜色说明</div>
+      <div className="grid grid-cols-2 gap-x-5 gap-y-2">
+        {caseCategoryOrder.map((category) => {
+          const style = caseTypeStyles[category];
+          return (
+            <div key={category} className="flex items-center gap-2 text-xs text-gray-700">
+              <span
+                className="h-2.5 w-2.5 rounded-full border border-white shadow-sm"
+                style={{ backgroundColor: style.marker }}
+              />
+              <span>{category}</span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -542,6 +1024,7 @@ function CaseOverviewMap({
       >
         {cases.map((item) => {
           const isSelected = item.id === selectedCase.id;
+          const typeStyle = caseTypeStyles[item.category];
           return (
             <CircleMarker
               key={item.id}
@@ -550,7 +1033,7 @@ function CaseOverviewMap({
               pathOptions={{
                 color: "#FFFFFF",
                 weight: 3,
-                fillColor: item.level === "极高" ? "#DC2626" : "#F59E0B",
+                fillColor: typeStyle.marker,
                 fillOpacity: 0.95,
               }}
               eventHandlers={{
@@ -562,6 +1045,7 @@ function CaseOverviewMap({
               <Popup closeButton={false} autoPan={false} className="case-map-popup">
                 <div className="w-64">
                   <div className="mb-2 flex items-center justify-between gap-3">
+                    <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${typeStyle.bg} ${typeStyle.text}`}>{item.category}</span>
                     <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-700">{item.level}</span>
                     <span className="text-[11px] text-gray-500">{item.date}</span>
                   </div>
@@ -577,7 +1061,9 @@ function CaseOverviewMap({
           );
         })}
       </LeafletMap>
-
+      <div className="pointer-events-none absolute bottom-6 left-6 z-[500]">
+        <CaseTypeLegend />
+      </div>
     </div>
   );
 }
