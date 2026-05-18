@@ -53,7 +53,7 @@ export default function Login() {
             </svg>
           </div>
 
-          <div className="pointer-events-none absolute right-[-72px] top-[112px] h-[560px] w-[455px] opacity-[0.24]">
+          <div className="pointer-events-none absolute right-[92px] top-[96px] h-[720px] w-[585px] opacity-[0.22]">
             <img src={africaMapOutline} alt="" className="h-full w-full object-contain" aria-hidden="true" />
           </div>
 
@@ -93,7 +93,7 @@ export default function Login() {
           </div>
         </section>
 
-        <section className="flex items-center justify-end bg-white px-8 py-10 lg:pl-6 lg:pr-10">
+        <section className="flex items-center justify-center bg-white px-8 py-10">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
