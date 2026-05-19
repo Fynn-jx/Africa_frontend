@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, MapPin, Users, Building2, AlertCircle, AlertTriangle, Target, ArrowLeft, FileText, TrendingUp, Shield, X, ChevronRight, Calendar, Filter, Clock, Flame, CloudLightning, Globe2, Activity, Gavel, Diamond } from "lucide-react";
+import { Search, MapPin, Users, Building2, AlertCircle, AlertTriangle, Target, ArrowLeft, FileText, TrendingUp, Shield, X, ChevronRight, Calendar, Filter, Clock, Flame, CloudLightning, Globe2, Activity, Gavel, Diamond, Factory, Zap } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Circle, Popup, GeoJSON, CircleMarker } from 'react-leaflet';
 import L from 'leaflet';
 import { FeatureCollection } from 'geojson';
@@ -40,8 +40,8 @@ const filterAndAdaptEvents = (
       return isInTimeRange && isInCountry;
     })
     .map(event => {
-      const tagId = event.tags[0] || "pol-stability";
-      const tagName = tagIdToName[tagId] || "政治稳定性";
+      const tagId = event.tags[0] || "policy-continuity";
+      const tagName = tagIdToName[tagId] || "政权政策";
       const severity = popularityToSeverity(event.popularity);
 
       return {
@@ -67,100 +67,102 @@ const eventLayerTypeConfig: Record<string, {
   icon: any;
   category: string;
 }> = {
-  // 政治-制度维度
-  "政治稳定性": {
-    label: "政治稳定性",
+  // 核心政治与权力博弈风险
+  "政权政策": {
+    label: "政权政策",
     color: "#005BBB",
     icon: Globe2,
-    category: "政治-制度"
+    category: "核心政治与权力博弈"
   },
-  "法律法规": {
-    label: "法律法规",
-    color: "#005BBB",
-    icon: Gavel,
-    category: "政治-制度"
-  },
-  "双边关系": {
-    label: "双边关系",
+  "军事冲突": {
+    label: "军事冲突",
     color: "#005BBB",
     icon: AlertTriangle,
-    category: "政治-制度"
+    category: "核心政治与权力博弈"
   },
-  "地缘政治": {
-    label: "地缘政治",
+  "恐怖极端": {
+    label: "恐怖极端",
+    color: "#005BBB",
+    icon: Flame,
+    category: "核心政治与权力博弈"
+  },
+  "制裁孤立": {
+    label: "制裁孤立",
+    color: "#005BBB",
+    icon: Shield,
+    category: "核心政治与权力博弈"
+  },
+  "意识形态脱钩": {
+    label: "意识形态脱钩",
     color: "#005BBB",
     icon: Globe2,
-    category: "政治-制度"
+    category: "核心政治与权力博弈"
   },
-  // 社会-环境维度
-  "经济韧性": {
-    label: "经济韧性",
+  // 经济、贸易与资源对抗风险
+  "供应链矿产": {
+    label: "供应链矿产",
+    color: "#10B981",
+    icon: Factory,
+    category: "经贸资源对抗"
+  },
+  "能源价格": {
+    label: "能源价格",
+    color: "#10B981",
+    icon: Zap,
+    category: "经贸资源对抗"
+  },
+  "金融管制": {
+    label: "金融管制",
     color: "#10B981",
     icon: TrendingUp,
-    category: "社会-环境"
+    category: "经贸资源对抗"
   },
-  "社会治安": {
-    label: "社会治安",
+  "贸易保护": {
+    label: "贸易保护",
     color: "#10B981",
+    icon: Gavel,
+    category: "经贸资源对抗"
+  },
+  "技术壁垒": {
+    label: "技术壁垒",
+    color: "#10B981",
+    icon: Diamond,
+    category: "经贸资源对抗"
+  },
+  // 治理、合规与长臂管辖风险
+  "国有化征收": {
+    label: "国有化征收",
+    color: "#DC2626",
+    icon: Building2,
+    category: "治理合规长臂管辖"
+  },
+  "长臂管辖": {
+    label: "长臂管辖",
+    color: "#DC2626",
+    icon: Gavel,
+    category: "治理合规长臂管辖"
+  },
+  "数字对抗": {
+    label: "数字对抗",
+    color: "#DC2626",
     icon: Shield,
-    category: "社会-环境"
+    category: "治理合规长臂管辖"
   },
-  "自然灾害": {
-    label: "自然灾害",
-    color: "#10B981",
+  "绿色壁垒": {
+    label: "绿色壁垒",
+    color: "#DC2626",
     icon: CloudLightning,
-    category: "社会-环境"
+    category: "治理合规长臂管辖"
   },
-  "医疗卫生": {
-    label: "医疗卫生",
-    color: "#10B981",
+  "社会ESG舆情": {
+    label: "社会ESG舆情",
+    color: "#DC2626",
     icon: Activity,
-    category: "社会-环境"
-  },
-  "文化宗教": {
-    label: "文化宗教",
-    color: "#10B981",
-    icon: Globe2,
-    category: "社会-环境"
-  },
-  "出行安全": {
-    label: "出行安全",
-    color: "#10B981",
-    icon: MapPin,
-    category: "社会-环境"
-  },
-  "应急资源": {
-    label: "应急资源",
-    color: "#10B981",
-    icon: Activity,
-    category: "社会-环境"
-  },
-  // 安全-技术维度
-  "恐怖主义": {
-    label: "恐怖主义",
-    color: "#DC2626",
-    icon: Flame,
-    category: "安全-技术"
-  },
-  "网络安全": {
-    label: "网络安全",
-    color: "#DC2626",
-    icon: Shield,
-    category: "安全-技术"
-  },
-  "供应链安全": {
-    label: "供应链安全",
-    color: "#DC2626",
-    icon: TrendingUp,
-    category: "安全-技术"
-  },
-  "领事保护": {
-    label: "领事保护",
-    color: "#DC2626",
-    icon: Shield,
-    category: "安全-技术"
+    category: "治理合规长臂管辖"
   },
 };
+
+const eventLayerCategoryOrder = ["核心政治与权力博弈", "经贸资源对抗", "治理合规长臂管辖"];
 
 // 根据热度值获取颜色
 const getPopularityColor = (popularity: number): string => {
@@ -228,34 +230,34 @@ const regions = [
 
 // 英文标签ID到中文标签名的映射
 const tagIdToName: Record<string, string> = {
-  "pol-stability": "政治稳定性",
-  "economic-resilience": "经济韧性",
-  "public-security": "社会治安",
-  "natural-disasters": "自然灾害",
-  "health": "医疗卫生",
-  "terrorism": "恐怖主义",
-  "laws-regulations": "法律法规",
-  "culture-religion": "文化宗教",
-  "bilateral-relations": "双边关系",
-  "geopolitics": "地缘政治",
-  "cybersecurity": "网络安全",
-  "supply-chain": "供应链安全",
-  "travel-safety": "出行安全",
-  "consular-protection": "领事保护",
-  "emergency-resources": "应急资源",
+  "policy-continuity": "政权政策",
+  "military-conflict": "军事冲突",
+  "terrorism-extremism": "恐怖极端",
+  "sanctions-isolation": "制裁孤立",
+  "ideology-nationalism": "意识形态脱钩",
+  "supply-minerals": "供应链矿产",
+  "energy-price": "能源价格",
+  "financial-controls": "金融管制",
+  "trade-protectionism": "贸易保护",
+  "tech-ip-barriers": "技术壁垒",
+  "nationalization-expropriation": "国有化征收",
+  "regulatory-longarm": "长臂管辖",
+  "cyber-digital": "数字对抗",
+  "climate-green": "绿色壁垒",
+  "social-esg": "社会ESG舆情",
 };
 
 // 大分类颜色配置（与重点项目保持一致）
 const categoryColors: Record<string, string> = {
-  "政治-制度": "#005BBB",   // 蓝色
-  "社会-环境": "#10B981",   // 绿色
-  "安全-技术": "#DC2626",   // 红色
+  "核心政治与权力博弈": "#005BBB",
+  "经贸资源对抗": "#10B981",
+  "治理合规长臂管辖": "#DC2626",
 };
 
 // 根据事件类型获取分类颜色
 const getEventCategoryColor = (type: string): string => {
   const config = eventLayerTypeConfig[type];
-  return categoryColors[config?.category || "政治-制度"];
+  return categoryColors[config?.category || "核心政治与权力博弈"];
 };
 
 
@@ -270,8 +272,8 @@ function adaptEventsForSimulator(allEvents: typeof allMockEvents) {
 
   // 转换为新格式，将英文标签ID映射为中文标签名
   return allEvents.map(event => {
-    const tagId = event.tags[0] || "pol-stability"; // 使用第一个标签ID
-    const tagName = tagIdToName[tagId] || "政治稳定性"; // 映射为中文标签名
+    const tagId = event.tags[0] || "policy-continuity"; // 使用第一个标签ID
+    const tagName = tagIdToName[tagId] || "政权政策"; // 映射为中文标签名
     const severity = popularityToSeverity(event.popularity);
 
     return {
@@ -296,11 +298,11 @@ const createEventLayerIcon = (type: string, popularity: number) => {
   const config = eventLayerTypeConfig[type];
   // 根据事件类型的分类获取颜色（与重点项目保持一致）
   const categoryColors: Record<string, string> = {
-    "政治-制度": "#005BBB",   // 蓝色
-    "社会-环境": "#10B981",   // 绿色
-    "安全-技术": "#DC2626",   // 红色
+    "核心政治与权力博弈": "#005BBB",
+    "经贸资源对抗": "#10B981",
+    "治理合规长臂管辖": "#DC2626",
   };
-  const categoryColor = categoryColors[config?.category || "政治-制度"];
+  const categoryColor = categoryColors[config?.category || "核心政治与权力博弈"];
 
   const size = popularity >= 90 ? 16 : popularity >= 80 ? 14 : 12;
 
@@ -467,8 +469,8 @@ export default function ImpactSimulator() {
   // 生成影响路径
   const generateImpactPath = (eventType: string): ImpactPath[] => {
     const paths: Record<string, ImpactPath[]> = {
-      // 法律法规事件的影响路径（针对埃及通过新投资法）
-      "法律法规": [
+      // 政权政策事件的影响路径（针对埃及通过新投资法）
+      "政权政策": [
         { step: 1, stage: "政策解读", description: "新投资法通过，需深入研读法律条款，评估对现有业务的影响", severity: "medium" },
         { step: 2, stage: "合规审查", description: "对照新法律要求，审查现有投资合同和业务模式是否符合规定", severity: "high" },
         { step: 3, stage: "机遇评估", description: "评估特殊经济区税收优惠和土地政策带来的商业机会", severity: "medium" },
@@ -507,11 +509,11 @@ export default function ImpactSimulator() {
 
     // 根据事件分类返回默认路径
     const config = eventLayerTypeConfig[eventType];
-    const category = config?.category || "政治-制度";
+    const category = config?.category || "核心政治与权力博弈";
 
-    if (category === "政治-制度") {
-      return paths["法律法规"];
-    } else if (category === "安全-技术") {
+    if (category === "核心政治与权力博弈") {
+      return paths["政权政策"];
+    } else if (category === "治理合规长臂管辖") {
       return paths["attack"];
     } else {
       return paths["protest"];
@@ -520,8 +522,8 @@ export default function ImpactSimulator() {
 
   // 生成应对措施
   const generateResponseMeasures = (eventType: string): ResponseMeasure[] => {
-    // 法律法规事件的专门应对措施
-    if (eventType === "法律法规") {
+    // 政权政策事件的专门应对措施
+    if (eventType === "政权政策") {
       return [
         {
           category: "政策研究",
@@ -600,8 +602,8 @@ export default function ImpactSimulator() {
 
   // 生成资产影响路径
   const generateAssetImpactPath = (assetType: string, eventType: string): ImpactPath[] => {
-    // 法律法规事件对资产的影响
-    if (eventType === "法律法规") {
+    // 政权政策事件对资产的影响
+    if (eventType === "政权政策") {
       return [
         { step: 1, stage: "合规性审查", description: `需审查${assetType}是否符合新法律要求，可能需要调整运营模式`, severity: "high" },
         { step: 2, stage: "政策红利", description: `如位于特殊经济区，${assetType}可享受税收减免等优惠政策`, severity: "medium" },
@@ -756,9 +758,9 @@ export default function ImpactSimulator() {
       type: event.type,
       location: event.country,
       coordinates: { lat: event.location[1], lng: event.location[0] },
-      radius: event.type === "conflict" || event.type === "恐怖主义" ? 50
-              : event.type === "disaster" || event.type === "自然灾害" ? 100
-              : event.type === "法律法规" ? 30  // 法律法规事件影响范围适中
+      radius: event.type === "conflict" || event.type === "恐怖极端" ? 50
+              : event.type === "disaster" || event.type === "绿色壁垒" ? 100
+              : event.type === "政权政策" ? 30
               : 20,
       affectedPopulation: event.affectedPopulation,
       criticalInfrastructure,
@@ -818,9 +820,9 @@ export default function ImpactSimulator() {
     // 根据事件类型生成详细的事件背景
     const getEventBackground = () => {
       const backgrounds: Record<string, { title: string; content: string[] }> = {
-        // 法律法规事件的背景分析（针对埃及通过新投资法）
-        "法律法规": {
-          title: "法律法规政策背景分析",
+        // 政权政策事件的背景分析（针对埃及通过新投资法）
+        "政权政策": {
+          title: "政权政策风险背景分析",
           content: [
             `${selectedEvent.date}，${impactZone.location}议会正式通过了具有里程碑意义的新投资法。该法案的通过是埃及政府深化经济改革、优化营商环境的重要举措，标志着埃及在吸引外资和促进经济发展方面迈出了关键一步。`,
             `根据法案内容，新投资法将在苏伊士运河走廊、红海沿岸等战略位置设立3个特殊经济区。这些区域将享受税收减免、土地使用优惠和审批程序简化等政策红利。同时，法律首次引入了国际仲裁机制，显著加强了对投资者权益的保护，解决了长期以来外国投资者对埃及法律体系的担忧。`,
@@ -873,11 +875,11 @@ export default function ImpactSimulator() {
 
       // 根据事件分类返回默认背景
       const config = eventLayerTypeConfig[impactZone.type];
-      const category = config?.category || "政治-制度";
+      const category = config?.category || "核心政治与权力博弈";
 
-      if (category === "政治-制度") {
-        return backgrounds["法律法规"];
-      } else if (category === "安全-技术") {
+      if (category === "核心政治与权力博弈") {
+        return backgrounds["政权政策"];
+      } else if (category === "治理合规长臂管辖") {
         return backgrounds["attack"];
       } else {
         return backgrounds["protest"];
@@ -889,8 +891,8 @@ export default function ImpactSimulator() {
       const highRiskAssets = impactZone.chineseAssets.filter(a => a.risk === "high").length;
       const estimatedLoss = impactZone.chineseAssets.length * 5000 + impactZone.affectedPopulation * 0.1;
 
-      // 法律法规事件的专属评估
-      if (impactZone.type === "法律法规") {
+      // 政权政策事件的专属评估
+      if (impactZone.type === "政权政策") {
         return {
           demographic: {
             title: "政策覆盖人群评估",
@@ -1587,7 +1589,7 @@ export default function ImpactSimulator() {
                           <Filter className="w-3 h-3" />
                           按类型筛选
                         </div>
-                        <div className="flex flex-wrap gap-1">
+                        <div className="space-y-2">
                           <button
                             onClick={() => setEventLayerFilterType("")}
                             className={`px-2 py-1 rounded text-xs transition-all ${
@@ -1598,18 +1600,29 @@ export default function ImpactSimulator() {
                           >
                             全部
                           </button>
-                          {Object.entries(eventLayerTypeConfig).map(([key, config]) => (
-                            <button
-                              key={key}
-                              onClick={() => setEventLayerFilterType(key)}
-                              className={`px-2 py-1 rounded text-xs transition-all ${
-                                eventLayerFilterType === key
-                                  ? "bg-[#005BBB] text-white"
-                                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                              }`}
-                            >
-                              {config.label}
-                            </button>
+                          {eventLayerCategoryOrder.map((category) => (
+                            <div key={category} className="space-y-1">
+                              <div className="text-[10px] font-medium text-gray-500">{category}</div>
+                              <div className="flex flex-wrap gap-1">
+                                {Object.entries(eventLayerTypeConfig)
+                                  .filter(([_, config]) => config.category === category)
+                                  .map(([key, config]) => {
+                                    const isActive = eventLayerFilterType === key;
+                                    return (
+                                      <button
+                                        key={key}
+                                        onClick={() => setEventLayerFilterType(key)}
+                                        style={{ backgroundColor: isActive ? categoryColors[config.category] : undefined }}
+                                        className={`px-2 py-1 rounded text-xs transition-all ${
+                                          isActive ? "text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                        }`}
+                                      >
+                                        {config.label}
+                                      </button>
+                                    );
+                                  })}
+                              </div>
+                            </div>
                           ))}
                         </div>
                       </div>
@@ -1749,7 +1762,7 @@ export default function ImpactSimulator() {
                     </div>
 
                     {/* 事件类型筛选 */}
-                    <div className="ml-8 mb-2">
+                    <div className="ml-8 mb-2 space-y-2">
                       <div className="flex items-center gap-1 flex-wrap">
                         <button
                           onClick={() => handleEventTypeFilter("")}
@@ -1761,21 +1774,32 @@ export default function ImpactSimulator() {
                         >
                           全部
                         </button>
-                        {Object.entries(eventLayerTypeConfig).map(([key, config]) => (
-                          <button
-                            key={key}
-                            onClick={() => handleEventTypeFilter(key)}
-                            className={`px-2 py-1 rounded text-xs transition-all ${
-                              selectedEventType === key
-                                ? "bg-[#005BBB] text-white"
-                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                            }`}
-                          >
-                            {config.label}
-                          </button>
-                        ))}
                       </div>
-                    </div>
+                      {eventLayerCategoryOrder.map((category) => (
+                        <div key={category} className="space-y-1">
+                          <div className="text-[10px] font-medium text-gray-500">{category}</div>
+                          <div className="flex items-center gap-1 flex-wrap">
+                            {Object.entries(eventLayerTypeConfig)
+                              .filter(([_, config]) => config.category === category)
+                              .map(([key, config]) => {
+                                const isActive = selectedEventType === key;
+                                return (
+                                  <button
+                                    key={key}
+                                    onClick={() => handleEventTypeFilter(key)}
+                                    style={{ backgroundColor: isActive ? categoryColors[config.category] : undefined }}
+                                    className={`px-2 py-1 rounded text-xs transition-all ${
+                                      isActive ? "text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                    }`}
+                                  >
+                                    {config.label}
+                                  </button>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      ))}
+                      </div>
 
                     {/* 事件列表 */}
                     <div className="ml-8 max-h-64 overflow-y-auto space-y-2 pr-1">

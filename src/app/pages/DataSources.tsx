@@ -70,225 +70,63 @@ interface EventItem {
 // 标签层级数据
 const tagCategories: TagCategory[] = [
   {
-    id: "political",
-    name: "政治-制度",
+    id: "core-political",
+    name: "核心政治与权力博弈风险",
     icon: "🏛️",
     children: [
-      { id: "pol-stability", name: "政治稳定性", parentId: "political" },
-      { id: "laws-regulations", name: "法律法规", parentId: "political" },
-      { id: "bilateral-relations", name: "双边关系", parentId: "political" },
-      { id: "geopolitics", name: "地缘政治", parentId: "political" },
+      { id: "policy-continuity", name: "政权政策", parentId: "core-political" },
+      { id: "military-conflict", name: "军事冲突", parentId: "core-political" },
+      { id: "terrorism-extremism", name: "恐怖极端", parentId: "core-political" },
+      { id: "sanctions-isolation", name: "制裁孤立", parentId: "core-political" },
+      { id: "ideology-nationalism", name: "意识形态脱钩", parentId: "core-political" },
     ],
   },
   {
-    id: "social",
-    name: "社会-环境",
-    icon: "🌍",
+    id: "geo-economic-resource",
+    name: "经济、贸易与资源对抗风险",
+    icon: "⛓️",
     children: [
-      { id: "economic-resilience", name: "经济韧性", parentId: "social" },
-      { id: "public-security", name: "社会治安", parentId: "social" },
-      { id: "natural-disasters", name: "自然灾害", parentId: "social" },
-      { id: "health", name: "医疗卫生", parentId: "social" },
-      { id: "culture-religion", name: "文化宗教", parentId: "social" },
-      { id: "travel-safety", name: "出行安全", parentId: "social" },
-      { id: "emergency-resources", name: "应急资源", parentId: "social" },
+      { id: "supply-minerals", name: "供应链矿产", parentId: "geo-economic-resource" },
+      { id: "energy-price", name: "能源价格", parentId: "geo-economic-resource" },
+      { id: "financial-controls", name: "金融管制", parentId: "geo-economic-resource" },
+      { id: "trade-protectionism", name: "贸易保护", parentId: "geo-economic-resource" },
+      { id: "tech-ip-barriers", name: "技术壁垒", parentId: "geo-economic-resource" },
     ],
   },
   {
-    id: "security-tech",
-    name: "安全-技术",
-    icon: "🔒",
+    id: "governance-regulatory",
+    name: "治理、合规与长臂管辖风险",
+    icon: "⚖️",
     children: [
-      { id: "terrorism", name: "恐怖主义", parentId: "security-tech" },
-      { id: "cybersecurity", name: "网络安全", parentId: "security-tech" },
-      { id: "supply-chain", name: "供应链安全", parentId: "security-tech" },
-      { id: "consular-protection", name: "领事保护", parentId: "security-tech" },
+      { id: "nationalization-expropriation", name: "国有化征收", parentId: "governance-regulatory" },
+      { id: "regulatory-longarm", name: "长臂管辖", parentId: "governance-regulatory" },
+      { id: "cyber-digital", name: "数字对抗", parentId: "governance-regulatory" },
+      { id: "climate-green", name: "绿色壁垒", parentId: "governance-regulatory" },
+      { id: "social-esg", name: "社会ESG舆情", parentId: "governance-regulatory" },
     ],
   },
 ];
 
-// 三级标签数据
-// 二级标签名称到id的映射
+// 小指标名称到id的映射
 const tagNameToId: Record<string, string> = {
-  "政治稳定性": "pol-stability",
-  "经济韧性": "economic-resilience",
-  "社会治安": "public-security",
-  "自然灾害": "natural-disasters",
-  "医疗卫生": "health",
-  "恐怖主义": "terrorism",
-  "法律法规": "laws-regulations",
-  "文化宗教": "culture-religion",
-  "双边关系": "bilateral-relations",
-  "地缘政治": "geopolitics",
-  "网络安全": "cybersecurity",
-  "供应链安全": "supply-chain",
-  "出行安全": "travel-safety",
-  "领事保护": "consular-protection",
-  "应急资源": "emergency-resources",
+  "政权政策": "policy-continuity",
+  "军事冲突": "military-conflict",
+  "恐怖极端": "terrorism-extremism",
+  "制裁孤立": "sanctions-isolation",
+  "意识形态脱钩": "ideology-nationalism",
+  "供应链矿产": "supply-minerals",
+  "能源价格": "energy-price",
+  "金融管制": "financial-controls",
+  "贸易保护": "trade-protectionism",
+  "技术壁垒": "tech-ip-barriers",
+  "国有化征收": "nationalization-expropriation",
+  "长臂管辖": "regulatory-longarm",
+  "数字对抗": "cyber-digital",
+  "绿色壁垒": "climate-green",
+  "社会ESG舆情": "social-esg",
 };
 
-// 三级标签数据（使用id作为key）
-const subTags: Record<string, string[]> = {
-  "pol-stability": [
-    "政权更迭与选举动荡",
-    "大规模示威游行",
-    "政变未遂与军警介入政治",
-    "罢工与关键行业停摆",
-    "地方自治/分离主义活动",
-    "政治暴力与冲突升级",
-    "国家紧急状态/戒严",
-    "重大政策转向引发不稳",
-  ],
-  "economic-resilience": [
-    "通货膨胀失控与物价暴涨",
-    "汇率剧烈波动与资本管制",
-    "银行流动性危机/挤兑",
-    "主权债务风险与违约",
-    "能源价格冲击与短缺",
-    "就业恶化与失业潮",
-    "产业/金融制裁冲击",
-    "重大税制与补贴调整冲击",
-  ],
-  "public-security": [
-    "抢劫盗窃高发",
-    "绑架勒索与人质事件",
-    "有组织犯罪活动",
-    "枪击/刀刺等暴力犯罪",
-    "性侵与性骚扰风险",
-    "针对外籍人员犯罪",
-    "群体性骚乱与打砸抢",
-    "夜间出行高危区域",
-  ],
-  "natural-disasters": [
-    "地震与余震",
-    "台风/飓风与风暴潮",
-    "洪水与城市内涝",
-    "干旱与水资源短缺",
-    "森林火灾与烟霾",
-    "火山喷发与火山灰",
-    "极端高温/寒潮",
-    "山体滑坡/泥石流",
-    "海啸预警事件",
-  ],
-  "health": [
-    "传染病暴发与扩散",
-    "食源性疾病与饮水污染",
-    "医疗资源挤兑（床位/急诊）",
-    "疫苗/药品短缺",
-    "医疗罢工与服务中断",
-    "医疗质量与误诊风险",
-    "抗生素耐药与院感",
-    "入境检疫与健康申报升级",
-  ],
-  "terrorism": [
-    "爆炸袭击（含简易爆炸装置）",
-    "枪击/车辆冲撞袭击",
-    "机场/车站等软目标袭击",
-    "人质劫持与谈判事件",
-    "自杀式袭击风险",
-    "极端组织威胁声明",
-    "可疑包裹与排爆处置",
-    "反恐行动升级与封控",
-  ],
-  "laws-regulations": [
-    "签证/入境政策突变",
-    "外国人居留与登记执法",
-    "数据合规与跨境传输限制",
-    "税务稽查与合规调查",
-    "外汇监管与资金汇出限制",
-    "劳动用工法规调整",
-    "行业许可/审批准入变化",
-    "环保/安全生产执法加严",
-    "罚款制裁与黑名单机制",
-  ],
-  "culture-religion": [
-    "宗教节庆期间风险提升",
-    "禁忌行为引发冲突",
-    "着装与礼仪违规风险",
-    "性别互动规范冲突",
-    "酒精/饮食禁忌相关事件",
-    "冒犯性言论与仇恨事件",
-    "宗教场所周边敏感区",
-    "民族矛盾与排外情绪",
-    "媒体舆情与文化误读",
-  ],
-  "bilateral-relations": [
-    "双边外交摩擦升级",
-    "互相制裁与反制措施",
-    "领事通道受限/暂停",
-    "航班/签证互限",
-    "企业投资审查趋严",
-    "技术/出口管制升级",
-    "海关通关强化与查验",
-    "公民案件引发关系紧张",
-  ],
-  "geopolitics": [
-    "区域武装冲突外溢",
-    "边境紧张与对峙升级",
-    "海上争端与航运风险",
-    "国际联盟对抗与站队压力",
-    "军演增多与误判风险",
-    "难民潮与跨境人道危机",
-    "战略通道封锁/管控",
-    "能源通道与管线安全事件",
-  ],
-  "cybersecurity": [
-    "勒索软件攻击",
-    "钓鱼邮件与社工欺诈",
-    "账号盗用与权限滥用",
-    "数据泄露与隐私外泄",
-    "DDoS 攻击与业务中断",
-    "供应链软件漏洞利用",
-    "关键基础设施网络入侵",
-    "移动设备丢失与信息泄露",
-    "虚假信息/深度伪造欺骗",
-  ],
-  "supply-chain": [
-    "港口拥堵与清关延误",
-    "运输中断（海运/空运/陆运）",
-    "原材料短缺与价格飙升",
-    "关键零部件断供",
-    "仓储火灾/事故与损毁",
-    "盗抢与货损货差",
-    "质量事件与批次召回",
-    "供应商破产/停产",
-    "制裁导致替代采购受限",
-  ],
-  "travel-safety": [
-    "交通事故高发路段",
-    "公共交通罢运/停运",
-    "机场关闭与航班大面积取消",
-    "护照/行李遗失与诈骗",
-    "路检/执法盘查风险",
-    "旅游景区踩踏与拥挤事故",
-    "酒店安全（火灾/安保薄弱）",
-    "自驾风险（路况/治安/导航误导）",
-    "夜间出行限制与宵禁",
-  ],
-  "consular-protection": [
-    "公民被拘押/调查",
-    "失联人员协查",
-    "重大伤亡事件处置",
-    "证件补发与旅行证办理",
-    "大规模撤离与转移安置",
-    "领事通知权与探视受限",
-    "受害者救助与法律援助对接",
-    "集体性劳务纠纷处置",
-    "重大舆情与媒体协同",
-  ],
-  "emergency-resources": [
-    "紧急医疗转运与救护车资源",
-    "应急避难所与临时安置点",
-    "应急物资储备（食物/水/药品）",
-    "发电与燃料保障资源",
-    "通信保障与卫星电话资源",
-    "搜救力量（消防/山地/水域）",
-    "应急交通与专用通道",
-    "语言翻译与心理支持资源",
-    "安全护卫与现场秩序维护资源",
-    "灾后重建与保险理赔支持",
-  ],
-};
+const subTags: Record<string, string[]> = {};
 
 // 辅助函数：根据标签获取层级信息
 function getTagHierarchy(tag: string): { level1: string; level2: string; level3?: string } {
@@ -363,14 +201,18 @@ function getTagsHierarchy(tags: string[]): { level1: string; level2: string; lev
   };
 }
 
+function getTagNameById(tagId: string): string {
+  return tagCategories.flatMap(category => category.children).find(tag => tag.id === tagId)?.name || tagId;
+}
+
 // 虚拟知识库数据
 const knowledgeItems: KnowledgeItem[] = [
   {
     id: "kb-1",
     title: "非洲风险事件标签与样本知识库",
     category: "风险事件数据智能标注分类",
-    tags: ["政治稳定性", "经济韧性", "社会治安", "恐怖主义"],
-    summary: "收录非洲地区各类风险事件的标准化标签体系和历史标注样本，支持机器学习模型的训练与优化",
+    tags: ["政权政策", "军事冲突", "供应链矿产", "社会ESG舆情"],
+    summary: "收录非洲地区风险事件的三大类、十五小指标标签体系和历史标注样本，支持机器学习模型的训练与优化",
     content: "详细内容...",
     lastUpdate: "2025-01-15",
   },
@@ -378,7 +220,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-2",
     title: "风险事件多语分类词表库",
     category: "风险事件数据智能标注分类",
-    tags: ["法律法规", "文化宗教", "语言翻译"],
+    tags: ["意识形态脱钩", "贸易保护", "长臂管辖"],
     summary: "包含英、法、阿、葡等多语种的风险事件专业术语库，支持跨语言事件识别与分类",
     content: "详细内容...",
     lastUpdate: "2025-01-12",
@@ -387,7 +229,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-3",
     title: "风险事件要素抽取与标注规则库",
     category: "风险事件数据智能标注分类",
-    tags: ["数据合规", "网络攻击", "数据泄露"],
+    tags: ["数字对抗", "技术壁垒", "绿色壁垒"],
     summary: "定义风险事件的时间、地点、参与者、影响范围等关键要素抽取规则和标注规范",
     content: "详细内容...",
     lastUpdate: "2025-01-10",
@@ -396,7 +238,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-4",
     title: "海外利益影响路径知识图谱库",
     category: "识别风险事件对海外利益的潜在影响路径",
-    tags: ["双边关系", "地缘政治", "供应链安全"],
+    tags: ["制裁孤立", "军事冲突", "供应链矿产"],
     summary: "构建风险事件与海外利益实体之间的关系图谱，可视化展现影响传导路径",
     content: "详细内容...",
     lastUpdate: "2025-01-14",
@@ -405,7 +247,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-5",
     title: "风险—机制—后果因果链模板库",
     category: "识别风险事件对海外利益的潜在影响路径",
-    tags: ["政治稳定性", "经济韧性", "自然灾害"],
+    tags: ["政权政策", "金融管制", "绿色壁垒"],
     summary: "预定义典型风险事件的触发机制、传导路径和潜在后果的因果链模板",
     content: "详细内容...",
     lastUpdate: "2025-01-11",
@@ -414,7 +256,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-6",
     title: "行业场景化影响评估指标库",
     category: "识别风险事件对海外利益的潜在影响路径",
-    tags: ["供应链安全", "出行安全", "应急资源"],
+    tags: ["能源价格", "贸易保护", "技术壁垒"],
     summary: "针对基建、能源、矿业、制造等不同行业场景，提供差异化的影响评估指标体系",
     content: "详细内容...",
     lastUpdate: "2025-01-09",
@@ -423,7 +265,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-7",
     title: "海外利益风险应对措施与预案库",
     category: "根据影响评估提出政策建议",
-    tags: ["领事保护", "应急资源", "出行安全"],
+    tags: ["恐怖极端", "社会ESG舆情", "长臂管辖"],
     summary: "汇集各类风险事件的标准化应对措施、应急预案和最佳实践案例",
     content: "详细内容...",
     lastUpdate: "2025-01-13",
@@ -432,7 +274,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-8",
     title: "领保协同与应急处置策略库",
     category: "根据影响评估提出政策建议",
-    tags: ["领事保护", "医疗卫生", "社会治安"],
+    tags: ["恐怖极端", "军事冲突", "社会ESG舆情"],
     summary: "整合外交部、商务部、地方政府和企业多方力量的协同处置策略和流程",
     content: "详细内容...",
     lastUpdate: "2025-01-08",
@@ -441,7 +283,7 @@ const knowledgeItems: KnowledgeItem[] = [
     id: "kb-9",
     title: "国别合规与政策建议依据库",
     category: "根据影响评估提出政策建议",
-    tags: ["法律法规", "双边关系", "文化宗教"],
+    tags: ["长臂管辖", "国有化征收", "政权政策"],
     summary: "提供各国法律法规、政策环境和合规要求的最新信息，支撑政策建议制定",
     content: "详细内容...",
     lastUpdate: "2025-01-07",
@@ -800,47 +642,19 @@ export default function DataSources() {
                             {category.children.map((subTag) => (
                               <div key={subTag.id} className="border border-gray-100 rounded-lg overflow-hidden">
                                 <button
-                                  onClick={() => toggleCategory(subTag.id)}
-                                  className="w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 transition-colors"
+                                  onClick={() => toggleSubTag(subTag.id)}
+                                  className={`w-full flex items-center justify-between px-3 py-2 transition-colors ${
+                                    selectedSubTags.has(subTag.id)
+                                      ? "bg-[#005BBB] text-white"
+                                      : "hover:bg-gray-50 text-gray-700"
+                                  }`}
                                 >
                                   <div className="flex items-center gap-2">
-                                    <ChevronRight className="w-3 h-3 text-gray-400" />
-                                    <span className="text-sm text-gray-700">{subTag.name}</span>
+                                    <Tag className={`w-3.5 h-3.5 ${selectedSubTags.has(subTag.id) ? "text-white" : "text-gray-400"}`} />
+                                    <span className="text-sm">{subTag.name}</span>
                                   </div>
-                                  <ChevronDown
-                                    className={`w-3 h-3 text-gray-400 transition-transform ${
-                                      expandedCategories.has(subTag.id) ? "rotate-90" : ""
-                                    }`}
-                                  />
+                                  <span className={`text-[11px] ${selectedSubTags.has(subTag.id) ? "text-blue-100" : "text-gray-400"}`}>小指标</span>
                                 </button>
-
-                                <AnimatePresence>
-                                  {expandedCategories.has(subTag.id) && (
-                                    <motion.div
-                                      initial={{ height: 0, opacity: 0 }}
-                                      animate={{ height: "auto", opacity: 1 }}
-                                      exit={{ height: 0, opacity: 0 }}
-                                      transition={{ duration: 0.2 }}
-                                      className="overflow-hidden"
-                                    >
-                                      <div className="px-3 py-2 space-y-1">
-                                        {(subTags[subTag.id] || []).map((tag) => (
-                                          <button
-                                            key={tag}
-                                            onClick={() => toggleSubTag(tag)}
-                                            className={`w-full text-left px-3 py-1.5 text-xs rounded-lg transition-colors ${
-                                              selectedSubTags.has(tag)
-                                                ? "bg-[#005BBB] text-white"
-                                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                            }`}
-                                          >
-                                            {tag}
-                                          </button>
-                                        ))}
-                                      </div>
-                                    </motion.div>
-                                  )}
-                                </AnimatePresence>
                               </div>
                             ))}
                           </div>
@@ -865,7 +679,7 @@ export default function DataSources() {
                   <div className="flex flex-wrap gap-2">
                     {Array.from(selectedSubTags).slice(0, 5).map((tag) => (
                       <span key={tag} className="text-xs px-2 py-1 bg-white border border-blue-200 rounded-md text-gray-700">
-                        {tag}
+                        {getTagNameById(tag)}
                       </span>
                     ))}
                     {selectedSubTags.size > 5 && (

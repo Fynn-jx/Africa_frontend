@@ -132,21 +132,21 @@ const eventTypeConfig: Record<string, {
 
 // 英文标签ID到中文标签的映射
 const tagIdToName: Record<string, string> = {
-  "pol-stability": "政治稳定性",
-  "economic-resilience": "经济韧性",
-  "public-security": "社会治安",
-  "natural-disasters": "自然灾害",
-  "health": "医疗卫生",
-  "terrorism": "恐怖主义",
-  "laws-regulations": "法律法规",
-  "bilateral-relations": "双边关系",
-  "geopolitics": "地缘政治",
-  "cybersecurity": "网络安全",
-  "supply-chain": "供应链安全",
-  "consular-protection": "领事保护",
-  "culture-religion": "文化宗教",
-  "travel-safety": "出行安全",
-  "emergency-resources": "应急资源",
+  "policy-continuity": "政权政策",
+  "military-conflict": "军事冲突",
+  "terrorism-extremism": "恐怖极端",
+  "sanctions-isolation": "制裁孤立",
+  "ideology-nationalism": "意识形态脱钩",
+  "supply-minerals": "供应链矿产",
+  "energy-price": "能源价格",
+  "financial-controls": "金融管制",
+  "trade-protectionism": "贸易保护",
+  "tech-ip-barriers": "技术壁垒",
+  "nationalization-expropriation": "国有化征收",
+  "regulatory-longarm": "长臂管辖",
+  "cyber-digital": "数字对抗",
+  "climate-green": "绿色壁垒",
+  "social-esg": "社会ESG舆情",
 };
 
 // 根据热度值获取颜色
@@ -169,8 +169,8 @@ function adaptEventsForRiskIndex(allEvents: typeof allMockEvents) {
 
   // 转换为新格式，将英文标签ID映射为中文标签名
   return allEvents.map(event => {
-    const tagId = event.tags[0] || "pol-stability";
-    const tagName = tagIdToName[tagId] || "政治稳定性";
+    const tagId = event.tags[0] || "policy-continuity";
+    const tagName = tagIdToName[tagId] || "政权政策";
     const severity = popularityToSeverity(event.popularity);
 
     return {

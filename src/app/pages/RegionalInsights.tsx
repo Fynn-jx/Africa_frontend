@@ -21,9 +21,9 @@ import { mockEvents as allMockEvents } from '../../data/eventsData';
 
 // 大分类颜色配置
 const categoryColors: Record<string, string> = {
-  "政治-制度": "#005BBB",   // 蓝色
-  "社会-环境": "#10B981",   // 绿色
-  "安全-技术": "#DC2626",   // 红色
+  "核心政治与权力博弈": "#005BBB",
+  "经贸资源对抗": "#10B981",
+  "治理合规长臂管辖": "#DC2626",
 };
 
 // 水滴图标组件
@@ -66,113 +66,113 @@ const eventTypeConfig: Record<string, {
   bgIcon: string;
   category: string;
 }> = {
-  // 政治-制度维度
-  "政治稳定性": {
-    label: "政治稳定性",
+  // 核心政治与权力博弈风险
+  "政权政策": {
+    label: "政权政策",
     color: "#005BBB",
     icon: Globe2,
     bgIcon: "",
-    category: "政治-制度"
+    category: "核心政治与权力博弈"
   },
-  "法律法规": {
-    label: "法律法规",
-    color: "#005BBB",
-    icon: Gavel,
-    bgIcon: "⚖️",
-    category: "政治-制度"
-  },
-  "双边关系": {
-    label: "双边关系",
+  "军事冲突": {
+    label: "军事冲突",
     color: "#005BBB",
     icon: AlertTriangle,
-    bgIcon: "🤝",
-    category: "政治-制度"
+    bgIcon: "⚔️",
+    category: "核心政治与权力博弈"
   },
-  "地缘政治": {
-    label: "地缘政治",
-    color: "#005BBB",
-    icon: Globe2,
-    bgIcon: "🌐",
-    category: "政治-制度"
-  },
-  // 社会-环境维度
-  "经济韧性": {
-    label: "经济韧性",
-    color: "#005BBB",
-    icon: TrendingUp,
-    bgIcon: "📈",
-    category: "社会-环境"
-  },
-  "社会治安": {
-    label: "社会治安",
-    color: "#005BBB",
-    icon: Shield,
-    bgIcon: "🛡️",
-    category: "社会-环境"
-  },
-  "自然灾害": {
-    label: "自然灾害",
-    color: "#005BBB",
-    icon: CloudLightning,
-    bgIcon: "🌊",
-    category: "社会-环境"
-  },
-  "医疗卫生": {
-    label: "医疗卫生",
-    color: "#005BBB",
-    icon: Activity,
-    bgIcon: "🏥",
-    category: "社会-环境"
-  },
-  "文化宗教": {
-    label: "文化宗教",
-    color: "#005BBB",
-    icon: Globe2,
-    bgIcon: "🌍",
-    category: "社会-环境"
-  },
-  "出行安全": {
-    label: "出行安全",
-    color: "#005BBB",
-    icon: MapPin,
-    bgIcon: "✈️",
-    category: "社会-环境"
-  },
-  "应急资源": {
-    label: "应急资源",
-    color: "#005BBB",
-    icon: Activity,
-    bgIcon: "🚨",
-    category: "社会-环境"
-  },
-  // 安全-技术维度
-  "恐怖主义": {
-    label: "恐怖主义",
+  "恐怖极端": {
+    label: "恐怖极端",
     color: "#005BBB",
     icon: Flame,
     bgIcon: "🔥",
-    category: "安全-技术"
+    category: "核心政治与权力博弈"
   },
-  "网络安全": {
-    label: "网络安全",
+  "制裁孤立": {
+    label: "制裁孤立",
+    color: "#005BBB",
+    icon: Shield,
+    bgIcon: "⛔",
+    category: "核心政治与权力博弈"
+  },
+  "意识形态脱钩": {
+    label: "意识形态脱钩",
+    color: "#005BBB",
+    icon: Globe2,
+    bgIcon: "🌐",
+    category: "核心政治与权力博弈"
+  },
+  // 经济、贸易与资源对抗风险
+  "供应链矿产": {
+    label: "供应链矿产",
+    color: "#005BBB",
+    icon: Factory,
+    bgIcon: "⛓️",
+    category: "经贸资源对抗"
+  },
+  "能源价格": {
+    label: "能源价格",
+    color: "#005BBB",
+    icon: Zap,
+    bgIcon: "⚡",
+    category: "经贸资源对抗"
+  },
+  "金融管制": {
+    label: "金融管制",
+    color: "#005BBB",
+    icon: TrendingUp,
+    bgIcon: "💱",
+    category: "经贸资源对抗"
+  },
+  "贸易保护": {
+    label: "贸易保护",
+    color: "#005BBB",
+    icon: Gavel,
+    bgIcon: "🧾",
+    category: "经贸资源对抗"
+  },
+  "技术壁垒": {
+    label: "技术壁垒",
+    color: "#005BBB",
+    icon: Diamond,
+    bgIcon: "💠",
+    category: "经贸资源对抗"
+  },
+  // 治理、合规与长臂管辖风险
+  "国有化征收": {
+    label: "国有化征收",
+    color: "#005BBB",
+    icon: Building2,
+    bgIcon: "🏢",
+    category: "治理合规长臂管辖"
+  },
+  "长臂管辖": {
+    label: "长臂管辖",
+    color: "#005BBB",
+    icon: Gavel,
+    bgIcon: "⚖️",
+    category: "治理合规长臂管辖"
+  },
+  "数字对抗": {
+    label: "数字对抗",
     color: "#005BBB",
     icon: Shield,
     bgIcon: "🔒",
-    category: "安全-技术"
+    category: "治理合规长臂管辖"
   },
-  "供应链安全": {
-    label: "供应链安全",
+  "绿色壁垒": {
+    label: "绿色壁垒",
     color: "#005BBB",
-    icon: TrendingUp,
-    bgIcon: "📦",
-    category: "安全-技术"
+    icon: CloudLightning,
+    bgIcon: "🌱",
+    category: "治理合规长臂管辖"
   },
-  "领事保护": {
-    label: "领事保护",
+  "社会ESG舆情": {
+    label: "社会ESG舆情",
     color: "#005BBB",
-    icon: Shield,
-    bgIcon: "🛂",
-    category: "安全-技术"
+    icon: Activity,
+    bgIcon: "📣",
+    category: "治理合规长臂管辖"
   },
 };
 
@@ -181,7 +181,7 @@ const tazaraNearbyEvents = [
   {
     id: "evt-001",
     location: [34.5, -6.5] as [number, number], // 坦桑尼亚中部
-    type: "政治稳定性",
+    type: "政权政策",
     severity: "high" as const,
     title: "坦桑尼亚中部抗议活动升级",
     description: "示威活动阻碍铁路运输",
@@ -191,7 +191,7 @@ const tazaraNearbyEvents = [
   {
     id: "evt-002",
     location: [31.5, -9.0] as [number, number], // 坦桑尼亚南部
-    type: "社会治安",
+    type: "社会ESG舆情",
     severity: "medium" as const,
     title: "矿区安全事件频发",
     description: "影响矿业生产和运输",
@@ -201,7 +201,7 @@ const tazaraNearbyEvents = [
   {
     id: "evt-003",
     location: [30.0, -13.0] as [number, number], // 坦赞边境地区
-    type: "自然灾害",
+    type: "绿色壁垒",
     severity: "high" as const,
     title: "强降雨导致铁路路基受损",
     description: "部分路段暂停运营",
@@ -211,7 +211,7 @@ const tazaraNearbyEvents = [
   {
     id: "evt-004",
     location: [28.5, -14.5] as [number, number], // 赞比亚铜带
-    type: "经济韧性",
+    type: "供应链矿产",
     severity: "medium" as const,
     title: "赞比亚铜矿工人罢工",
     description: "影响铜矿出口和铁路运输",
@@ -232,21 +232,21 @@ const tazaraNearbyLogistics = [
 
 // 英文标签ID到中文标签名的映射
 const tagIdToName: Record<string, string> = {
-  "pol-stability": "政治稳定性",
-  "economic-resilience": "经济韧性",
-  "public-security": "社会治安",
-  "natural-disasters": "自然灾害",
-  "health": "医疗卫生",
-  "terrorism": "恐怖主义",
-  "laws-regulations": "法律法规",
-  "culture-religion": "文化宗教",
-  "bilateral-relations": "双边关系",
-  "geopolitics": "地缘政治",
-  "cybersecurity": "网络安全",
-  "supply-chain": "供应链安全",
-  "travel-safety": "出行安全",
-  "consular-protection": "领事保护",
-  "emergency-resources": "应急资源",
+  "policy-continuity": "政权政策",
+  "military-conflict": "军事冲突",
+  "terrorism-extremism": "恐怖极端",
+  "sanctions-isolation": "制裁孤立",
+  "ideology-nationalism": "意识形态脱钩",
+  "supply-minerals": "供应链矿产",
+  "energy-price": "能源价格",
+  "financial-controls": "金融管制",
+  "trade-protectionism": "贸易保护",
+  "tech-ip-barriers": "技术壁垒",
+  "nationalization-expropriation": "国有化征收",
+  "regulatory-longarm": "长臂管辖",
+  "cyber-digital": "数字对抗",
+  "climate-green": "绿色壁垒",
+  "social-esg": "社会ESG舆情",
 };
 
 // 将数据中心的事件数据适配为RegionalInsights需要的格式
@@ -266,8 +266,8 @@ function adaptEventsForRegionalInsights(allEvents: typeof allMockEvents, startDa
 
   // 转换为新格式，将英文标签ID映射为中文标签名
   return filteredEvents.map(event => {
-    const tagId = event.tags[0] || "pol-stability"; // 使用第一个标签ID
-    const tagName = tagIdToName[tagId] || "政治稳定性"; // 映射为中文标签名
+    const tagId = event.tags[0] || "policy-continuity"; // 使用第一个标签ID
+    const tagName = tagIdToName[tagId] || "政权政策"; // 映射为中文标签名
     const severity = popularityToSeverity(event.popularity);
 
     return {
@@ -429,15 +429,15 @@ export default function RegionalInsights() {
       totalEvents: filteredEvents.length,
       politicalEvents: filteredEvents.filter(e => {
         const config = eventTypeConfig[e.type];
-        return config && config.category === "政治-制度";
+        return config && config.category === "核心政治与权力博弈";
       }).length,
       socialEvents: filteredEvents.filter(e => {
         const config = eventTypeConfig[e.type];
-        return config && config.category === "社会-环境";
+        return config && config.category === "经贸资源对抗";
       }).length,
       securityEvents: filteredEvents.filter(e => {
         const config = eventTypeConfig[e.type];
-        return config && config.category === "安全-技术";
+        return config && config.category === "治理合规长臂管辖";
       }).length,
       highRiskEvents: filteredEvents.filter(e => e.severity === 'high').length,
       affectedCountries: [...new Set(filteredEvents.map(e => e.country))].length,
@@ -468,7 +468,7 @@ export default function RegionalInsights() {
 
   const getEventIcon = (type: string, severity: string) => {
     const config = eventTypeConfig[type];
-    const categoryColor = categoryColors[config?.category || "政治-制度"];
+    const categoryColor = categoryColors[config?.category || "核心政治与权力博弈"];
     const size = severity === 'high' ? 28 : severity === 'medium' ? 24 : 20;
 
     return L.divIcon({
@@ -952,7 +952,7 @@ export default function RegionalInsights() {
           <>
             {tazaraNearbyEvents.map((event) => {
               const eventConfig = eventTypeConfig[event.type];
-              const iconColor = categoryColors[eventConfig?.category || "政治-制度"];
+              const iconColor = categoryColors[eventConfig?.category || "核心政治与权力博弈"];
               const isSelected = selectedEvent?.id === event.id;
 
               // 创建��定义地图标记图标
@@ -1063,7 +1063,7 @@ export default function RegionalInsights() {
             <div className="space-y-2">
               {/* 按维度分组 */}
               <div className="space-y-1.5">
-                <div className="text-[10px] text-gray-500 font-medium px-1">政治-制度</div>
+                <div className="text-[10px] text-gray-500 font-medium px-1">核心政治与权力博弈</div>
                 <div className="flex flex-wrap gap-1">
                   <button
                     onClick={() => setSelectedEventType("")}
@@ -1076,7 +1076,7 @@ export default function RegionalInsights() {
                     全部
                   </button>
                   {Object.entries(eventTypeConfig)
-                    .filter(([_, config]) => config.category === "政治-制度")
+                    .filter(([_, config]) => config.category === "核心政治与权力博弈")
                     .map(([key, config]) => (
                       <button
                         key={key}
@@ -1095,16 +1095,16 @@ export default function RegionalInsights() {
               </div>
 
               <div className="space-y-1.5">
-                <div className="text-[10px] text-gray-500 font-medium px-1">社会-环境</div>
+                <div className="text-[10px] text-gray-500 font-medium px-1">经贸资源对抗</div>
                 <div className="flex flex-wrap gap-1">
                   {Object.entries(eventTypeConfig)
-                    .filter(([_, config]) => config.category === "社会-环境")
+                    .filter(([_, config]) => config.category === "经贸资源对抗")
                     .map(([key, config]) => (
                       <button
                         key={key}
                         onClick={() => setSelectedEventType(key)}
                         className={`px-2 py-1 rounded text-xs transition-all flex items-center gap-1 ${
-                          selectedEventType === key
+                            selectedEventType === key
                             ? "bg-[#10B981] text-white"
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                         }`}
@@ -1117,10 +1117,10 @@ export default function RegionalInsights() {
               </div>
 
               <div className="space-y-1.5">
-                <div className="text-[10px] text-gray-500 font-medium px-1">安全-技术</div>
+                <div className="text-[10px] text-gray-500 font-medium px-1">治理合规长臂管辖</div>
                 <div className="flex flex-wrap gap-1">
                   {Object.entries(eventTypeConfig)
-                    .filter(([_, config]) => config.category === "安全-技术")
+                    .filter(([_, config]) => config.category === "治理合规长臂管辖")
                     .map(([key, config]) => (
                       <button
                         key={key}
@@ -1193,7 +1193,7 @@ export default function RegionalInsights() {
             <div className="space-y-1.5">
               {filteredEvents.slice(0, 100).map((event, index) => {
                 const config = eventTypeConfig[event.type];
-                const categoryColor = categoryColors[config?.category || "政治-制度"];
+                const categoryColor = categoryColors[config?.category || "核心政治与权力博弈"];
                 const popularityColor = getPopularityColor(event.popularity);
                 return (
                   <motion.div
