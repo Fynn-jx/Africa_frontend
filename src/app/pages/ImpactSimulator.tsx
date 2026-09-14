@@ -1477,7 +1477,7 @@ export default function ImpactSimulator() {
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                  url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
                 {/* 显示所有国家边界（使用真�� GeoJSON 数据） */}
@@ -1908,7 +1908,7 @@ export default function ImpactSimulator() {
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
               {/* 影响范围圆圈 */}
