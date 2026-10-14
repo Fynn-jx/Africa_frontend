@@ -1,13 +1,15 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, MapPin, Users, Building2, AlertCircle, AlertTriangle, Target, ArrowLeft, FileText, TrendingUp, Shield, X, ChevronRight, Calendar, Filter, Clock, Flame, CloudLightning, Globe2, Activity, Gavel, Diamond, Factory, Zap } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Circle, Popup, GeoJSON, CircleMarker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Circle, Popup, GeoJSON, CircleMarker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { FeatureCollection } from 'geojson';
 import 'leaflet/dist/leaflet.css';
 import { mockEvents as allMockEvents } from '../../data/eventsData';
 import KnowledgeBaseSelector from '../../components/KnowledgeBaseSelector';
 import { KnowledgeItem } from '../../data/knowledgeBase';
+import { createReviewImpactZone, reviewDemoEvent } from '../../data/reviewDemo';
+import { ReviewDemoSummary, ReviewDemoToolbar } from '../components/ReviewDemo';
 
 // 非洲大陆边界
 const AFRICA_BOUNDS: [[number, number], [number, number]] = [
@@ -338,7 +340,7 @@ interface ResponseMeasure {
 }
 
 interface ImpactZone {
-  type: "protest" | "attack" | "conflict" | "disaster";
+  type: string;
   location: string;
   coordinates: { lat: number; lng: number };
   radius: number;
@@ -389,14 +391,15 @@ const chineseAssetsByRegion = {
 };
 
 export default function ImpactSimulator() {
-  const [view, setView] = useState<"selector" | "analysis">("selector");
+  const [view, setView] = useState<"selector" | "analysis">("analysis");
   const [selectedTime, setSelectedTime] = useState(timeOptions[0]);
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedEventType, setSelectedEventType] = useState<string>("");
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [impactZone, setImpactZone] = useState<ImpactZone | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<any>(reviewDemoEvent);
+  const [impactZone, setImpactZone] = useState<ImpactZone | null>(createReviewImpactZone);
+  const [mapRevision, setMapRevision] = useState(0);
   const [showReport, setShowReport] = useState(false);
   const [expandedAssets, setExpandedAssets] = useState<Set<string>>(new Set());
   const [expandedInfra, setExpandedInfra] = useState<Set<string>>(new Set());
@@ -729,13 +732,16 @@ export default function ImpactSimulator() {
 
   // 选择事件进行分析
   const handleEventSelect = (event: any) => {
-    setSelectedEvent(event);
-
     // 找到所属地区
     const country = africanCountries.find(c => c.name === event.country);
     const region = regions.find(r => r.countries.includes(event.country));
 
     if (!country) return;
+    setSelectedEvent(event);
+    setExpandedAssets(new Set());
+    setExpandedInfra(new Set());
+    setShowReport(false);
+    setMapRevision(value => value + 1);
 
     // 生成影响区域数据
     const regionAssets = chineseAssetsByRegion[region?.id || "east-africa"] || [];
@@ -805,11 +811,34 @@ export default function ImpactSimulator() {
     setSelectedEvent(null);
     setImpactZone(null);
     setShowReport(false);
+    setExpandedAssets(new Set());
+    setExpandedInfra(new Set());
   };
+
+  const restoreDemo = () => {
+    setSelectedTime(timeOptions[0]);
+    setSelectedRegion("");
+    setSelectedCountry("");
+    setSelectedEventType("");
+    setFilteredEvents([]);
+    setShowEventsLayer(false);
+    setEventLayerFilterType("");
+    setEventLayerFilterSeverity("");
+    setSelectedKnowledgeItems([]);
+    setExpandedAssets(new Set());
+    setExpandedInfra(new Set());
+    setShowReport(false);
+    setSelectedEvent(reviewDemoEvent);
+    setImpactZone(createReviewImpactZone());
+    setMapRevision(value => value + 1);
+    setView("analysis");
+  };
+  const isReviewDemo = selectedEvent?.id === reviewDemoEvent.id;
 
   // 生成报告内容
   const generateReportContent = () => {
     if (!impactZone || !selectedEvent) return null;
+    if (isReviewDemo) return <ReviewDemoSummary full />;
 
     const currentDate = new Date().toLocaleDateString('zh-CN', {
       year: 'numeric',
@@ -1450,7 +1479,9 @@ export default function ImpactSimulator() {
   };
 
   return (
-    <div className="h-[calc(100vh-73px)] bg-[#FAFAFA] relative">
+    <div className="h-[calc(100vh-73px)] bg-[#FAFAFA] relative flex flex-col">
+      <ReviewDemoToolbar isDemo={isReviewDemo} onReset={restoreDemo} onExplore={handleBack} />
+      <div className="relative flex-1 min-h-0">
       <AnimatePresence mode="wait">
         {/* 选择器视图 */}
         {view === "selector" && (
@@ -1872,11 +1903,11 @@ export default function ImpactSimulator() {
               className="absolute top-6 left-6 z-10 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
               <ArrowLeft className="w-5 h-5 text-gray-600" />
-              <span className="text-sm text-gray-900">返回</span>
+              <span className="text-sm text-gray-900">选择其他事件</span>
             </button>
 
             {/* 事件信息显示 */}
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10">
+            <div className="absolute bottom-6 left-6 right-[424px] z-10 pointer-events-none">
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1896,9 +1927,10 @@ export default function ImpactSimulator() {
 
             {/* 地图 */}
             <MapContainer
+              key={`analysis-${mapRevision}`}
               center={[impactZone.coordinates.lat, impactZone.coordinates.lng]}
-              zoom={8}
-              className="w-full h-full z-0"
+              zoom={isReviewDemo ? 10 : 8}
+              className="h-full z-0 !absolute !left-0 !top-0 !right-[400px]"
               zoomControl={false}
               attributionControl={false}
               minZoom={3}
@@ -1956,7 +1988,7 @@ export default function ImpactSimulator() {
                 const assetColor = getRiskColor(asset.risk);
 
                 return (
-                  <Circle
+                  <CircleMarker
                     key={index}
                     center={[lat, lng]}
                     radius={7}
@@ -1966,6 +1998,7 @@ export default function ImpactSimulator() {
                     opacity={0.95}
                     fillOpacity={0.85}
                   >
+                    {isReviewDemo && <Tooltip permanent direction={index === 1 ? "left" : "right"}>{asset.name}</Tooltip>}
                     <Popup>
                       <div className="p-2 min-w-[200px]">
                         <div className="flex items-start justify-between mb-2">
@@ -1991,7 +2024,7 @@ export default function ImpactSimulator() {
                         </div>
                       </div>
                     </Popup>
-                  </Circle>
+                  </CircleMarker>
                 );
               })}
 
@@ -2003,7 +2036,7 @@ export default function ImpactSimulator() {
                 const lat = impactZone.coordinates.lat + Math.sin(angle) * distance;
 
                 return (
-                  <Circle
+                  <CircleMarker
                     key={index}
                     center={[lat, lng]}
                     radius={5}
@@ -2022,14 +2055,15 @@ export default function ImpactSimulator() {
                         <div className="text-xs text-gray-500">{infra.type}</div>
                       </div>
                     </Popup>
-                  </Circle>
+                  </CircleMarker>
                 );
               })}
             </MapContainer>
 
             {/* 右侧分析面板 */}
-            <div className="absolute right-0 top-0 bottom-0 w-[400px] bg-white/95 backdrop-blur-sm shadow-[-4px_0_20px_rgba(0,0,0,0.08)] overflow-y-auto">
+            <div key={`summary-${mapRevision}`} className="absolute right-0 top-0 bottom-0 w-[400px] bg-white/95 backdrop-blur-sm shadow-[-4px_0_20px_rgba(0,0,0,0.08)] overflow-y-auto">
               <div className="p-6">
+                {isReviewDemo && <div className="mb-6"><ReviewDemoSummary destination="/regional-insights" /></div>}
                 {/* 标题 */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
@@ -2041,7 +2075,7 @@ export default function ImpactSimulator() {
 
                 {/* 影响半径 */}
                 <div className="mb-6 p-4 bg-gray-50 rounded-xl">
-                  <div className="text-xs text-gray-500 mb-2">影响半径</div>
+                  <div className="text-xs text-gray-500 mb-2">{isReviewDemo ? "设定影响半径" : "影响半径"}</div>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl tabular-nums text-gray-900">{impactZone.radius}</span>
                     <span className="text-sm text-gray-500">公里</span>
@@ -2054,7 +2088,7 @@ export default function ImpactSimulator() {
                   <div className="p-4 bg-white border border-gray-100 rounded-xl">
                     <div className="flex items-center gap-3 mb-1">
                       <Users className="w-5 h-5 text-[#005BBB]" />
-                      <span className="text-xs text-gray-500">受影响总人口</span>
+                      <span className="text-xs text-gray-500">{isReviewDemo ? "情景人口（演示设定）" : "受影响总人口"}</span>
                     </div>
                     <div className="text-3xl tabular-nums text-gray-900 ml-8">
                       {impactZone.affectedPopulation.toLocaleString()}
@@ -2227,7 +2261,7 @@ export default function ImpactSimulator() {
           </motion.div>
         )}
       </AnimatePresence>
-
+      </div>
       {/* 报告弹窗 */}
       <AnimatePresence>
         {showReport && (

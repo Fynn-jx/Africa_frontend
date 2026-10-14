@@ -18,6 +18,8 @@ import { FeatureCollection } from 'geojson';
 import { loadMiningData } from '../../utils/loadMiningData';
 import { loadTazaraData } from '../../utils/loadTazaraData';
 import { mockEvents as allMockEvents } from '../../data/eventsData';
+import { reviewDemoEvent, reviewDemoPeriod } from '../../data/reviewDemo';
+import { ReviewDemoSummary, ReviewDemoToolbar } from '../components/ReviewDemo';
 
 // 大分类颜色配置
 const categoryColors: Record<string, string> = {
@@ -178,6 +180,7 @@ const eventTypeConfig: Record<string, {
 
 // 坦赞铁路附近的事件数据
 const tazaraNearbyEvents = [
+  reviewDemoEvent,
   {
     id: "evt-001",
     location: [34.5, -6.5] as [number, number], // 坦桑尼亚中部
@@ -360,6 +363,8 @@ function calculateDistance(coord1: [number, number], coord2: [number, number]): 
 }
 
 export default function RegionalInsights() {
+  const [demoMode, setDemoMode] = useState(true);
+  const [mapRevision, setMapRevision] = useState(0);
   const [africaGeoJSON, setAfricaGeoJSON] = useState<FeatureCollection | null>(null);
   const [miningData, setMiningData] = useState<any>(null);
   const [tazaraData, setTazaraData] = useState<any>(null);
@@ -382,37 +387,38 @@ export default function RegionalInsights() {
   }, []);
 
   // 时间选择状态
-  const [startDate, setStartDate] = useState<Date>(() => {
-    const date = new Date();
-    date.setDate(date.getDate() - 30);
-    return date;
-  });
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date>(() => new Date(reviewDemoPeriod.start));
+  const [endDate, setEndDate] = useState<Date>(() => new Date(reviewDemoPeriod.end));
 
   // 筛选状态
   const [selectedEventType, setSelectedEventType] = useState<string>("");
   const [selectedSeverity, setSelectedSeverity] = useState<string>("");
 
   // 右侧标签页
-  const [activeTab, setActiveTab] = useState<"industrial" | "infrastructure" | "economic" | "enterprise">("industrial");
+  const [activeTab, setActiveTab] = useState<"industrial" | "infrastructure" | "economic" | "enterprise">("infrastructure");
 
   // 矿产数据图层控制
   const [showMiningLayer, setShowMiningLayer] = useState<boolean>(false);
 
   // 物流枢纽图层控制
-  const [showLogisticsLayer, setShowLogisticsLayer] = useState<boolean>(false);
+  const [showLogisticsLayer, setShowLogisticsLayer] = useState<boolean>(true);
 
   // 选中的重点项目
-  const [selectedInfrastructure, setSelectedInfrastructure] = useState<string | null>(null);
+  const [selectedInfrastructure, setSelectedInfrastructure] = useState<string | null>("ki-1");
 
   // 选中的事件（用于显示影响范围）
-  const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<any | null>(reviewDemoEvent);
 
   // 地图视图控制
-  const [mapView, setMapView] = useState<{ center: [number, number]; zoom: number } | null>(null);
+  const [mapView, setMapView] = useState<{ center: [number, number]; zoom: number } | null>({ center: reviewDemoEvent.location, zoom: 7 });
 
   // 生成事件数据
-  const events = useMemo(() => adaptEventsForRegionalInsights(allMockEvents, startDate, endDate), [startDate, endDate]);
+  const events = useMemo(() => {
+    const scenarios = (demoMode ? [reviewDemoEvent] : tazaraNearbyEvents)
+      .filter(event => event.date >= startDate.toISOString().slice(0, 10) && event.date <= endDate.toISOString().slice(0, 10))
+      .map(event => ({ ...event, label: event.title, country: "坦赞铁路沿线", popularity: event.severity === "high" ? 95 : 85 }));
+    return demoMode ? scenarios : [...scenarios, ...adaptEventsForRegionalInsights(allMockEvents, startDate, endDate)];
+  }, [startDate, endDate, demoMode]);
 
   // 筛选后的事件
   const filteredEvents = useMemo(() => {
@@ -422,6 +428,41 @@ export default function RegionalInsights() {
       return true;
     });
   }, [events, selectedEventType, selectedSeverity]);
+
+  useEffect(() => {
+    if (selectedEvent && !filteredEvents.some(event => event.id === selectedEvent.id)) setSelectedEvent(null);
+  }, [filteredEvents, selectedEvent]);
+
+  const explore = () => {
+    setDemoMode(false);
+    setSelectedEvent(null);
+    setSelectedInfrastructure(null);
+    setSelectedEventType("");
+    setSelectedSeverity("");
+    setShowMiningLayer(false);
+    setShowLogisticsLayer(false);
+    setMapView(null);
+  };
+
+  const selectTab = (tab: typeof activeTab) => {
+    explore();
+    setActiveTab(tab);
+  };
+
+  const restoreDemo = () => {
+    setDemoMode(true);
+    setStartDate(new Date(reviewDemoPeriod.start));
+    setEndDate(new Date(reviewDemoPeriod.end));
+    setSelectedEventType("");
+    setSelectedSeverity("");
+    setActiveTab("infrastructure");
+    setSelectedInfrastructure("ki-1");
+    setSelectedEvent(reviewDemoEvent);
+    setShowMiningLayer(false);
+    setShowLogisticsLayer(true);
+    setMapView({ center: reviewDemoEvent.location, zoom: 7 });
+    setMapRevision(value => value + 1);
+  };
 
   // 统计数据 - 按标签维度统计
   const statistics = useMemo(() => {
@@ -449,7 +490,7 @@ export default function RegionalInsights() {
     if (activeTab === "infrastructure") {
       if (selectedInfrastructure === "ki-1") {
         // 坦赞铁路：放大到铁路区域
-        setMapView({ center: [35.0, -12.0], zoom: 6 });
+        setMapView(selectedEvent ? { center: selectedEvent.location, zoom: 7 } : { center: [33.0, -10.0], zoom: 6 });
       } else if (selectedInfrastructure) {
         // 其他项目：放大到项目位置
         const project = keyProjects.keyInfrastructure.find(p => p.id === selectedInfrastructure);
@@ -464,7 +505,7 @@ export default function RegionalInsights() {
       // 切换标签页：恢复默认视图
       setMapView(null);
     }
-  }, [selectedInfrastructure, activeTab]);
+  }, [selectedInfrastructure, activeTab, selectedEvent]);
 
   const getEventIcon = (type: string, severity: string) => {
     const config = eventTypeConfig[type];
@@ -528,10 +569,13 @@ export default function RegionalInsights() {
   };
 
   return (
-    <div className="h-[calc(100vh-73px)] bg-[#FAFAFA] relative overflow-hidden">
+    <div className="h-[calc(100vh-73px)] bg-[#FAFAFA] relative overflow-hidden flex flex-col">
+      <ReviewDemoToolbar isDemo={demoMode} onReset={restoreDemo} onExplore={() => selectTab("infrastructure")} />
+      <div className="relative flex-1 min-h-0">
       {/* 地图 */}
       <div className="absolute inset-0">
         <MapContainer
+          key={`regional-${mapRevision}`}
           center={[20, 0]}
           zoom={3}
           className="w-full h-full z-0"
@@ -565,6 +609,7 @@ export default function RegionalInsights() {
 
           {/* 风险事件标记 - 缩小图标，密集显示 */}
           {filteredEvents.map((event) => {
+            if (activeTab === "infrastructure" && selectedInfrastructure === "ki-1" && tazaraNearbyEvents.some(item => item.id === event.id)) return null;
             const icon = getEventIcon(event.type, event.severity);
             const popularityColor = getPopularityColor(event.popularity);
             return (
@@ -950,7 +995,7 @@ export default function RegionalInsights() {
         {/* 坦赞铁路附近的事件 - 只在显示坦赞铁路时显示 */}
         {activeTab === "infrastructure" && selectedInfrastructure === "ki-1" && (
           <>
-            {tazaraNearbyEvents.map((event) => {
+            {tazaraNearbyEvents.filter(event => filteredEvents.some(item => item.id === event.id)).map((event) => {
               const eventConfig = eventTypeConfig[event.type];
               const iconColor = categoryColors[eventConfig?.category || "核心政治与权力博弈"];
               const isSelected = selectedEvent?.id === event.id;
@@ -986,6 +1031,7 @@ export default function RegionalInsights() {
                   icon={mapPinIcon}
                   eventHandlers={{
                     click: () => {
+                      setDemoMode(false);
                       setSelectedEvent(selectedEvent?.id === event.id ? null : event);
                     }
                   }}
@@ -1022,7 +1068,7 @@ export default function RegionalInsights() {
 
       {/* 左侧面板 - 时间选择、事件列表、统计 */}
       <div className="absolute top-6 left-6 bottom-6 w-80 flex flex-col z-10">
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl flex-1 flex flex-col overflow-hidden">
+        <div key={`filters-${mapRevision}`} className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl flex-1 min-h-0 overflow-y-auto">
           {/* 时间选择器 */}
           <div className="p-5 border-b border-gray-200">
             <div className="flex items-center gap-2 mb-4">
@@ -1036,7 +1082,7 @@ export default function RegionalInsights() {
                 <input
                   type="date"
                   value={formatDate(startDate)}
-                  onChange={(e) => setStartDate(new Date(e.target.value))}
+                  onChange={(e) => { if (e.target.value) { setDemoMode(false); setStartDate(new Date(e.target.value)); } }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#005BBB] focus:border-transparent"
                   max={formatDate(endDate)}
                 />
@@ -1046,7 +1092,7 @@ export default function RegionalInsights() {
                 <input
                   type="date"
                   value={formatDate(endDate)}
-                  onChange={(e) => setEndDate(new Date(e.target.value))}
+                  onChange={(e) => { if (e.target.value) { setDemoMode(false); setEndDate(new Date(e.target.value)); } }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#005BBB] focus:border-transparent"
                   min={formatDate(startDate)}
                 />
@@ -1055,18 +1101,18 @@ export default function RegionalInsights() {
           </div>
 
           {/* 筛选器 */}
-          <div className="px-5 py-3 border-b border-gray-200">
-            <div className="flex items-center gap-2 mb-2">
+          <details open={!demoMode} className="px-5 py-3 border-b border-gray-200">
+            <summary className="flex cursor-pointer items-center gap-2 mb-2">
               <Filter className="w-4 h-4 text-gray-500" />
-              <span className="text-xs font-medium text-gray-700">事件筛选</span>
-            </div>
+              <span className="text-xs font-medium text-gray-700">事件筛选 · 点击展开或收起</span>
+            </summary>
             <div className="space-y-2">
               {/* 按维度分组 */}
               <div className="space-y-1.5">
                 <div className="text-[10px] text-gray-500 font-medium px-1">核心政治与权力博弈</div>
                 <div className="flex flex-wrap gap-1">
                   <button
-                    onClick={() => setSelectedEventType("")}
+                    onClick={() => { setDemoMode(false); setSelectedEventType(""); }}
                     className={`px-2 py-1 rounded text-xs transition-all ${
                       selectedEventType === ""
                         ? "bg-[#005BBB] text-white"
@@ -1080,7 +1126,7 @@ export default function RegionalInsights() {
                     .map(([key, config]) => (
                       <button
                         key={key}
-                        onClick={() => setSelectedEventType(key)}
+                        onClick={() => { setDemoMode(false); setSelectedEventType(key); }}
                         className={`px-2 py-1 rounded text-xs transition-all flex items-center gap-1 ${
                           selectedEventType === key
                             ? "bg-[#005BBB] text-white"
@@ -1102,7 +1148,7 @@ export default function RegionalInsights() {
                     .map(([key, config]) => (
                       <button
                         key={key}
-                        onClick={() => setSelectedEventType(key)}
+                        onClick={() => { setDemoMode(false); setSelectedEventType(key); }}
                         className={`px-2 py-1 rounded text-xs transition-all flex items-center gap-1 ${
                             selectedEventType === key
                             ? "bg-[#10B981] text-white"
@@ -1124,7 +1170,7 @@ export default function RegionalInsights() {
                     .map(([key, config]) => (
                       <button
                         key={key}
-                        onClick={() => setSelectedEventType(key)}
+                        onClick={() => { setDemoMode(false); setSelectedEventType(key); }}
                         className={`px-2 py-1 rounded text-xs transition-all flex items-center gap-1 ${
                           selectedEventType === key
                             ? "bg-[#DC2626] text-white"
@@ -1141,7 +1187,7 @@ export default function RegionalInsights() {
               {/* 严重程度筛选 */}
               <div className="flex gap-1 pt-1">
                 <button
-                  onClick={() => setSelectedSeverity("")}
+                  onClick={() => { setDemoMode(false); setSelectedSeverity(""); }}
                   className={`px-2 py-1 rounded text-xs transition-all ${
                     selectedSeverity === ""
                       ? "bg-[#005BBB] text-white"
@@ -1151,7 +1197,7 @@ export default function RegionalInsights() {
                   全部严重程度
                 </button>
                 <button
-                  onClick={() => setSelectedSeverity("high")}
+                  onClick={() => { setDemoMode(false); setSelectedSeverity("high"); }}
                   className={`px-2 py-1 rounded text-xs transition-all ${
                     selectedSeverity === "high"
                       ? "bg-red-500 text-white"
@@ -1161,7 +1207,7 @@ export default function RegionalInsights() {
                   高风险
                 </button>
                 <button
-                  onClick={() => setSelectedSeverity("medium")}
+                  onClick={() => { setDemoMode(false); setSelectedSeverity("medium"); }}
                   className={`px-2 py-1 rounded text-xs transition-all ${
                     selectedSeverity === "medium"
                       ? "bg-amber-500 text-white"
@@ -1171,7 +1217,7 @@ export default function RegionalInsights() {
                   中风险
                 </button>
                 <button
-                  onClick={() => setSelectedSeverity("low")}
+                  onClick={() => { setDemoMode(false); setSelectedSeverity("low"); }}
                   className={`px-2 py-1 rounded text-xs transition-all ${
                     selectedSeverity === "low"
                       ? "bg-green-500 text-white"
@@ -1182,10 +1228,10 @@ export default function RegionalInsights() {
                 </button>
               </div>
             </div>
-          </div>
+          </details>
 
           {/* 事件列表 - 密集显示 */}
-          <div className="flex-1 overflow-y-auto px-5 py-3">
+          <div className="px-5 py-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-gray-700">风险事件</span>
               <span className="text-xs text-gray-500">{filteredEvents.length} 条</span>
@@ -1198,6 +1244,10 @@ export default function RegionalInsights() {
                 return (
                   <motion.div
                     key={event.id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => { setDemoMode(false); setSelectedEvent(event); setMapView({ center: event.location, zoom: 7 }); }}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setDemoMode(false); setSelectedEvent(event); setMapView({ center: event.location, zoom: 7 }); } }}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.2, delay: index * 0.005 }}
@@ -1263,12 +1313,12 @@ export default function RegionalInsights() {
       </div>
 
       {/* 右侧面板 - 项目分类 */}
-      <div className="absolute top-6 right-6 w-80 z-10">
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
+      <div className="absolute top-6 right-6 bottom-6 w-80 z-10 pointer-events-none">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden max-h-full flex flex-col pointer-events-auto">
           {/* 标签页导航 */}
-          <div className="flex border-b border-gray-200">
+          <div className="flex shrink-0 border-b border-gray-200">
             <button
-              onClick={() => setActiveTab("industrial")}
+              onClick={() => selectTab("industrial")}
               className={`flex-1 px-4 py-3 text-xs font-medium transition-all ${
                 activeTab === "industrial"
                   ? "bg-[#005BBB] text-white"
@@ -1278,7 +1328,7 @@ export default function RegionalInsights() {
               产业数据
             </button>
             <button
-              onClick={() => setActiveTab("infrastructure")}
+              onClick={() => selectTab("infrastructure")}
               className={`flex-1 px-4 py-3 text-xs font-medium transition-all ${
                 activeTab === "infrastructure"
                   ? "bg-[#005BBB] text-white"
@@ -1288,7 +1338,7 @@ export default function RegionalInsights() {
               重点项目
             </button>
             <button
-              onClick={() => setActiveTab("economic")}
+              onClick={() => selectTab("economic")}
               className={`flex-1 px-4 py-3 text-xs font-medium transition-all ${
                 activeTab === "economic"
                   ? "bg-[#005BBB] text-white"
@@ -1298,7 +1348,7 @@ export default function RegionalInsights() {
               经济特区
             </button>
             <button
-              onClick={() => setActiveTab("enterprise")}
+              onClick={() => selectTab("enterprise")}
               className={`flex-1 px-4 py-3 text-xs font-medium transition-all ${
                 activeTab === "enterprise"
                   ? "bg-[#005BBB] text-white"
@@ -1310,7 +1360,8 @@ export default function RegionalInsights() {
           </div>
 
           {/* 内容区域 */}
-          <div className="max-h-[calc(100vh-73px-12rem)] overflow-y-auto p-4">
+          <div key={`project-summary-${mapRevision}`} className="min-h-0 overflow-y-auto p-4">
+            {demoMode && <div className="mb-4"><ReviewDemoSummary destination="/impact-simulator" /></div>}
             {/* 产业数据标签页 - 显示矿产数据按钮 */}
             {activeTab === "industrial" && (
               <div className="space-y-3">
@@ -1582,6 +1633,8 @@ export default function RegionalInsights() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     onClick={() => {
+                      setDemoMode(false);
+                      setSelectedEvent(null);
                       if (activeTab === "infrastructure" && project.isRailway) {
                         // 坦赞铁路：切换显示
                         setSelectedInfrastructure(selectedInfrastructure === project.id ? null : project.id);
@@ -1644,6 +1697,7 @@ export default function RegionalInsights() {
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
