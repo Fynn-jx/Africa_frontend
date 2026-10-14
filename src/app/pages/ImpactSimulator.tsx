@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useSearchParams } from "react-router-dom";
 import { Search, MapPin, Users, Building2, AlertCircle, AlertTriangle, Target, ArrowLeft, FileText, TrendingUp, Shield, X, ChevronRight, Calendar, Filter, Clock, Flame, CloudLightning, Globe2, Activity, Gavel, Diamond, Factory, Zap } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Circle, Popup, GeoJSON, CircleMarker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
@@ -8,8 +9,8 @@ import 'leaflet/dist/leaflet.css';
 import { mockEvents as allMockEvents } from '../../data/eventsData';
 import KnowledgeBaseSelector from '../../components/KnowledgeBaseSelector';
 import { KnowledgeItem } from '../../data/knowledgeBase';
-import { createReviewImpactZone, reviewDemoEvent } from '../../data/reviewDemo';
-import { ReviewDemoSummary, ReviewDemoToolbar } from '../components/ReviewDemo';
+import { createReviewImpactZone, reviewDemoEvent, getTazaraRiskEvent } from '../../data/reviewDemo';
+import { ReviewDemoSummary, ReviewDemoToolbar, RailwayEventSelect } from '../components/ReviewDemo';
 
 // 非洲大陆边界
 const AFRICA_BOUNDS: [[number, number], [number, number]] = [
@@ -391,19 +392,33 @@ const chineseAssetsByRegion = {
 };
 
 export default function ImpactSimulator() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedEvent = getTazaraRiskEvent(searchParams.get("event"));
+  const initialEvent = requestedEvent ?? reviewDemoEvent;
   const [view, setView] = useState<"selector" | "analysis">("analysis");
   const [selectedTime, setSelectedTime] = useState(timeOptions[0]);
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedEventType, setSelectedEventType] = useState<string>("");
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<any>(reviewDemoEvent);
-  const [impactZone, setImpactZone] = useState<ImpactZone | null>(createReviewImpactZone);
+  const [selectedEvent, setSelectedEvent] = useState<any>(initialEvent);
+  const [impactZone, setImpactZone] = useState<ImpactZone | null>(() => createReviewImpactZone(initialEvent));
   const [mapRevision, setMapRevision] = useState(0);
   const [showReport, setShowReport] = useState(false);
   const [expandedAssets, setExpandedAssets] = useState<Set<string>>(new Set());
   const [expandedInfra, setExpandedInfra] = useState<Set<string>>(new Set());
   const [africaGeoJSON, setAfricaGeoJSON] = useState<FeatureCollection | null>(null);
+
+  useEffect(() => {
+    if (!requestedEvent) return;
+    setSelectedEvent(requestedEvent);
+    setImpactZone(createReviewImpactZone(requestedEvent));
+    setExpandedAssets(new Set());
+    setExpandedInfra(new Set());
+    setShowReport(false);
+    setMapRevision(value => value + 1);
+    setView("analysis");
+  }, [requestedEvent]);
 
   // 知识库选择状态
   const [selectedKnowledgeItems, setSelectedKnowledgeItems] = useState<KnowledgeItem[]>([]);
@@ -732,11 +747,16 @@ export default function ImpactSimulator() {
 
   // 选择事件进行分析
   const handleEventSelect = (event: any) => {
+    if (getTazaraRiskEvent(event.id)) {
+      setSearchParams({ event: event.id });
+      return;
+    }
     // 找到所属地区
     const country = africanCountries.find(c => c.name === event.country);
     const region = regions.find(r => r.countries.includes(event.country));
 
     if (!country) return;
+    setSearchParams({});
     setSelectedEvent(event);
     setExpandedAssets(new Set());
     setExpandedInfra(new Set());
@@ -807,6 +827,7 @@ export default function ImpactSimulator() {
   };
 
   const handleBack = () => {
+    setSearchParams({});
     setView("selector");
     setSelectedEvent(null);
     setImpactZone(null);
@@ -816,6 +837,7 @@ export default function ImpactSimulator() {
   };
 
   const restoreDemo = () => {
+    setSearchParams({});
     setSelectedTime(timeOptions[0]);
     setSelectedRegion("");
     setSelectedCountry("");
@@ -833,12 +855,13 @@ export default function ImpactSimulator() {
     setMapRevision(value => value + 1);
     setView("analysis");
   };
-  const isReviewDemo = selectedEvent?.id === reviewDemoEvent.id;
+  const selectedRailEvent = getTazaraRiskEvent(selectedEvent?.id);
+  const isRailwayEvent = Boolean(selectedRailEvent);
 
   // 生成报告内容
   const generateReportContent = () => {
     if (!impactZone || !selectedEvent) return null;
-    if (isReviewDemo) return <ReviewDemoSummary full />;
+    if (selectedRailEvent) return <ReviewDemoSummary event={selectedRailEvent} full />;
 
     const currentDate = new Date().toLocaleDateString('zh-CN', {
       year: 'numeric',
@@ -1462,7 +1485,7 @@ export default function ImpactSimulator() {
             </div>
             <div className="text-right">
               <p>第一届数字经济实践大赛</p>
-              <p>参赛作品 · 仅供演示参考</p>
+              <p>影响分析报告</p>
             </div>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
@@ -1480,7 +1503,7 @@ export default function ImpactSimulator() {
 
   return (
     <div className="h-[calc(100vh-73px)] bg-[#FAFAFA] relative flex flex-col">
-      <ReviewDemoToolbar isDemo={isReviewDemo} onReset={restoreDemo} onExplore={handleBack} />
+      <ReviewDemoToolbar title={isRailwayEvent ? "坦赞铁路" : selectedEvent?.label ?? "影响模拟器"} onReset={restoreDemo} onExplore={handleBack} />
       <div className="relative flex-1 min-h-0">
       <AnimatePresence mode="wait">
         {/* 选择器视图 */}
@@ -1711,6 +1734,10 @@ export default function ImpactSimulator() {
                 {/* 分隔线 */}
                 <div className="border-t border-gray-200"></div>
 
+                <div className="mb-5 rounded-xl border border-blue-100 bg-blue-50/50 p-3">
+                  <RailwayEventSelect onChange={handleEventSelect} />
+                </div>
+
                 {/* 步骤1: 选择时间 */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
@@ -1929,7 +1956,7 @@ export default function ImpactSimulator() {
             <MapContainer
               key={`analysis-${mapRevision}`}
               center={[impactZone.coordinates.lat, impactZone.coordinates.lng]}
-              zoom={isReviewDemo ? 10 : 8}
+              zoom={isRailwayEvent ? 10 : 8}
               className="h-full z-0 !absolute !left-0 !top-0 !right-[400px]"
               zoomControl={false}
               attributionControl={false}
@@ -1998,7 +2025,7 @@ export default function ImpactSimulator() {
                     opacity={0.95}
                     fillOpacity={0.85}
                   >
-                    {isReviewDemo && <Tooltip permanent direction={index === 1 ? "left" : "right"}>{asset.name}</Tooltip>}
+                    {isRailwayEvent && <Tooltip permanent direction={index === 1 ? "left" : "right"}>{asset.name}</Tooltip>}
                     <Popup>
                       <div className="p-2 min-w-[200px]">
                         <div className="flex items-start justify-between mb-2">
@@ -2063,7 +2090,10 @@ export default function ImpactSimulator() {
             {/* 右侧分析面板 */}
             <div key={`summary-${mapRevision}`} className="absolute right-0 top-0 bottom-0 w-[400px] bg-white/95 backdrop-blur-sm shadow-[-4px_0_20px_rgba(0,0,0,0.08)] overflow-y-auto">
               <div className="p-6">
-                {isReviewDemo && <div className="mb-6"><ReviewDemoSummary destination="/regional-insights" /></div>}
+                {selectedRailEvent && <div className="mb-6">
+                  <RailwayEventSelect selectedId={selectedRailEvent.id} onChange={handleEventSelect} />
+                  <ReviewDemoSummary event={selectedRailEvent} destination="/regional-insights" />
+                </div>}
                 {/* 标题 */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
@@ -2075,7 +2105,7 @@ export default function ImpactSimulator() {
 
                 {/* 影响半径 */}
                 <div className="mb-6 p-4 bg-gray-50 rounded-xl">
-                  <div className="text-xs text-gray-500 mb-2">{isReviewDemo ? "设定影响半径" : "影响半径"}</div>
+                  <div className="text-xs text-gray-500 mb-2">影响半径</div>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl tabular-nums text-gray-900">{impactZone.radius}</span>
                     <span className="text-sm text-gray-500">公里</span>
@@ -2088,7 +2118,7 @@ export default function ImpactSimulator() {
                   <div className="p-4 bg-white border border-gray-100 rounded-xl">
                     <div className="flex items-center gap-3 mb-1">
                       <Users className="w-5 h-5 text-[#005BBB]" />
-                      <span className="text-xs text-gray-500">{isReviewDemo ? "情景人口（演示设定）" : "受影响总人口"}</span>
+                      <span className="text-xs text-gray-500">{isRailwayEvent ? "潜在影响人口" : "受影响总人口"}</span>
                     </div>
                     <div className="text-3xl tabular-nums text-gray-900 ml-8">
                       {impactZone.affectedPopulation.toLocaleString()}

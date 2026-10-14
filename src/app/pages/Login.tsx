@@ -2,19 +2,18 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { AlertTriangle, ArrowRight, Building2, Database, Eye, EyeOff, Globe2, Landmark } from "lucide-react";
-import hnuAfricaLogo from "../../assets/logos/logo-hnu-africa-institute-transparent.png";
-import ciweiLogo from "../../assets/logos/logo-ciwei-security-transparent.png";
+import rucBrainLogo from "../../assets/logos/logo-ruc-brain-transparent.png";
+import rucGlobalAreaStudiesLogo from "../../assets/logos/logo-ruc-global-area-studies-transparent.png";
 import smartLabLogo from "../../assets/logos/logo-smart-lab-transparent.png";
 import shujizheLogo from "../../assets/logos/logo-shujizhe-transparent.png";
-import titanSharkLogo from "../../assets/logos/logo-titanshark-transparent.png";
 import africaMapOutline from "../../assets/africa-countries-outline.svg";
 
 const partnerLogos = [
-  { name: "湖南大学非洲研究院", src: hnuAfricaLogo, className: "h-12 w-auto max-w-[300px]" },
-  { name: "中非经贸合作智能实验室", src: smartLabLogo, className: "h-16 w-auto max-w-[390px]" },
-  { name: "刺猬安全", src: ciweiLogo, className: "h-10 w-auto max-w-[170px]" },
-  { name: "数迹者", src: shujizheLogo, className: "h-10 w-auto max-w-[230px]" },
-  { name: "钛鲨科技", src: titanSharkLogo, className: "h-10 w-auto max-w-[260px]" },
+  { name: "中国人民大学国家治理大数据和人工智能创新平台", src: rucBrainLogo, className: "h-9 w-auto max-w-full object-contain object-left" },
+  { name: "中国人民大学区域国别研究院", src: rucGlobalAreaStudiesLogo, className: "h-12 w-auto max-w-full object-contain object-left" },
+  // This source includes generous outer padding; crop it within the shared row.
+  { name: "中非经贸合作智能实验室", src: smartLabLogo, className: "-ml-3 h-16 w-auto max-w-full object-contain object-left" },
+  { name: "数迹者", src: shujizheLogo, className: "h-10 w-auto max-w-full object-contain object-left" },
 ];
 
 export default function Login() {
@@ -75,9 +74,9 @@ export default function Login() {
 
               <div className="mt-14">
                 <div className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-blue-200/90">联合建设与数据支持</div>
-                <div className="space-y-5">
+                <div className="space-y-4">
                   {partnerLogos.map((logo) => (
-                    <div key={logo.name} className="flex items-center">
+                    <div key={logo.name} className="flex h-12 items-center overflow-hidden">
                       <img src={logo.src} alt={logo.name} className={logo.className} />
                     </div>
                   ))}

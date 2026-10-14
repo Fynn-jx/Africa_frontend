@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useSearchParams } from "react-router-dom";
 import { MapPin, TrendingUp, Calendar, AlertTriangle, Flame, CloudLightning, Factory, Building2, Zap, ChevronRight, Filter, X, Shield, Globe2, Activity, Gavel, Diamond, AlertCircle } from "lucide-react";
 import {
   MapContainer,
@@ -18,7 +19,7 @@ import { FeatureCollection } from 'geojson';
 import { loadMiningData } from '../../utils/loadMiningData';
 import { loadTazaraData } from '../../utils/loadTazaraData';
 import { mockEvents as allMockEvents } from '../../data/eventsData';
-import { reviewDemoEvent, reviewDemoPeriod } from '../../data/reviewDemo';
+import { reviewDemoEvent, reviewDemoPeriod, getTazaraRiskEvent, tazaraRiskEvents as tazaraNearbyEvents } from '../../data/reviewDemo';
 import { ReviewDemoSummary, ReviewDemoToolbar } from '../components/ReviewDemo';
 
 // 大分类颜色配置
@@ -178,51 +179,6 @@ const eventTypeConfig: Record<string, {
   },
 };
 
-// 坦赞铁路附近的事件数据
-const tazaraNearbyEvents = [
-  reviewDemoEvent,
-  {
-    id: "evt-001",
-    location: [34.5, -6.5] as [number, number], // 坦桑尼亚中部
-    type: "政权政策",
-    severity: "high" as const,
-    title: "坦桑尼亚中部抗议活动升级",
-    description: "示威活动阻碍铁路运输",
-    date: "2026-02-15",
-    impactRadius: 150, // 影响半径（公里）
-  },
-  {
-    id: "evt-002",
-    location: [31.5, -9.0] as [number, number], // 坦桑尼亚南部
-    type: "社会ESG舆情",
-    severity: "medium" as const,
-    title: "矿区安全事件频发",
-    description: "影响矿业生产和运输",
-    date: "2026-02-18",
-    impactRadius: 120,
-  },
-  {
-    id: "evt-003",
-    location: [30.0, -13.0] as [number, number], // 坦赞边境地区
-    type: "绿色壁垒",
-    severity: "high" as const,
-    title: "强降雨导致铁路路基受损",
-    description: "部分路段暂停运营",
-    date: "2026-02-20",
-    impactRadius: 180,
-  },
-  {
-    id: "evt-004",
-    location: [28.5, -14.5] as [number, number], // 赞比亚铜带
-    type: "供应链矿产",
-    severity: "medium" as const,
-    title: "赞比亚铜矿工人罢工",
-    description: "影响铜矿出口和铁路运输",
-    date: "2026-02-22",
-    impactRadius: 100,
-  },
-];
-
 // 坦赞铁路附近的物流枢纽
 const tazaraNearbyLogistics = [
   { id: "log-tz-1", name: "姆贝亚货运站", country: "赞比亚", type: "货运站", coordinates: [30.2, -14.5] as [number, number] },
@@ -363,6 +319,9 @@ function calculateDistance(coord1: [number, number], coord2: [number, number]): 
 }
 
 export default function RegionalInsights() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedEvent = getTazaraRiskEvent(searchParams.get("event"));
+  const initialEvent = requestedEvent ?? reviewDemoEvent;
   const [demoMode, setDemoMode] = useState(true);
   const [mapRevision, setMapRevision] = useState(0);
   const [africaGeoJSON, setAfricaGeoJSON] = useState<FeatureCollection | null>(null);
@@ -407,18 +366,37 @@ export default function RegionalInsights() {
   const [selectedInfrastructure, setSelectedInfrastructure] = useState<string | null>("ki-1");
 
   // 选中的事件（用于显示影响范围）
-  const [selectedEvent, setSelectedEvent] = useState<any | null>(reviewDemoEvent);
+  const [selectedEvent, setSelectedEvent] = useState<any | null>(initialEvent);
 
   // 地图视图控制
-  const [mapView, setMapView] = useState<{ center: [number, number]; zoom: number } | null>({ center: reviewDemoEvent.location, zoom: 7 });
+  const [mapView, setMapView] = useState<{ center: [number, number]; zoom: number } | null>({ center: initialEvent.location, zoom: 7 });
 
-  // 生成事件数据
+  const isTazaraSelected = activeTab === "infrastructure" && selectedInfrastructure === "ki-1";
+  const selectedRailEvent = getTazaraRiskEvent(selectedEvent?.id);
+
+  useEffect(() => {
+    if (!requestedEvent) return;
+    setSelectedEvent(requestedEvent);
+    setSelectedInfrastructure("ki-1");
+    setActiveTab("infrastructure");
+    setStartDate(current => requestedEvent.date < current.toISOString().slice(0, 10) ? new Date(reviewDemoPeriod.start) : current);
+    setEndDate(current => requestedEvent.date > current.toISOString().slice(0, 10) ? new Date(reviewDemoPeriod.end) : current);
+    setSelectedEventType(current => current && current !== requestedEvent.type ? "" : current);
+    setSelectedSeverity(current => current && current !== requestedEvent.severity ? "" : current);
+  }, [requestedEvent]);
+
+  const selectRiskEvent = (event: any) => {
+    setSelectedEvent(event);
+    setMapView({ center: event.location, zoom: 7 });
+    setSearchParams(getTazaraRiskEvent(event.id) ? { event: event.id } : {});
+  };
+
+  // 项目范围内保留所有铁路事件，切换事件不会退出项目。
   const events = useMemo(() => {
-    const scenarios = (demoMode ? [reviewDemoEvent] : tazaraNearbyEvents)
-      .filter(event => event.date >= startDate.toISOString().slice(0, 10) && event.date <= endDate.toISOString().slice(0, 10))
-      .map(event => ({ ...event, label: event.title, country: "坦赞铁路沿线", popularity: event.severity === "high" ? 95 : 85 }));
-    return demoMode ? scenarios : [...scenarios, ...adaptEventsForRegionalInsights(allMockEvents, startDate, endDate)];
-  }, [startDate, endDate, demoMode]);
+    const scenarios = tazaraNearbyEvents
+      .filter(event => event.date >= startDate.toISOString().slice(0, 10) && event.date <= endDate.toISOString().slice(0, 10));
+    return isTazaraSelected ? scenarios : [...scenarios, ...adaptEventsForRegionalInsights(allMockEvents, startDate, endDate)];
+  }, [startDate, endDate, isTazaraSelected]);
 
   // 筛选后的事件
   const filteredEvents = useMemo(() => {
@@ -434,6 +412,7 @@ export default function RegionalInsights() {
   }, [filteredEvents, selectedEvent]);
 
   const explore = () => {
+    setSearchParams({});
     setDemoMode(false);
     setSelectedEvent(null);
     setSelectedInfrastructure(null);
@@ -450,6 +429,7 @@ export default function RegionalInsights() {
   };
 
   const restoreDemo = () => {
+    setSearchParams({});
     setDemoMode(true);
     setStartDate(new Date(reviewDemoPeriod.start));
     setEndDate(new Date(reviewDemoPeriod.end));
@@ -570,7 +550,7 @@ export default function RegionalInsights() {
 
   return (
     <div className="h-[calc(100vh-73px)] bg-[#FAFAFA] relative overflow-hidden flex flex-col">
-      <ReviewDemoToolbar isDemo={demoMode} onReset={restoreDemo} onExplore={() => selectTab("infrastructure")} />
+      <ReviewDemoToolbar title={getSelectedProject()?.name ?? { industrial: "产业数据", infrastructure: "重点项目", economic: "经济特区", enterprise: "核心企业" }[activeTab]} onReset={restoreDemo} onExplore={() => selectTab("infrastructure")} />
       <div className="relative flex-1 min-h-0">
       {/* 地图 */}
       <div className="absolute inset-0">
@@ -1021,7 +1001,7 @@ export default function RegionalInsights() {
                 className: 'custom-map-pin-icon',
                 iconSize: [isSelected ? 32 : 28, isSelected ? 32 : 28],
                 iconAnchor: [isSelected ? 16 : 14, isSelected ? 32 : 28],
-                popupAnchor: [0, -isSelected ? 32 : -28],
+                popupAnchor: [0, isSelected ? -32 : -28],
               });
 
               return (
@@ -1031,8 +1011,7 @@ export default function RegionalInsights() {
                   icon={mapPinIcon}
                   eventHandlers={{
                     click: () => {
-                      setDemoMode(false);
-                      setSelectedEvent(selectedEvent?.id === event.id ? null : event);
+                      selectRiskEvent(event);
                     }
                   }}
                 >
@@ -1246,12 +1225,13 @@ export default function RegionalInsights() {
                     key={event.id}
                     role="button"
                     tabIndex={0}
-                    onClick={() => { setDemoMode(false); setSelectedEvent(event); setMapView({ center: event.location, zoom: 7 }); }}
-                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setDemoMode(false); setSelectedEvent(event); setMapView({ center: event.location, zoom: 7 }); } }}
+                    aria-pressed={selectedEvent?.id === event.id}
+                    onClick={() => selectRiskEvent(event)}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectRiskEvent(event); } }}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.2, delay: index * 0.005 }}
-                    className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer text-xs"
+                    className={`flex items-center gap-2 p-2 rounded-lg transition-colors cursor-pointer text-xs ${selectedEvent?.id === event.id ? "bg-blue-50 ring-1 ring-blue-200" : "bg-gray-50 hover:bg-gray-100"}`}
                   >
                     <span className="flex-shrink-0">
                       <MapPinIcon color={categoryColor} size={16} />
@@ -1361,7 +1341,7 @@ export default function RegionalInsights() {
 
           {/* 内容区域 */}
           <div key={`project-summary-${mapRevision}`} className="min-h-0 overflow-y-auto p-4">
-            {demoMode && <div className="mb-4"><ReviewDemoSummary destination="/impact-simulator" /></div>}
+            {isTazaraSelected && selectedRailEvent && <div className="mb-4"><ReviewDemoSummary event={selectedRailEvent} destination="/impact-simulator" /></div>}
             {/* 产业数据标签页 - 显示矿产数据按钮 */}
             {activeTab === "industrial" && (
               <div className="space-y-3">
@@ -1633,6 +1613,7 @@ export default function RegionalInsights() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     onClick={() => {
+                      setSearchParams({});
                       setDemoMode(false);
                       setSelectedEvent(null);
                       if (activeTab === "infrastructure" && project.isRailway) {
