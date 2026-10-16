@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PORI_AGGREGATION_NOTE, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_EXAMPLE_NOTE, PORI_GRID_FORMULA, PORI_METHODOLOGY, PORI_PARAMETER_NOTE } from "../../data/poriDefinition";
+import { PORI_AGGREGATION_NOTE, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_GRID_FORMULA, PORI_METHODOLOGY, PORI_PARAMETER_NOTE } from "../../data/poriDefinition";
 import { motion } from "motion/react";
 import {
   Bot,
@@ -133,7 +133,7 @@ function buildAssistantReply(question: string, scope: ScopeId): ChatMessage {
       id: crypto.randomUUID(),
       role: "assistant",
       content:
-        `${PORI_METHODOLOGY} 网格压力公式为 ${PORI_GRID_FORMULA}。${PORI_PARAMETER_NOTE} ${PORI_AGGREGATION_NOTE} ${PORI_EXAMPLE_NOTE} ${PORI_DIMENSION_NOTE} 三类分别是核心政治与权力博弈、经济贸易与资源对抗、治理合规与长臂管辖，各含5项解释维度。${PORI_DEMO_NOTE}`,
+        `${PORI_METHODOLOGY} 网格压力公式为 ${PORI_GRID_FORMULA}。${PORI_PARAMETER_NOTE} ${PORI_AGGREGATION_NOTE} ${PORI_DIMENSION_NOTE} 三类分别是核心政治与权力博弈、经济贸易与资源对抗、治理合规与长臂管辖，各含5项解释维度。${PORI_DEMO_NOTE}`,
       references: ["PORI舆情风险情绪指数", "风险情绪指数页面", "数据中心-PORI字段"],
     };
   }

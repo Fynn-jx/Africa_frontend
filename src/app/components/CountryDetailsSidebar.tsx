@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PORI_DEFINITION, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_METHODOLOGY } from "../../data/poriDefinition";
+import { PORI_DEFINITION, PORI_WARNING_NOTE, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_METHODOLOGY } from "../../data/poriDefinition";
 import { motion } from "motion/react";
 import { X, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import { LineChart, Line, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine, Label } from "recharts";
@@ -159,7 +159,7 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
             <span className="text-gray-400 ml-1">vs 上周</span>
           </div>
         </div>
-        <p className="mt-3 text-xs text-gray-500 leading-relaxed">{PORI_DEFINITION} {PORI_DEMO_NOTE}</p>
+        <p className="mt-3 text-xs text-gray-500 leading-relaxed">{PORI_DEFINITION} {PORI_WARNING_NOTE} {PORI_DEMO_NOTE}</p>
       </div>
 
       {/* 内容区 */}
