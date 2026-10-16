@@ -1,3 +1,5 @@
+import { PORI_DEFINITION, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_FORMULA } from "./poriDefinition";
+
 export type DatasetLayer = "base" | "derived";
 export type SourceTypeKey =
   | "government"
@@ -227,7 +229,7 @@ export const datasetCatalog: DatasetDefinition[] = [
     shortName: "PORI指数",
     layer: "derived",
     domain: "平台衍生指数",
-    description: "基于新闻事件、社交媒体、社区交流和冲突事件等基础数据，按国家和日期生成0-100分的舆情风险情绪指数，并作为风险情绪指数页面热力图、排行榜和国家详情的统一数据口径。",
+    description: `${PORI_DEFINITION} 基于新闻事件、社交媒体、社区交流和冲突事件等基础数据，先叠加统计窗口内各事件对网格的压力，再按国家或区域汇总并归一化，用于热力图、排行榜和国家详情。${PORI_DIMENSION_NOTE} ${PORI_DEMO_NOTE}`,
     coverage: "国家级日度指数",
     records: "国家-日期指数",
     updateCycle: "日级",
@@ -239,22 +241,22 @@ export const datasetCatalog: DatasetDefinition[] = [
       { name: "pori_id", label: "指数ID", description: "指数记录唯一标识", example: "PORI-001" },
       { name: "country", label: "国家", description: "计算国家", example: "Nigeria" },
       { name: "country_code", label: "国家代码", description: "匹配地图国家面的标准代码", example: "NG" },
-      { name: "pori_score", label: "PORI分数", description: "核心政治与权力博弈、经济贸易与资源对抗、治理合规与长臂管辖三大维度分数的算术平均值，取0-100分", example: "65.6" },
+      { name: "pori_score", label: "PORI分数", description: `${PORI_DEFINITION} 网格压力公式：${PORI_FORMULA}。${PORI_DIMENSION_NOTE} ${PORI_DEMO_NOTE}`, example: "65.6" },
       { name: "risk_level", label: "风险等级", description: "低、中、高、极高", example: "高" },
       { name: "week_change", label: "周变化", description: "较上周变化值", example: "+6.2" },
-      { name: "core_political_power", label: "核心政治风险", description: "政权更迭与政策连续性、地缘军事冲突与战争、恐怖主义与极端主义、国际制裁与外交孤立、意识形态与民族主义脱钩5项子维度分数的算术平均值", example: "67.3" },
+      { name: "core_political_power", label: "核心政治风险", description: "风险解释维度：政权更迭与政策连续性、地缘军事冲突与战争、恐怖主义与极端主义、国际制裁与外交孤立、意识形态与民族主义脱钩5项子维度演示分数的算术平均值，不用于计算PORI总分", example: "67.3" },
       { name: "regime_policy_continuity", label: "政权政策", description: "评估东道国选举、政府换届或非正常政权更迭带来的政策急转弯概率", example: "76" },
       { name: "military_conflict_war", label: "军事冲突", description: "领土争端、边境摩擦、地区军备竞赛以及爆发直接军事对抗或代理人战争的概率", example: "71" },
       { name: "terrorism_extremism", label: "恐怖极端", description: "恐怖袭击、内乱、暴动或分裂主义活动对人身安全和商业运营的直接威胁", example: "81" },
       { name: "sanctions_diplomatic_isolation", label: "制裁孤立", description: "目标国遭受联合国、多边组织或大国单边制裁，如金融冻结、贸易禁运的风险", example: "58" },
       { name: "ideology_nationalism_decoupling", label: "意识形态脱钩", description: "阵营对抗、民粹主义抬头或排外情绪高涨，导致国际合作破裂或外资遭遇不公对待", example: "62" },
-      { name: "geo_economic_resource", label: "经贸资源风险", description: "供应链与关键矿产、能源安全、跨境金融、贸易保护和技术壁垒5项子维度分数的算术平均值", example: "62.1" },
+      { name: "geo_economic_resource", label: "经贸资源风险", description: "风险解释维度：供应链与关键矿产、能源安全、跨境金融、贸易保护和技术壁垒5项子维度演示分数的算术平均值，不用于计算PORI总分", example: "62.1" },
       { name: "supply_chain_critical_minerals", label: "供应链矿产", description: "稀土、芯片、关键原材料等战略物资的出口管制、断供或运输航线被封锁的风险", example: "73" },
       { name: "energy_security_price_volatility", label: "能源价格", description: "石油、天然气等核心能源供应受政治操纵，或因地缘冲突导致全球能源价格飙升的风险", example: "69" },
       { name: "cross_border_finance_capital_controls", label: "金融管制", description: "SWIFT系统切断、外汇管制、资产冻结或资本无法自由汇出的风险", example: "57" },
       { name: "tariffs_trade_protectionism", label: "贸易保护", description: "恶意加征关税、非关税壁垒、反倾销调查以及贸易协定被单方面撕毁的风险", example: "64" },
       { name: "tech_cold_war_ip_barriers", label: "技术壁垒", description: "高科技领域投资审查、技术出口管制、实体清单制裁以及技术标准分裂的风险", example: "66" },
-      { name: "governance_regulatory", label: "治理合规风险", description: "国有化与资产征收、长臂管辖、网络主权、绿色壁垒和ESG舆情5项子维度分数的算术平均值", example: "67.3" },
+      { name: "governance_regulatory", label: "治理合规风险", description: "风险解释维度：国有化与资产征收、长臂管辖、网络主权、绿色壁垒和ESG舆情5项子维度演示分数的算术平均值，不用于计算PORI总分", example: "67.3" },
       { name: "nationalization_expropriation", label: "国有化征收", description: "东道国政府迫于政治或财政压力，对外资资产进行强制收归国有、征用或无偿没收的风险", example: "52" },
       { name: "weaponized_regulation_long_arm", label: "长臂管辖", description: "大国利用国内法对境外实体进行跨境执法、巨额罚款或合规施压的风险", example: "56" },
       { name: "cyber_sovereignty_digital_conflict", label: "数字对抗", description: "国家级网络攻击、关键基础设施遭黑客破坏、跨境数据合规与数据本地化政策收紧的风险", example: "48" },
@@ -277,8 +279,8 @@ export const datasetCatalog: DatasetDefinition[] = [
       { name: "非洲社区交流群数据", type: "基础数据", description: "提供半公开社区风险线索和线下行动信号", coverage: "重点社区与行业群组", update: "日级", reliability: "中" },
       { name: "非洲冲突事件基础数据", type: "基础数据", description: "提供冲突强度和空间背景", coverage: "重点风险国家", update: "周级", reliability: "高" },
     ],
-    updateLogs: ["增加15维指标解释", "调整国家级日度聚合逻辑", "新增周变化字段"],
-    lineage: ["基础事件标准化", "多源情绪与强度识别", "国家-日期聚合", "指数归一化与分级", "PORI可视化数据集"],
+    updateLogs: ["统一PORI为网格压力的区域/时间聚合口径", "三大类与15项子维度作为解释视角", "标注前端分数为演示数据"],
+    lineage: ["基础事件标准化与时间窗筛选", "事件强度、尺度权重与成本距离", "事件贡献叠加为网格压力 R_{g,t}", "按国家/区域及时间窗口聚合", "归一化至0–100与风险分级", "PORI展示（当前为演示数据）"],
   },
   {
     id: "policy-entry-risk",

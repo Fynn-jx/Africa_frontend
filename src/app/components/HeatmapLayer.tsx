@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GeoJSON, Popup, CircleMarker } from './map';
 import { FeatureCollection, Feature } from 'geojson';
 import L from 'leaflet';
+import { PORI_DEFINITION, PORI_DEMO_NOTE } from '../../data/poriDefinition';
 
 interface CountryData {
   id: string;
@@ -144,7 +145,8 @@ export default function HeatmapLayer({
             pointer-events: none;
           ">
             ${countryName}
-            ${country ? `<span style="opacity: 0.8; font-size: 11px; margin-left: 6px;">(${country.score}分)</span>` : '<span style="opacity: 0.6; font-size: 11px; margin-left: 6px;">(无数据)</span>'}
+            ${country?.hasData ? `<span style="opacity: 0.8; font-size: 11px; margin-left: 6px;">(PORI ${country.score}分 · 演示)</span>
+              <div style="font-size: 11px; font-weight: 400; white-space: normal; max-width: 240px; margin-top: 4px;">${PORI_DEFINITION} ${PORI_DEMO_NOTE}</div>` : '<span style="opacity: 0.6; font-size: 11px; margin-left: 6px;">(无数据)</span>'}
           </div>`,
           {
             permanent: false,

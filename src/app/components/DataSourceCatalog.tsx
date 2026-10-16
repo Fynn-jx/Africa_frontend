@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { africanCountriesData } from "../../data/africanCountriesData";
 import { motion } from "motion/react";
 import {
   Activity,
@@ -813,7 +814,7 @@ function roundScore(value: number) {
   return Number(value.toFixed(1));
 }
 
-function averageScores(values: number[]) {
+function averageDimensionScores(values: number[]) {
   return roundScore(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
@@ -835,13 +836,12 @@ function buildPoriScores(index: number) {
     return scores;
   }, {});
 
-  const core_political_power = averageScores(poriDimensionGroups.corePoliticalPower.map((fieldName) => subdimensionScores[fieldName]));
-  const geo_economic_resource = averageScores(poriDimensionGroups.geoEconomicResource.map((fieldName) => subdimensionScores[fieldName]));
-  const governance_regulatory = averageScores(poriDimensionGroups.governanceRegulatory.map((fieldName) => subdimensionScores[fieldName]));
-  const pori_score = averageScores([core_political_power, geo_economic_resource, governance_regulatory]);
+  // These averages describe the demo dimensions only, independently of PORI.
+  const core_political_power = averageDimensionScores(poriDimensionGroups.corePoliticalPower.map((fieldName) => subdimensionScores[fieldName]));
+  const geo_economic_resource = averageDimensionScores(poriDimensionGroups.geoEconomicResource.map((fieldName) => subdimensionScores[fieldName]));
+  const governance_regulatory = averageDimensionScores(poriDimensionGroups.governanceRegulatory.map((fieldName) => subdimensionScores[fieldName]));
 
   return {
-    pori_score,
     core_political_power,
     geo_economic_resource,
     governance_regulatory,
@@ -943,11 +943,14 @@ function getGeneratedSampleValue(field: DatasetDefinition["fields"][number], dat
 function buildPoriSampleRow(dataset: DatasetDefinition, index: number) {
   const serial = String(index + 1).padStart(3, "0");
   const scores = buildPoriScores(index);
+  // Reuse the map's standalone demo score, never a mean of the dimensions.
+  const country = africanCountriesData.find(country => country.code === sampleCountryCodes[index % sampleCountryCodes.length])!;
   const fieldValues: Record<string, string | number> = {
     pori_id: `PORI-${serial}`,
     country: sampleCountries[index % sampleCountries.length],
     country_code: sampleCountryCodes[index % sampleCountryCodes.length],
-    risk_level: getPoriRiskLevel(scores.pori_score),
+    pori_score: country.score,
+    risk_level: getPoriRiskLevel(country.score),
     week_change: `${index % 2 === 0 ? "+" : "-"}${(1.2 + index * 0.7).toFixed(1)}`,
     source_event_count: 180 + index * 31 + (index % 3) * 17,
     event_window: ["过去7天", "过去14天", "过去30天"][index % 3],

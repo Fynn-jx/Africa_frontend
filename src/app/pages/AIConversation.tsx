@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { PORI_DEFINITION, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_FORMULA } from "../../data/poriDefinition";
 import { motion } from "motion/react";
 import {
   Bot,
@@ -35,7 +36,7 @@ interface ScopeOption {
 
 const scopeOptions: ScopeOption[] = [
   { id: "all", label: "全平台", count: "风险 / 案例 / 数据 / 项目", icon: Globe2 },
-  { id: "pori", label: "风险情绪指数", count: "PORI 15维", icon: ShieldAlert },
+  { id: "pori", label: "风险情绪指数", count: "网格压力聚合 / 15项解释维度", icon: ShieldAlert },
   { id: "case", label: "案例分析", count: "4个重点案例", icon: FileSearch },
   { id: "data", label: "数据中心", count: "基础与衍生数据", icon: Database },
   { id: "project", label: "重点项目", count: "资产与通道", icon: Layers },
@@ -53,7 +54,7 @@ const initialMessages: ChatMessage[] = [
 
 const quickFacts = [
   { label: "当前案例", value: "4" },
-  { label: "PORI维度", value: "15" },
+  { label: "PORI解释维度", value: "15" },
   { label: "衍生指数", value: "5" },
   { label: "数据域", value: "基础 + 衍生" },
 ];
@@ -63,7 +64,7 @@ const referenceItems = [
   { title: "坦桑尼亚达累斯萨拉姆港停摆", type: "案例", detail: "交通运输 / 坦赞走廊 / 2025-10-29" },
   { title: "津巴布韦锂精矿出口禁令", type: "案例", detail: "经营管理 / 锂供应链 / 2026-02-25" },
   { title: "刚果（金）鲁巴亚钶钽矿塌方", type: "案例", detail: "供应链 / 北基伍省 / 2026-01-28" },
-  { title: "PORI舆情风险情绪指数", type: "指数", detail: "3个大维度 / 15个小维度" },
+  { title: "PORI舆情风险情绪指数", type: "指数", detail: "网格压力聚合 / 3大类15项解释维度" },
   { title: "PERI / SCRI / LBTI / LECSI", type: "指数", detail: "政策准入、产业链、物流、ESG民意" },
 ];
 
@@ -127,12 +128,12 @@ function buildAssistantReply(question: string, scope: ScopeId): ChatMessage {
     };
   }
 
-  if (question.includes("PORI") || question.includes("情绪") || question.includes("15") || question.includes("维度")) {
+  if (scope === "pori" || question.toUpperCase().includes("PORI") || question.includes("情绪") || question.includes("15") || question.includes("维度")) {
     return {
       id: crypto.randomUUID(),
       role: "assistant",
       content:
-        "PORI当前按三组风险展开。第一组是核心政治与权力博弈风险，覆盖政权更迭、军事冲突、恐怖极端主义、国际制裁、意识形态与民族主义脱钩。第二组是经济、贸易与资源对抗风险，覆盖供应链卡脖子、能源价格、跨境金融、贸易保护、技术冷战。第三组是治理、合规与长臂管辖风险，覆盖国有化征收、监管武器化、网络与数据主权、气候绿色壁垒、社会动荡与ESG舆情。前端展示时已经做了短标签，详情解释仍保留原义。",
+        `${PORI_DEFINITION} 网格压力公式为 ${PORI_FORMULA}，即对统计窗口内事件的强度、尺度权重与成本距离衰减贡献求和，再按国家或区域及时间窗口聚合并归一化。${PORI_DIMENSION_NOTE} 三组风险分别是核心政治与权力博弈、经济贸易与资源对抗、治理合规与长臂管辖，各含5项解释维度。${PORI_DEMO_NOTE}`,
       references: ["PORI舆情风险情绪指数", "风险情绪指数页面", "数据中心-PORI字段"],
     };
   }
