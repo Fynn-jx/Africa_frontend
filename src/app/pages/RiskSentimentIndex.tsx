@@ -228,7 +228,7 @@ export default function RiskSentimentIndex() {
   return (
     <div className="relative h-[calc(100vh-73px)] bg-[#FAFAFA] overflow-hidden">
       {/* 顶部控制栏 */}
-      <div className="absolute top-6 left-8 z-10 bg-white/95 backdrop-blur-sm rounded-xl px-6 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
+      <div hidden={showRanking} className="absolute top-6 left-8 z-10 bg-white/95 backdrop-blur-sm rounded-xl px-6 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]">
         <div className="flex items-center gap-6">
           <div>
             <div className="text-xs text-gray-500 mb-1">平台状态</div>
@@ -393,6 +393,7 @@ export default function RiskSentimentIndex() {
                 </div>
                 <button
                   onClick={() => setShowRanking(false)}
+                  aria-label="关闭指数排行榜"
                   className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4 text-gray-500" />
@@ -449,6 +450,7 @@ export default function RiskSentimentIndex() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => setShowRanking(true)}
+          aria-label="展开指数排行榜"
           className="absolute top-32 left-8 z-10 bg-white/95 backdrop-blur-sm rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.06)] px-4 py-3 hover:shadow-[0_8px_30px rgba(0,0,0,0.12)] transition-all duration-300"
         >
           <ChevronRight className="w-5 h-5 text-gray-600" />
