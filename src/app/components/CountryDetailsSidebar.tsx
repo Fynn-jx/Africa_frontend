@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PORI_DEFINITION, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_FORMULA } from "../../data/poriDefinition";
+import { PORI_DEFINITION, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_METHODOLOGY } from "../../data/poriDefinition";
 import { motion } from "motion/react";
 import { X, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import { LineChart, Line, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceLine, Label } from "recharts";
@@ -150,7 +150,7 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
         </div>
 
         {/* 当前得分 */}
-        <div className="text-xs text-gray-500 mb-2" title={PORI_FORMULA}>PORI · 网格压力聚合指数（演示）</div>
+        <div className="text-xs text-gray-500 mb-2" title={PORI_METHODOLOGY}>PORI · 舆情风险指数（演示）</div>
         <div className="flex items-baseline gap-3">
           <div className="text-4xl tabular-nums text-gray-900">{country.score}</div>
           <div className={`flex items-center gap-1 text-sm ${country.trend > 0 ? "text-red-500" : "text-green-500"}`}>
@@ -207,7 +207,7 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
                       return (
                         <div className="bg-white rounded-lg shadow-lg px-3 py-2 border border-gray-100">
                           <div className="text-xs text-gray-500 mb-1">第 {data.day} 天</div>
-                          <div className="text-sm text-gray-900 mb-1" title={PORI_DEFINITION}>PORI: {data.score}（演示）</div>
+                          <div className="text-sm text-gray-900 mb-1" title={PORI_METHODOLOGY}>PORI: {data.score}（演示）</div>
                           <div className="text-xs px-2 py-0.5 rounded inline-block"
                             style={{
                               backgroundColor: data.riskLevel === 'high' ? '#FEE2E2' :
@@ -278,7 +278,7 @@ export default function CountryDetailsSidebar({ country, onClose }: CountryDetai
 
         {/* 15维度雷达图 - 可切换风险评估 */}
         <div>
-          <h3 className="text-sm text-gray-500 mb-4">15维度风险评估</h3>
+          <h3 className="text-sm text-gray-500 mb-4">15项风险解释维度（演示）</h3>
           <p className="text-xs text-gray-500 leading-relaxed mb-4">{PORI_DIMENSION_NOTE}</p>
 
           {/* 类别选择按钮 */}

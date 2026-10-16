@@ -5,7 +5,7 @@ import LeafletMap, { Marker, Popup } from "../components/map";
 import HeatmapLayer from "../components/HeatmapLayer";
 import CountryDetailsSidebar from "../components/CountryDetailsSidebar";
 import { africanCountriesData } from "../../data/africanCountriesData";
-import { PORI_DEFINITION, PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_FORMULA } from "../../data/poriDefinition";
+import { PORI_DEMO_NOTE, PORI_DIMENSION_NOTE, PORI_METHODOLOGY } from "../../data/poriDefinition";
 import { mockEvents as allMockEvents } from "../../data/eventsData";
 import L from 'leaflet';
 
@@ -281,7 +281,7 @@ export default function RiskSentimentIndex() {
 
       {/* 颜色图例 */}
       <div className="absolute bottom-8 left-8 z-10 bg-white/95 backdrop-blur-sm rounded-xl px-6 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-        <div className="text-xs text-gray-500 mb-3" title={`${PORI_DEFINITION} ${PORI_FORMULA}。${PORI_DIMENSION_NOTE} ${PORI_DEMO_NOTE}`}>风险等级（PORI指数 · 演示）</div>
+        <div className="text-xs text-gray-500 mb-3" title={`${PORI_METHODOLOGY} ${PORI_DIMENSION_NOTE} ${PORI_DEMO_NOTE}`}>风险等级（PORI指数 · 演示）</div>
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-[#60A5FA] opacity-60"></div>
@@ -390,7 +390,7 @@ export default function RiskSentimentIndex() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-sm font-semibold text-gray-900">风险指数排行榜</div>
-                  <div className="text-xs text-gray-500 mt-0.5" title={`${PORI_DEFINITION} ${PORI_DIMENSION_NOTE} ${PORI_DEMO_NOTE}`}>按PORI指数从高到低排序 · 演示</div>
+                  <div className="text-xs text-gray-500 mt-0.5" title={`${PORI_METHODOLOGY} ${PORI_DIMENSION_NOTE} ${PORI_DEMO_NOTE}`}>按PORI指数从高到低排序 · 演示</div>
                 </div>
                 <button
                   onClick={() => setShowRanking(false)}

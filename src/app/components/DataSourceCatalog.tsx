@@ -814,10 +814,6 @@ function roundScore(value: number) {
   return Number(value.toFixed(1));
 }
 
-function averageDimensionScores(values: number[]) {
-  return roundScore(values.reduce((sum, value) => sum + value, 0) / values.length);
-}
-
 function getPoriSubdimensionScore(fieldName: string, index: number) {
   const baseScore = poriSubdimensionBaseScores[fieldName] ?? 55;
   return Math.max(0, Math.min(100, baseScore + ((index % 5) - 2) * 4 + Math.floor(index / 5) * 3));
@@ -836,10 +832,12 @@ function buildPoriScores(index: number) {
     return scores;
   }, {});
 
-  // These averages describe the demo dimensions only, independently of PORI.
-  const core_political_power = averageDimensionScores(poriDimensionGroups.corePoliticalPower.map((fieldName) => subdimensionScores[fieldName]));
-  const geo_economic_resource = averageDimensionScores(poriDimensionGroups.geoEconomicResource.map((fieldName) => subdimensionScores[fieldName]));
-  const governance_regulatory = averageDimensionScores(poriDimensionGroups.governanceRegulatory.map((fieldName) => subdimensionScores[fieldName]));
+  // Independent demo category contributions. Real contributions must aggregate
+  // category events; neither these values nor the dimensions compute PORI.
+  const offset = ((index % 5) - 2) * 2 + Math.floor(index / 5);
+  const core_political_power = roundScore(67.3 + offset);
+  const geo_economic_resource = roundScore(62.1 + offset);
+  const governance_regulatory = roundScore(67.3 - offset);
 
   return {
     core_political_power,
