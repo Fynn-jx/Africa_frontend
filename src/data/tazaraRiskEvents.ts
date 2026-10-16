@@ -1,5 +1,7 @@
 // Scenario inputs, not a live event feed or measured forecasts.
 // Locations use station coordinates from the project's TAZARA GeoJSON files.
+import { resolveImpactParameters, type ImpactScale } from '../utils/costDistanceImpact';
+
 type Risk = "high" | "medium" | "low";
 type Step = { step: number; stage: string; description: string; severity: Risk };
 type Response = { category: string; priority: "immediate" | "short-term"; measures: string[] };
@@ -16,7 +18,10 @@ export interface TazaraRiskEvent {
   popularity: number;
   date: string;
   timestamp: number;
-  impactRadius: number;
+  scale: ImpactScale;
+  halfDistanceKm: number;
+  strength?: number;
+  scaleWeight?: number;
   affectedPopulation: number;
   source: string;
   description: string;
@@ -28,8 +33,9 @@ export interface TazaraRiskEvent {
   responseMeasures: Response[];
 }
 
-const defineEvent = (event: Omit<TazaraRiskEvent, "label" | "timestamp" | "source">): TazaraRiskEvent => ({
-  ...event, label: event.title, timestamp: Date.parse(`${event.date}T12:00:00Z`),
+type EventInput = Omit<TazaraRiskEvent, "label" | "timestamp" | "source" | "scale" | "halfDistanceKm"> & Partial<Pick<TazaraRiskEvent, "scale" | "halfDistanceKm">>;
+const defineEvent = (event: EventInput): TazaraRiskEvent => ({
+  ...event, ...resolveImpactParameters(event), label: event.title, timestamp: Date.parse(`${event.date}T12:00:00Z`),
   source: "铁路风险情景库；事件、人口及资产参数为模拟输入",
 });
 const steps = (items: [string, string, Risk][]): Step[] => items.map(([stage, description, severity], index) => ({ step: index + 1, stage, description, severity }));
@@ -38,7 +44,7 @@ export const tazaraRiskEvents: TazaraRiskEvent[] = [
   defineEvent({
     id: "review-tazara-community-001", title: "坦赞铁路沿线社区抗议与货运受阻",
     country: "赞比亚", location: [31.2067054, -10.2434633], locationLabel: "Kasama 站周边",
-    type: "社会ESG舆情", severity: "high", popularity: 95, date: "2026-02-22", impactRadius: 20, affectedPopulation: 12500,
+    type: "社会ESG舆情", severity: "high", popularity: 95, date: "2026-02-22", affectedPopulation: 12500,
     description: "若 Kasama 站周边社区抗议阻碍货运通行，装卸、矿产品转运及项目营地补给可能受到连带影响。",
     affectedSegment: "Kasama 站及周边接驳线", serviceImpact: "站点出入受限，装卸与发运延后",
     conclusion: "局部节点受扰可能传导至物流履约，需优先核实现场、协调社区并比较替代转运方案。",
@@ -61,7 +67,7 @@ export const tazaraRiskEvents: TazaraRiskEvent[] = [
   defineEvent({
     id: "tazara-flood-002", title: "姆林巴区间强降雨与路基损毁",
     country: "坦桑尼亚", location: [35.8021373, -8.7827487], locationLabel: "Mlimba 站周边",
-    type: "绿色壁垒", severity: "high", popularity: 93, date: "2026-02-20", impactRadius: 45, affectedPopulation: 18600,
+    type: "绿色壁垒", severity: "high", popularity: 93, date: "2026-02-20", affectedPopulation: 18600,
     description: "若持续降雨冲刷 Mlimba 周边路基并影响桥涵排水，相关区间可能限速或封锁，进港货列需调整运行计划。",
     affectedSegment: "Mlimba 周边山地区间", serviceImpact: "区间限速或封锁，干线运力下降",
     conclusion: "线路基础设施损毁直接影响通行能力，需完成巡检与抢修评估后再安排货列放行。",
@@ -84,7 +90,7 @@ export const tazaraRiskEvents: TazaraRiskEvent[] = [
   defineEvent({
     id: "tazara-customs-003", title: "坦赞边境货运查验趋严与通关积压",
     country: "坦桑尼亚", location: [32.7677559, -9.3183324], locationLabel: "Tunduma—Nakonde 口岸",
-    type: "贸易保护", severity: "medium", popularity: 87, date: "2026-02-18", impactRadius: 15, affectedPopulation: 6800,
+    type: "贸易保护", severity: "medium", popularity: 87, date: "2026-02-18", affectedPopulation: 6800,
     description: "若边境查验要求提高或单证复核增加，跨境货列可能延长待检时间，并占用站场与保税仓容量。",
     affectedSegment: "Tunduma—Nakonde 跨境接续段", serviceImpact: "跨境货列待检，站场周转放缓",
     conclusion: "通关延迟主要影响跨境周转，需优先核验单证与查验安排，区分待检积压与线路物理中断。",
@@ -107,7 +113,7 @@ export const tazaraRiskEvents: TazaraRiskEvent[] = [
   defineEvent({
     id: "tazara-fuel-004", title: "姆贝亚机车燃料供应延迟",
     country: "坦桑尼亚", location: [33.4118653, -8.9321091], locationLabel: "Mbeya 站及补给节点",
-    type: "能源价格", severity: "medium", popularity: 84, date: "2026-02-16", impactRadius: 30, affectedPopulation: 9200,
+    type: "能源价格", severity: "medium", popularity: 84, date: "2026-02-16", affectedPopulation: 9200,
     description: "若 Mbeya 机车燃料到货延迟且储备不足，补给周转将拖慢牵引安排，造成班次压缩与运输成本上升。",
     affectedSegment: "Mbeya 站及相邻牵引区间", serviceImpact: "可用牵引能力下降，发车间隔扩大",
     conclusion: "线路仍可通行，但燃料缺口限制可用机车，应优先确认库存与到货并统筹牵引安排。",
@@ -130,7 +136,7 @@ export const tazaraRiskEvents: TazaraRiskEvent[] = [
   defineEvent({
     id: "tazara-loading-005", title: "卡皮里姆波希矿产品装运劳资纠纷",
     country: "赞比亚", location: [28.6811822, -13.9549148], locationLabel: "New Kapiri Mposhi 货运站",
-    type: "供应链矿产", severity: "high", popularity: 91, date: "2026-02-14", impactRadius: 25, affectedPopulation: 7400,
+    type: "供应链矿产", severity: "high", popularity: 91, date: "2026-02-14", affectedPopulation: 7400,
     description: "若矿产品集运与装卸人员因劳资纠纷停工，始发货列装载不足，矿区库存与出口履约压力可能同步上升。",
     affectedSegment: "New Kapiri Mposhi 始发与集运段", serviceImpact: "装车效率下降，出口货列始发延后",
     conclusion: "扰动发生在货源集运与装卸环节，需协调劳资诉求和堆场容量，干线畅通并不等同于装运正常。",

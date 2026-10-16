@@ -53,7 +53,7 @@ export function ReviewDemoSummary({ event = reviewDemoEvent, destination, full =
         <p><span className="text-gray-500">运输影响：</span>{event.serviceImpact}</p>
       </div>
       <div className="my-4 grid grid-cols-2 gap-3">
-        <div><p className="text-xl font-semibold tabular-nums">{scenario.radius} <span className="text-xs font-normal">km</span></p><p className="text-xs text-gray-500">影响半径</p></div>
+        <div><p className="text-xl font-semibold tabular-nums">{scenario.halfDistanceKm} <span className="text-xs font-normal">km</span></p><p className="text-xs text-gray-500">成本半衰距离</p></div>
         <div><p className="text-xl font-semibold tabular-nums">{scenario.chineseAssets.length} <span className="text-xs font-normal">处</span></p><p className="text-xs text-gray-500">关注资产</p></div>
       </div>
       <p className="text-xs font-semibold leading-5 text-[#005BBB]">{scenario.impactPath.map(step => step.stage).join(" → ")}</p>
@@ -65,7 +65,7 @@ export function ReviewDemoSummary({ event = reviewDemoEvent, destination, full =
           <h3 className="font-semibold">关注资产与响应</h3>
           {scenario.chineseAssets.map(asset => <p key={asset.name} className="text-sm">{asset.name} · 距离 {asset.distance} km · {asset.risk === "high" ? "高" : asset.risk === "medium" ? "中" : "低"}风险</p>)}
           {scenario.responseMeasures.map(item => <p key={item.category} className="text-sm leading-6"><strong>{item.category}：</strong>{item.measures.join(" ")}</p>)}
-          <p className="text-xs leading-5 text-gray-500">方法说明：影响半径、人口及资产为情景分析输入；空间暴露不代表实际损失，情景事件不作为已发生事实。</p>
+          <p className="text-xs leading-5 text-gray-500">方法说明：影响强度按成本距离指数衰减，成本半衰距离、人口及资产为情景分析输入；空间暴露不代表实际损失，情景事件不作为已发生事实。</p>
         </div>
       )}
       {destination && <Link to={`${destination}?event=${encodeURIComponent(event.id)}`} className="mt-3 inline-block text-xs font-semibold text-[#005BBB] hover:underline">{destination === "/regional-insights" ? "查看该事件的重点资产 →" : "查看该事件的影响分析 →"}</Link>}

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useSearchParams } from "react-router-dom";
 import { Search, MapPin, Users, Building2, AlertCircle, AlertTriangle, Target, ArrowLeft, FileText, TrendingUp, Shield, X, ChevronRight, Calendar, Filter, Clock, Flame, CloudLightning, Globe2, Activity, Gavel, Diamond, Factory, Zap } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Circle, Popup, GeoJSON, CircleMarker, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON, CircleMarker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { FeatureCollection } from 'geojson';
 import 'leaflet/dist/leaflet.css';
@@ -11,6 +11,10 @@ import KnowledgeBaseSelector from '../../components/KnowledgeBaseSelector';
 import { KnowledgeItem } from '../../data/knowledgeBase';
 import { createReviewImpactZone, reviewDemoEvent, getTazaraRiskEvent } from '../../data/reviewDemo';
 import { ReviewDemoSummary, ReviewDemoToolbar, RailwayEventSelect } from '../components/ReviewDemo';
+import { useTazaraData } from '../../hooks/useTazaraData';
+import { loadAfricaBoundaries } from '../../utils/loadAfricaBoundaries';
+import { getCostDistanceImpact, IMPACT_CUTOFF, resolveImpactParameters, scenarioAssetCoordinate, type ImpactScale } from '../../utils/costDistanceImpact';
+import { ImpactFootprint, ImpactFootprintLegend } from '../components/map/ImpactFootprint';
 
 // 非洲大陆边界
 const AFRICA_BOUNDS: [[number, number], [number, number]] = [
@@ -344,7 +348,8 @@ interface ImpactZone {
   type: string;
   location: string;
   coordinates: { lat: number; lng: number };
-  radius: number;
+  scale: ImpactScale;
+  halfDistanceKm: number;
   affectedPopulation: number;
   criticalInfrastructure: {
     type: string;
@@ -402,12 +407,28 @@ export default function ImpactSimulator() {
   const [selectedEventType, setSelectedEventType] = useState<string>("");
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<any>(initialEvent);
-  const [impactZone, setImpactZone] = useState<ImpactZone | null>(() => createReviewImpactZone(initialEvent));
+  const [scenarioZone, setImpactZone] = useState<ImpactZone | null>(() => createReviewImpactZone(initialEvent));
   const [mapRevision, setMapRevision] = useState(0);
   const [showReport, setShowReport] = useState(false);
   const [expandedAssets, setExpandedAssets] = useState<Set<string>>(new Set());
   const [expandedInfra, setExpandedInfra] = useState<Set<string>>(new Set());
   const [africaGeoJSON, setAfricaGeoJSON] = useState<FeatureCollection | null>(null);
+  const [boundaryError, setBoundaryError] = useState<string | null>(null);
+  const tazaraData = useTazaraData();
+  const selectedImpact = useMemo(() => selectedEvent && africaGeoJSON && !tazaraData.loading && !tazaraData.error
+    ? getCostDistanceImpact(selectedEvent, tazaraData.railLines, africaGeoJSON) : null,
+  [selectedEvent, africaGeoJSON, tazaraData.railLines, tazaraData.loading, tazaraData.error]);
+  const impactZone = useMemo(() => {
+    if (!scenarioZone) return null;
+    const origin: [number, number] = [scenarioZone.coordinates.lng, scenarioZone.coordinates.lat];
+    const chineseAssets = scenarioZone.chineseAssets.map((asset, index) => ({ ...asset,
+      coordinates: scenarioAssetCoordinate(origin, asset.distance, index, scenarioZone.chineseAssets.length),
+    })).filter(asset => (selectedImpact?.impactAt(asset.coordinates) ?? 0) >= IMPACT_CUTOFF);
+    const criticalInfrastructure = scenarioZone.criticalInfrastructure.map((infra, index) => ({ ...infra,
+      coordinates: scenarioAssetCoordinate(origin, infra.distance, index, scenarioZone.criticalInfrastructure.length, Math.PI / Math.max(1, scenarioZone.criticalInfrastructure.length)),
+    })).filter(infra => (selectedImpact?.impactAt(infra.coordinates) ?? 0) >= IMPACT_CUTOFF);
+    return { ...scenarioZone, chineseAssets, criticalInfrastructure };
+  }, [scenarioZone, selectedImpact]);
 
   useEffect(() => {
     if (!requestedEvent) return;
@@ -442,10 +463,9 @@ export default function ImpactSimulator() {
 
   // 加载非洲国家边界数据
   useEffect(() => {
-    fetch('/data/african-countries-only.geojson')
-      .then(res => res.json())
+    loadAfricaBoundaries()
       .then(data => setAfricaGeoJSON(data))
-      .catch(err => console.error('加载非洲国家边界数据失败:', err));
+      .catch(err => setBoundaryError(String(err)));
   }, []);
 
   // 处理地区选择
@@ -772,10 +792,10 @@ export default function ImpactSimulator() {
       { type: "电站", name: "主要配电站", distance: 1.5, impactPath: generateAssetImpactPath("电站", event.type) },
     ];
 
-    const chineseAssets = regionAssets.map(asset => ({
+    const chineseAssets = regionAssets.map((asset, index) => ({
       type: asset.type,
       name: asset.name,
-      distance: Math.floor(Math.random() * 50) + 5,
+      distance: 5 + index * 11,
       risk: asset.risk as "high" | "medium" | "low",
       impactPath: generateAssetImpactPath(asset.type, event.type),
     }));
@@ -784,10 +804,7 @@ export default function ImpactSimulator() {
       type: event.type,
       location: event.country,
       coordinates: { lat: event.location[1], lng: event.location[0] },
-      radius: event.type === "conflict" || event.type === "恐怖极端" ? 50
-              : event.type === "disaster" || event.type === "绿色壁垒" ? 100
-              : event.type === "政权政策" ? 30
-              : 20,
+      ...resolveImpactParameters(event),
       affectedPopulation: event.affectedPopulation,
       criticalInfrastructure,
       chineseAssets,
@@ -973,7 +990,7 @@ export default function ImpactSimulator() {
         },
         infrastructure: {
           title: "基础设施影响评估",
-          content: `事件对${impactZone.location}的基础设施造成不同程度的影响。交通基础设施首当其冲，主要道路和铁路运输受阻，影响范围达${impactZone.radius * 2}公里。电力设施受损导致部分区域停电，影响工商业活动和居民生活。通讯基础设施受到干扰，信息传递效率下降。此外，医疗设施承受巨大压力，部分医院已达到接收能力上限。`,
+          content: `以${impactZone.halfDistanceKm}成本公里为半衰距离，影响强度按成本距离指数衰减。铁路走廊、国界和水域共同决定足迹形状；以影响强度≥0.1筛选基础设施，估算暴露面积约${selectedImpact?.areaKm2.toLocaleString() ?? '—'}平方公里。空间暴露仅用于情景筛查，不等同于设施已受损。`,
         },
         economic: {
           title: "经济影响评估",
@@ -1046,9 +1063,9 @@ export default function ImpactSimulator() {
 
             <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200">
               <div className="bg-white rounded-lg p-4">
-                <div className="text-xs text-gray-500 mb-2">影响半径</div>
-                <div className="text-2xl font-bold text-gray-900">{impactZone.radius} 公里</div>
-                <div className="text-xs text-gray-600 mt-1">核心影响区域</div>
+                <div className="text-xs text-gray-500 mb-2">成本半衰距离</div>
+                <div className="text-2xl font-bold text-gray-900">{impactZone.halfDistanceKm} km</div>
+                <div className="text-xs text-gray-600 mt-1">影响强度每经过该成本距离减半</div>
               </div>
               <div className="bg-white rounded-lg p-4">
                 <div className="text-xs text-gray-500 mb-2">受影响人口</div>
@@ -1224,7 +1241,7 @@ export default function ImpactSimulator() {
             <h3 className="text-md font-semibold text-gray-900 mb-4">总体评估</h3>
             <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
               <p>
-                本次{getEventLabel(impactZone.type)}发生在{impactZone.location}，影响半径达{impactZone.radius}公里，
+                本次{getEventLabel(impactZone.type)}位于{impactZone.location}，模型成本半衰距离为{impactZone.halfDistanceKm} km，
                 受影响人口约{(impactZone.affectedPopulation / 10000).toFixed(1)}万人。
                 事件波及{impactZone.chineseAssets.length}处中资资产，其中{impactZone.chineseAssets.filter(a => a.risk === "high").length}处面临高风险。
               </p>
@@ -1956,7 +1973,7 @@ export default function ImpactSimulator() {
             <MapContainer
               key={`analysis-${mapRevision}`}
               center={[impactZone.coordinates.lat, impactZone.coordinates.lng]}
-              zoom={isRailwayEvent ? 10 : 8}
+              zoom={selectedImpact?.parameters.scale === 'regional' ? 6 : selectedImpact?.parameters.scale === 'corridor' ? 7 : 8}
               className="h-full z-0 !absolute !left-0 !top-0 !right-[400px]"
               zoomControl={false}
               attributionControl={false}
@@ -1970,47 +1987,11 @@ export default function ImpactSimulator() {
                 url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
-              {/* 影响范围圆圈 */}
-              <Circle
-                center={[impactZone.coordinates.lat, impactZone.coordinates.lng]}
-                radius={impactZone.radius * 1000 * 1.2}
-                pathOptions={{
-                  color: getEventColor(impactZone.type),
-                  fillColor: getEventColor(impactZone.type),
-                  fillOpacity: 0.05,
-                  weight: 1,
-                  opacity: 0.3,
-                }}
-              />
-              <Circle
-                center={[impactZone.coordinates.lat, impactZone.coordinates.lng]}
-                radius={impactZone.radius * 1000 * 0.7}
-                pathOptions={{
-                  color: getEventColor(impactZone.type),
-                  fillColor: getEventColor(impactZone.type),
-                  fillOpacity: 0.1,
-                  weight: 1.5,
-                  opacity: 0.5,
-                }}
-              />
-              <Circle
-                center={[impactZone.coordinates.lat, impactZone.coordinates.lng]}
-                radius={impactZone.radius * 1000 * 0.4}
-                pathOptions={{
-                  color: getEventColor(impactZone.type),
-                  fillColor: getEventColor(impactZone.type),
-                  fillOpacity: 0.15,
-                  weight: 2,
-                  opacity: 0.8,
-                }}
-              />
+              {selectedImpact && <ImpactFootprint model={selectedImpact} color={getEventColor(impactZone.type)} fitView />}
 
               {/* 中资资产标记 */}
               {impactZone.chineseAssets.map((asset, index) => {
-                const angle = (index * Math.PI * 2) / impactZone.chineseAssets.length;
-                const distance = asset.distance / 111;
-                const lng = impactZone.coordinates.lng + Math.cos(angle) * distance;
-                const lat = impactZone.coordinates.lat + Math.sin(angle) * distance;
+                const [lng, lat] = asset.coordinates;
 
                 const assetColor = getRiskColor(asset.risk);
 
@@ -2057,10 +2038,7 @@ export default function ImpactSimulator() {
 
               {/* 关键基础设施 */}
               {impactZone.criticalInfrastructure.map((infra, index) => {
-                const angle = (index * Math.PI * 2 + Math.PI) / impactZone.criticalInfrastructure.length;
-                const distance = infra.distance / 111;
-                const lng = impactZone.coordinates.lng + Math.cos(angle) * distance;
-                const lat = impactZone.coordinates.lat + Math.sin(angle) * distance;
+                const [lng, lat] = infra.coordinates;
 
                 return (
                   <CircleMarker
@@ -2103,13 +2081,9 @@ export default function ImpactSimulator() {
                   <p className="text-sm text-gray-600">{impactZone.location}</p>
                 </div>
 
-                {/* 影响半径 */}
+                {/* 成本距离参数与分级足迹 */}
                 <div className="mb-6 p-4 bg-gray-50 rounded-xl">
-                  <div className="text-xs text-gray-500 mb-2">影响半径</div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl tabular-nums text-gray-900">{impactZone.radius}</span>
-                    <span className="text-sm text-gray-500">公里</span>
-                  </div>
+                  <ImpactFootprintLegend model={selectedImpact} error={tazaraData.error || boundaryError} />
                 </div>
 
                 {/* 受影响人口 */}

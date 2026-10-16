@@ -93,6 +93,32 @@ pnpm build
 
 ## 项目结构
 
+### 成本距离影响足迹
+
+重点项目和影响模拟器共用 `src/utils/costDistanceImpact.ts`：
+
+- `impact(g) = strength × scaleWeight × exp(-c(e,g) / lambdaKm)`，`lambdaKm = halfDistanceKm / ln(2)`。
+- `halfDistanceKm` 是成本半衰距离，不是地图半径。默认：社区/社会 ESG 25 km；供应链、能源、贸易、绿色/灾害与交通物流 75 km；政策、冲突及其他类型 200 km。事件可显式指定 `scale`、`halfDistanceKm`（大于 0 且不超过 200）、`strength`、`scaleWeight`（0–1）。
+- 事件强度 `strength` 默认高/危急 1、中 0.75、低 0.5；尺度权重 `scaleWeight` 默认 1。以上均为演示假设，未使用历史损失校准。
+- 以事件为中心投影到约 5 km 的八邻域网格，使用 Dijkstra 最小累计成本。陆地阻力 1，原始铁路 GeoJSON 附近 7.5 km 阻力 0.45，跨国界增加 25 成本公里，国家面之外及面内孔洞不可通行。海岸事件所在格可连接相邻陆地。没有额外的道路、地形或实时交通数据。
+- 绘制 `impact ≥ 0.1 / 0.25 / 0.5` 的嵌套 MultiPolygon，保留岛与孔洞；足迹面积为命中格数 × 25 km²。站点、矿产、物流和模拟资产的筛选与高亮均使用同一网格的 `impact ≥ 0.1`。
+- 网格边界由 0.1 截止成本及最低阻力推导，超出边界返回 0。结果按事件坐标、强度、尺度参数及空间数据引用缓存；每组空间数据最多保留 12 个结果。两页共享数据请求与缓存。
+- 模拟器中只有距离的演示资产按固定角度放置；这些示意坐标同时用于绘制和命中判断。人口和资产情景输入不代表实际损失。
+
+验证命令（测试脚本使用 Node 24 的原生 TypeScript 支持）：
+
+```bash
+npm run test:impact
+npm run typecheck:impact
+npm run build
+```
+
+`typecheck:impact` 严格检查新增算法、加载器及事件数据；`build` 保持原有 `vite build`。项目全量 `tsc` 仍有缺失 Leaflet 类型等历史问题。
+
+本地运行 `npm run dev`，打开 `/regional-insights` 与 `/impact-simulator`。选择不同铁路事件比较足迹；切换图层和打开站点详情应保留当前足迹，点击事件弹窗的 X 后足迹和受影响高亮应一起消失，项目仍保持选中。再切换事件或到影响模拟器，应使用对应事件的同一模型结果。
+
+### 源码目录
+
 ```text
 /src
   /app

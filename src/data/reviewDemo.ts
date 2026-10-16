@@ -9,7 +9,8 @@ export function createReviewImpactZone(event: TazaraRiskEvent = reviewDemoEvent)
     type: event.type,
     location: `${event.country} · ${event.locationLabel}`,
     coordinates: { lat: event.location[1], lng: event.location[0] },
-    radius: event.impactRadius,
+    scale: event.scale,
+    halfDistanceKm: event.halfDistanceKm,
     affectedPopulation: event.affectedPopulation,
     criticalInfrastructure: [
       { type: "铁路节点", name: event.affectedSegment, distance: 0, impactPath: event.impactPath.slice(0, 2) },

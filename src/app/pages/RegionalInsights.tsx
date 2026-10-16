@@ -6,7 +6,6 @@ import {
   MapContainer,
   TileLayer,
   CircleMarker,
-  Circle,
   Marker,
   Popup,
   GeoJSON,
@@ -17,7 +16,10 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FeatureCollection } from 'geojson';
 import { loadMiningData } from '../../utils/loadMiningData';
-import { loadTazaraData } from '../../utils/loadTazaraData';
+import { useTazaraData } from '../../hooks/useTazaraData';
+import { loadAfricaBoundaries } from '../../utils/loadAfricaBoundaries';
+import { getCostDistanceImpact, IMPACT_CUTOFF, resolveImpactParameters } from '../../utils/costDistanceImpact';
+import { ImpactFootprint, ImpactFootprintLegend } from '../components/map/ImpactFootprint';
 import { mockEvents as allMockEvents } from '../../data/eventsData';
 import { reviewDemoEvent, reviewDemoPeriod, getTazaraRiskEvent, tazaraRiskEvents as tazaraNearbyEvents } from '../../data/reviewDemo';
 import { ReviewDemoSummary, ReviewDemoToolbar } from '../components/ReviewDemo';
@@ -301,21 +303,12 @@ const keyProjects = {
   ],
 };
 
-// 计算两点间距离（公里）
-function calculateDistance(coord1: [number, number], coord2: [number, number]): number {
-  const R = 6371; // 地球半径（公里）
-  const lat1 = coord1[1] * Math.PI / 180;
-  const lat2 = coord2[1] * Math.PI / 180;
-  const deltaLat = (coord2[1] - coord1[1]) * Math.PI / 180;
-  const deltaLon = (coord2[0] - coord1[0]) * Math.PI / 180;
-
-  const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-          Math.cos(lat1) * Math.cos(lat2) *
-          Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
+function CloseEventImpact({ onClose }: { onClose: () => void }) {
+  const map = useMap();
+  return <button type="button" aria-label="关闭事件影响" className="absolute right-2 top-2 rounded p-1 text-gray-500 hover:bg-gray-100"
+    onClick={event => { event.stopPropagation(); map.closePopup(); onClose(); }}>
+    <X className="h-4 w-4" />
+  </button>;
 }
 
 export default function RegionalInsights() {
@@ -326,22 +319,18 @@ export default function RegionalInsights() {
   const [mapRevision, setMapRevision] = useState(0);
   const [africaGeoJSON, setAfricaGeoJSON] = useState<FeatureCollection | null>(null);
   const [miningData, setMiningData] = useState<any>(null);
-  const [tazaraData, setTazaraData] = useState<any>(null);
+  const tazaraData = useTazaraData();
+  const [boundaryError, setBoundaryError] = useState<string | null>(null);
 
   // 加载数据
   useEffect(() => {
-    fetch('/data/african-countries-only.geojson')
-      .then(res => res.json())
+    loadAfricaBoundaries()
       .then(data => setAfricaGeoJSON(data))
-      .catch(err => console.error('加载非洲国家边界数据失败:', err));
+      .catch(err => setBoundaryError(String(err)));
 
     loadMiningData().then(data => {
       console.log('矿业数据加载完成:', data);
       setMiningData(data);
-    });
-    loadTazaraData().then(data => {
-      console.log('坦赞铁路数据加载完成:', data);
-      setTazaraData(data);
     });
   }, []);
 
@@ -373,6 +362,9 @@ export default function RegionalInsights() {
 
   const isTazaraSelected = activeTab === "infrastructure" && selectedInfrastructure === "ki-1";
   const selectedRailEvent = getTazaraRiskEvent(selectedEvent?.id);
+  const selectedImpact = useMemo(() => selectedEvent && africaGeoJSON && !tazaraData.loading && !tazaraData.error
+    ? getCostDistanceImpact(selectedEvent, tazaraData.railLines, africaGeoJSON) : null,
+  [selectedEvent, tazaraData.railLines, tazaraData.loading, tazaraData.error, africaGeoJSON]);
 
   useEffect(() => {
     if (!requestedEvent) return;
@@ -389,6 +381,10 @@ export default function RegionalInsights() {
     setSelectedEvent(event);
     setMapView({ center: event.location, zoom: 7 });
     setSearchParams(getTazaraRiskEvent(event.id) ? { event: event.id } : {});
+  };
+  const clearEventImpact = () => {
+    setSelectedEvent(null);
+    setSearchParams({});
   };
 
   // 项目范围内保留所有铁路事件，切换事件不会退出项目。
@@ -737,13 +733,7 @@ export default function RegionalInsights() {
         {(activeTab === "industrial" || (activeTab === "infrastructure" && selectedInfrastructure === "ki-1")) && showMiningLayer && selectedEvent && miningData && (
           <>
             {[...(miningData.facilities || []), ...(miningData.explorations || []), ...(miningData.deposits || [])]
-              .filter((item: any) => {
-                const distance = calculateDistance(
-                  [item.coordinates[0], item.coordinates[1]],
-                  selectedEvent.location
-                );
-                return distance <= selectedEvent.impactRadius;
-              })
+              .filter((item: any) => (selectedImpact?.impactAt(item.coordinates) ?? 0) >= IMPACT_CUTOFF)
               .map((item: any) => {
                 const getType = (id: string) => {
                   if (miningData.facilities?.find((f: any) => f.id === id)) return { color: '#0E986F', label: '设施' };
@@ -819,14 +809,8 @@ export default function RegionalInsights() {
         {/* 受影响的物流枢纽高亮 */}
         {(activeTab === "industrial" || (activeTab === "infrastructure" && selectedInfrastructure === "ki-1")) && showLogisticsLayer && selectedEvent && (
           <>
-            {tazaraNearbyLogistics
-              .filter((hub: any) => {
-                const distance = calculateDistance(
-                  [hub.coordinates[0], hub.coordinates[1]],
-                  selectedEvent.location
-                );
-                return distance <= selectedEvent.impactRadius;
-              })
+            {[...logisticsHubs, ...tazaraNearbyLogistics]
+              .filter(hub => (selectedImpact?.impactAt(hub.coordinates as [number, number]) ?? 0) >= IMPACT_CUTOFF)
               .map((hub: any) => (
                 <CircleMarker
                   key={`affected-logistics-${hub.id}`}
@@ -920,32 +904,14 @@ export default function RegionalInsights() {
           </>
         )}
 
-        {/* 事件影响范围圈 */}
-        {activeTab === "infrastructure" && selectedInfrastructure === "ki-1" && selectedEvent && (
-          <Circle
-            center={[selectedEvent.location[1], selectedEvent.location[0]]}
-            radius={selectedEvent.impactRadius * 1000} // 转换为米
-            pathOptions={{
-              color: '#DC2626',
-              weight: 2,
-              fillColor: '#DC2626',
-              fillOpacity: 0.1,
-              dashArray: '10, 10',
-            }}
-          />
-        )}
+        {/* 与资产命中判断共用的成本距离影响足迹 */}
+        {(activeTab === "industrial" || isTazaraSelected) && selectedImpact && <ImpactFootprint model={selectedImpact} />}
 
         {/* 受影响的站点高亮 */}
         {activeTab === "infrastructure" && selectedInfrastructure === "ki-1" && selectedEvent && tazaraData && (
           <>
             {tazaraData.stations
-              .filter((station: any) => {
-                const distance = calculateDistance(
-                  [station.coordinates[0], station.coordinates[1]],
-                  selectedEvent.location
-                );
-                return distance <= selectedEvent.impactRadius;
-              })
+              .filter(station => (selectedImpact?.impactAt(station.coordinates) ?? 0) >= IMPACT_CUTOFF)
               .map((station: any) => (
                 <CircleMarker
                   key={`affected-station-${station.id || station.name}`}
@@ -1015,11 +981,12 @@ export default function RegionalInsights() {
                     }
                   }}
                 >
-                  <Popup>
-                    <div className="p-2 min-w-[220px]">
+                  <Popup closeButton={false}>
+                    <CloseEventImpact onClose={clearEventImpact} />
+                    <div className="p-2 pr-6 min-w-[220px]">
                       <div className="flex items-center gap-2 mb-2">
                         <AlertCircle className="w-4 h-4 text-red-600" />
-                      <span className="text-sm font-medium text-gray-900">{event.title}</span>
+                      <span className="text-sm font-medium text-gray-900">{event.title ?? event.label}</span>
                     </div>
                     <div className="text-xs text-gray-500 mb-1">{eventTypeConfig[event.type]?.label || event.type}</div>
                     <div className={`text-xs px-2 py-0.5 rounded inline-block mb-2 ${
@@ -1033,7 +1000,7 @@ export default function RegionalInsights() {
                     </div>
                     <p className="text-xs text-gray-600 mb-2">{event.description}</p>
                     <div className="text-xs text-gray-400">{event.date}</div>
-                    <div className="text-xs text-[#005BBB] mt-2">影响半径: {event.impactRadius}公里</div>
+                    <div className="text-xs text-[#005BBB] mt-2">成本半衰距离: {resolveImpactParameters(event).halfDistanceKm} km</div>
                     <div className="text-xs text-gray-500 mt-1">点击查看影响范围</div>
                   </div>
                 </Popup>
@@ -1044,6 +1011,12 @@ export default function RegionalInsights() {
         )}
         </MapContainer>
       </div>
+
+      {(activeTab === "industrial" || isTazaraSelected) && selectedEvent && (
+        <div className="absolute bottom-6 left-[368px] right-[424px] z-10 rounded-xl bg-white/95 p-3 shadow-lg pointer-events-none">
+          <ImpactFootprintLegend model={selectedImpact} error={tazaraData.error || boundaryError} />
+        </div>
+      )}
 
       {/* 左侧面板 - 时间选择、事件列表、统计 */}
       <div className="absolute top-6 left-6 bottom-6 w-80 flex flex-col z-10">
