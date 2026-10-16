@@ -1031,7 +1031,7 @@ export default function ImpactSimulator() {
             </div>
             <div>
               <span className="text-gray-500">数据来源：</span>
-              非洲出海安全官大数据平台
+              企业出海安全官大数据平台
             </div>
           </div>
         </div>
@@ -1497,7 +1497,7 @@ export default function ImpactSimulator() {
         <div className="border-t border-gray-200 pt-6 mt-8">
           <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
             <div>
-              <p>报告生成：非洲出海安全官智能分析系统</p>
+              <p>报告生成：企业出海安全官智能分析系统</p>
               <p>数据来源：多源数据融合与AI分析</p>
             </div>
             <div className="text-right">

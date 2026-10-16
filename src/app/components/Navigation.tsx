@@ -51,7 +51,7 @@ export default function Navigation() {
           <div className="flex items-center gap-3">
             <Globe className="w-6 h-6 text-[#005BBB]" />
             <h1 className="text-lg tracking-tight text-gray-900">
-              非洲出海安全官
+              企业出海安全官
             </h1>
           </div>
 

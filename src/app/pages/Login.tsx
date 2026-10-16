@@ -66,7 +66,7 @@ export default function Login() {
               <div className="max-w-2xl">
                 <div>
                   <div>
-                    <h1 className="text-4xl font-semibold tracking-tight lg:text-5xl">非洲出海安全官</h1>
+                    <h1 className="text-4xl font-semibold tracking-tight lg:text-5xl">企业出海安全官</h1>
                     <p className="mt-3 text-sm leading-6 text-blue-100">面向企业出海、供应链管理与海外安全决策的智能风险平台。</p>
                   </div>
                 </div>
@@ -106,7 +106,7 @@ export default function Login() {
           >
             <div className="mb-8">
               <h2 className="text-3xl font-semibold tracking-tight text-gray-950">欢迎登录</h2>
-              <p className="mt-2 text-sm text-gray-500">访问非洲出海安全官工作台</p>
+              <p className="mt-2 text-sm text-gray-500">访问企业出海安全官工作台</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">

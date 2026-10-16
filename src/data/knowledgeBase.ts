@@ -26,7 +26,7 @@ export const annotationKnowledgeBase: KnowledgeItem[] = [
       "社会治安 → 抢劫盗窃高发、绑架勒索、有组织犯罪、群体性骚乱",
       "恐怖主义 → 爆炸袭击、枪击车辆冲撞、绑架人质、劫持车辆"
     ],
-    source: "非洲出海安全官数据中心"
+    source: "企业出海安全官数据中心"
   },
 
   // 1.2 风险事件多语分类词表库
