@@ -72,3 +72,5 @@ AFR_Mineral_Deposits.xls
 非洲矿产数据/
 image/
 public/data/boundaries/
+.vercel
+.env*
