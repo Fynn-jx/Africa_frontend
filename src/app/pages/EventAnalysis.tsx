@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   AlertTriangle,
-  ArrowRight,
   CheckCircle2,
   FileSearch,
   Loader2,
@@ -364,20 +363,8 @@ export default function EventAnalysis() {
   return (
     <div className="min-h-screen bg-slate-50/70 px-4 py-8 sm:px-8">
       <div className="mx-auto max-w-[1440px]">
-        <header className="mb-7 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="mb-2 text-xs font-semibold tracking-widest text-[#005BBB]">
-              TRACK B · 事件到项目预警
-            </p>
-            <h1 className="text-2xl font-semibold text-slate-950">事件研判</h1>
-            <p className="mt-2 text-sm text-slate-500">
-              从多语种新闻提取证据，追踪坦赞铁路空间暴露与项目预警。
-            </p>
-          </div>
-          <span className="rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs text-[#005BBB]">
-            AI 抽取 <ArrowRight className="mx-1 inline h-3 w-3" /> 空间计算{" "}
-            <ArrowRight className="mx-1 inline h-3 w-3" /> 建议
-          </span>
+        <header className="mb-7">
+          <h1 className="text-2xl font-semibold text-slate-950">事件研判</h1>
         </header>
         <div className="grid items-start gap-6 xl:grid-cols-[350px_minmax(0,1fr)]">
           <aside className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm xl:sticky xl:top-24">

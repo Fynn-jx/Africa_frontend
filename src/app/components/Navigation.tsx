@@ -2,7 +2,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Globe, FileSearch, Target, Layers, Database, LogOut, MessageSquare } from "lucide-react";
 
 const navItems = [
-  { path: "/event-analysis", label: "事件研判", icon: FileSearch },
   {
     path: "/",
     label: "风险情绪指数",
@@ -28,6 +27,7 @@ const navItems = [
     label: "数据中心",
     icon: Database,
   },
+  { path: "/event-analysis", label: "事件研判", icon: FileSearch },
   {
     path: "/ai-conversation",
     label: "AI对话",
