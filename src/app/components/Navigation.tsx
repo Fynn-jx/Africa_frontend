@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Globe, FileSearch, Target, Layers, Database, LogOut, MessageSquare } from "lucide-react";
 
 const navItems = [
+  { path: "/event-analysis", label: "事件研判", icon: FileSearch },
   {
     path: "/",
     label: "风险情绪指数",
@@ -47,7 +48,7 @@ export default function Navigation() {
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
       <div className="max-w-screen-2xl mx-auto px-8 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Globe className="w-6 h-6 text-[#005BBB]" />
             <h1 className="text-lg tracking-tight text-gray-900">
@@ -55,8 +56,8 @@ export default function Navigation() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
+          <div className="flex min-w-0 items-center gap-2 overflow-x-auto">
+            <div className="flex shrink-0 items-center gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive =

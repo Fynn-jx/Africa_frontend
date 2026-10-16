@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.impact.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "files": [
+    "src/utils/eventAnalysis.ts",
+    "src/data/eventAnalysisSchema.ts",
+    "src/data/eventAnalysisSamples.ts",
+    "api/analyze.ts",
+    "api/_prompts.ts",
+    "src/app/pages/EventAnalysis.tsx"
+  ]
+}

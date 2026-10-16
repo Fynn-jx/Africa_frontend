@@ -133,7 +133,7 @@ npm run typecheck:impact
 npm run build
 ```
 
-`typecheck:impact` 严格检查新增算法、加载器及事件数据；`build` 保持原有 `vite build`。项目全量 `tsc` 仍有缺失 Leaflet 类型等历史问题。
+`typecheck:impact` 严格检查新增算法、加载器及事件数据；`build` 保持原有 `vite build`。项目全量 `tsc` 不在原有检查范围内；Track B 增加了包含新页面的 `typecheck:analysis`。
 
 本地运行 `npm run dev`，打开 `/regional-insights` 与 `/impact-simulator`。选择不同铁路事件比较足迹；切换图层和打开站点详情应保留当前足迹，点击事件弹窗的 X 后足迹和受影响高亮应一起消失，项目仍保持选中。再切换事件或到影响模拟器，应使用对应事件的同一模型结果。
 
@@ -184,3 +184,69 @@ npm run build
 ## 许可证
 
 专有软件 - 保留所有权利
+
+
+## 事件研判（Track B 核心流程）
+
+登录后打开 `/event-analysis`，或点击导航中的「事件研判」。输入中文、英文、法语或斯瓦希里语新闻（10–6000 字符），选择坦赞铁路 TAZARA，点击「开始研判」。四个按钮只填入虚构示例，所有结果仍由实际 API 抽取，未预置模型结果。
+
+### 架构与工作流
+
+`EventAnalysis.tsx` → `POST /api/analyze { mode: "extract", text, projectId: "tazara" }` → DeepSeek 严格 JSON 抽取 → 客户端地名解析与成本距离计算 → `POST /api/analyze { mode: "advise", computed }` → 基于计算结果生成建议。原有 AI 对话页仍为预设回答演示，已在顶部标注。
+
+- 服务端：`api/analyze.ts` 是 Vercel Node 函数，直接调用 DeepSeek Chat Completions，无新增 SDK；仅补充 Node、React、Leaflet 类型依赖以严格检查 API、新页面与地图。模型 JSON 模式、temperature 0.1、AbortController 30 秒超时；Vercel 函数时限配置为 40 秒。`vercel.json` 的 SPA rewrite 排除 `/api` 与 `/api/*`。
+- API 编译：`api/tsconfig.json` 使用 NodeNext 并将相对 `.ts` 导入改写为 `.js`；离线测试还会编译并加载处理函数及提示词，验证打包后的导入与返回契约。
+- 提示词：`api/_prompts.ts` 单独导出抽取 / 建议指令，采用 TypeScript 字符串避免 Markdown 打包路径问题；`src/data/eventAnalysisSchema.ts` 共用现有三大类 15 项原名和运行时校验。原文引句、地名必须逐字出现在输入中；字段、标签、日期、坐标和建议条数均校验。
+- 计算：`src/utils/eventAnalysis.ts` 复用 `costDistanceImpact.ts`、`loadTazaraData.ts` 与国家边界。地点按站点库（含中英文别名）、城市库、LLM 坐标依次解析；LLM 坐标标记低置信。多地点全部展示，本次仅计算首个可解析点，需人工核对其他地点，不能把多个足迹面积直接相加。
+- 展示：`src/app/pages/EventAnalysis.tsx` 提供七步处理依据；`src/app/components/map/EventAnalysisMap.tsx` 复用 `ImpactFootprint`。物流资产使用 `src/data/logisticsAssets.ts` 中重点项目页既有静态目录，示意坐标不是实测资产；没有额外编造资产和损失。
+
+### 环境变量与启动
+
+使用 Node.js 24（测试依赖原生 TypeScript 支持）：
+
+```bash
+npm install --legacy-peer-deps
+npm run dev
+```
+
+`npm run dev` **只启动前端**，不提供 `/api/analyze`。联调前后端可在已安装 Vercel CLI 的环境运行 `vercel dev`（仅本地，不执行 deploy）。使用已有本地项目配置即可；若 CLI 要求关联远程项目，请由维护者自行选择。
+
+`.env.example` 仅包含变量名与非敏感默认模型名：
+
+- `DEEPSEEK_API_KEY`：只在服务端进程环境中安全配置，必填；不使用 `VITE_` 前缀，不在浏览器输入，不写入源码、日志、提示词或版本库。
+- `DEEPSEEK_MODEL`：可选，默认 `deepseek-chat`。
+
+`.gitignore` 已忽略 `.env` 与 `.env.local`。仓库不包含任何 API key。本次实现没有写入或提供 key；未配置时返回 `503 / MISSING_API_KEY`，不会以示例结果代替。
+
+在已安全配置进程环境变量的终端直接验证四个示例（不需要先启动 Vite / Vercel，也不会读取 `.env` 文件）：
+
+```bash
+node scripts/test-analyze-api.mjs
+```
+
+脚本直接调用真实 API 处理函数，逐条运行 extract，输出结构化摘要或明确错误；任一失败时退出码为 1，不打印 key。该命令会请求 DeepSeek；离线测试使用 `npm run test:analysis`，无需凭据。API 的缺少 key、上游异常、超时、无效 JSON 和 schema 校验失败都返回带 `error` / `code` 的 4xx/5xx；前端展示错误及重试，建议失败保留已完成的真实计算。
+
+### 参数、口径与边界
+
+- `SIGNAL_WEIGHTS`：`s_e = 0.4E + 0.3S + 0.3V`；C 的确认项只影响等级，不重复计入强度。
+- `TAG_WEIGHTS`：15 类起步均为 1.0，**起步等权，待逻辑回归校准**。
+- 衰减尺度复用现有映射：社会 ESG 25、供应链 / 能源 / 贸易 / 绿色 75、其他 200 成本公里的**半衰距离**，`λ = halfDistanceKm / ln(2)`；它不是半径，也不是直接将 25/75/200 当成 λ。
+- `R = s_e × k_τ × exp(−c/λ)`；足迹 / 站点 / 物流命中使用实际 R ≥ 0.1。`L = max(沿线站点所在网格 impact_unit) × s_e × k_τ`，范围 0–1；impact_unit 的强度、类别权重为 1，避免把强度乘两次。采用原模型单位场 0.1 截止范围，范围外按 0 处理；L 可以小于 0.1，而实际足迹没有命中。
+- 网格 5 km，陆地阻力 1，铁路阻力 0.45（缓冲 7.5 km），跨境加 25 成本公里，水域不可通行；详细模型见前文。参数可在相应常量与 `resolveImpactParameters` 调整，界面显示实际取值。
+- `WARNING_THRESHOLDS`：L ≥ 0.5 高危、≥ 0.25 警惕、≥ 0.1 关注，否则无预警。confirmation=true 在基础等级上调一级，最高高危，L 本身不变。M 固定显示「需历史序列，暂不可计算」。这不是完整国家 PORI，也未做历史序列或损失校准。
+- 置信度 < 0.6、非风险、地点 unresolved、仅有 LLM 坐标或多地点均给出人工复核原因。非风险事件不生成足迹、不计算 L，不把无法计算显示为 0 或无预警。地点不明也不推断落在坦赞铁路上。
+- 人工可选择主标签、站点 / 城市或有效经纬度，并明确人工风险判定。「按修正重新计算」仅做客户端计算，保留原始抽取、引句、置信度和原始复核原因，并根据修正重算当前复核原因；低置信度仍显示「需人工复核」，标注「已人工修正」，清除旧建议；步骤 7 可单独生成新建议。没有修改信号的输入，若原文或信号有误应修改文本重新抽取。
+- 虚构示例位于 `src/data/eventAnalysisSamples.ts`：Kasama 社区阻断；法语 Mbeya / Tunduma 燃油与通关；Dar es Salaam 文化节非风险；无明确地名的抗议。模型抽取有随机性，分类、引句、地点关联和人工修正均需最终复核。
+
+验证：
+
+```bash
+npm run test:impact
+npm run test:analysis
+npm run typecheck:analysis
+npm run build
+```
+
+新测试覆盖信号合成、等级阈值 / 确认上调、三种定位来源、unresolved、人工修正、非风险无足迹、低强度 L、真实铁路数据、API 契约 / 缺少凭据 / 上游异常 / JSON 解析失败 / 超时、四示例脚本和 rewrite。没有执行提交、推送或部署。
+
+实现参考：[Vercel Node 函数](https://vercel.com/docs/functions/runtimes/node-js)、[Vercel rewrite 配置](https://vercel.com/docs/project-configuration/vercel-json#rewrites)、[DeepSeek JSON 输出](https://api-docs.deepseek.com/guides/json_mode/)。

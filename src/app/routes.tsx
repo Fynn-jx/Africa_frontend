@@ -8,6 +8,7 @@ import ImpactSimulator from "./pages/ImpactSimulator";
 import RegionalInsights from "./pages/RegionalInsights";
 import DataSources from "./pages/DataSources";
 import AIConversation from "./pages/AIConversation";
+import EventAnalysis from "./pages/EventAnalysis";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
     path: "/",
     element: <AppLayout />,
     children: [
+      {
+        path: "event-analysis",
+        element: <ProtectedRoute><EventAnalysis /></ProtectedRoute>,
+      },
       {
         index: true,
         element: (
